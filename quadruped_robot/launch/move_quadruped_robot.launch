@@ -1,0 +1,4 @@
+<launch>
+  <node name="move_quadruped_robot"   pkg="quadruped_robot" type="move_quadruped_robot"/>
+  <node name="quadruped_robot_controller"   pkg="quadruped_robot" type="quadruped_robot_controller" output="screen"/>
+</launch>

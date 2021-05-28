@@ -1,0 +1,50 @@
+
+
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 2
+
+leftfront_leg_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints:
+    - leftfront_leg_shoulder_joint
+    - leftfront_leg_upper_joint
+    - leftfront_leg_lower_joint
+  gains:
+    leftfront_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.04}
+    leftfront_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.04}
+    leftfront_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.04}
+
+
+leftback_leg_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints:
+    - leftback_leg_shoulder_joint
+    - leftback_leg_upper_joint
+    - leftback_leg_lower_joint
+  gains:
+    leftback_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.04}
+    leftback_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.04}
+    leftback_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.04}
+
+rightfront_leg_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints:
+    - rightfront_leg_shoulder_joint
+    - rightfront_leg_upper_joint
+    - rightfront_leg_lower_joint
+  gains:
+    rightfront_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.04}
+    rightfront_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.04}
+    rightfront_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.04}
+
+rightback_leg_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints:
+    - rightback_leg_shoulder_joint
+    - rightback_leg_upper_joint
+    - rightback_leg_lower_joint
+  gains:
+    rightback_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.04}
+    rightback_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.04}
+    rightback_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.04}

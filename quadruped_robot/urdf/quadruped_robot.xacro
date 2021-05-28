@@ -1,0 +1,363 @@
+<?xml version="1.0"?>
+<robot name="quadruped_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+  <material name="gray">
+    <color rgba="0.5 0.5 0.5 2.5"/>
+  </material>
+
+  <!-- base -->
+  <link name="base_link"/>
+
+  <!-- body -->
+  <joint name="base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="body_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="body_link">
+    <inertial>
+      <origin xyz="0 0 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.00043333333" ixy="0.0" ixz="0.0" iyy="0.00763333333" iyz="0.0" izz="0.0078"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" rpy="0 0 0" />
+      <geometry>
+        <box size="0.3 0.08 0.04" />
+      </geometry>
+      <material name="gray" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" rpy="0 0 0" />
+      <geometry>
+        <box size="0.3 0.06 0.04" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="body_link">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <!-- left_legs macro -->
+  <xacro:macro name="left_legs_macro" params="prefix xyz1 effort velocity">
+
+  <!-- left leg shoulder -->
+  <joint name="${prefix}_shoulder_joint" type="revolute">
+    <origin xyz="${xyz1}" rpy="0 ${radians(-90)} 0"/>
+    <parent link="body_link"/>
+    <child  link="${prefix}_shoulder_link"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1" upper="1.5" effort="${effort}" velocity="${velocity}"/>
+  </joint>
+
+  <transmission name="${prefix}_shoulder_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}_shoulder_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}_shoulder_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanismReduction>1</mechanismReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${prefix}_shoulder_link">
+    <inertial>
+      <origin xyz="0 0.025 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.00001208333" ixy="0.0" ixz="0.0" iyy="0.00000375" iyz="0.0" izz="0.00001208333"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.025 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.05 0.015" />
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0.0175 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.035 0.015" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="${prefix}_shoulder_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <!-- left leg upper -->
+  <joint name="${prefix}_upper_joint" type="revolute">
+    <origin xyz="0 0.0425 0" rpy="${radians(-90)} ${radians(135)} 0"/>
+    <parent link="${prefix}_shoulder_link"/>
+    <child  link="${prefix}_upper_link"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.7" upper="0.8" effort="${effort}" velocity="${velocity}"/>
+  </joint>
+
+  <transmission name="${prefix}_upper_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}_upper_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}_upper_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanismReduction>1</mechanismReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${prefix}_upper_link">
+    <inertial>
+      <origin xyz="0 0.05 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.00008496666" ixy="0.0" ixz="0.0" iyy="0.00000350833" iyz="0.0" izz="0.00008520833"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.05 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.1 0.015" />
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0.05 0.0005" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.1 0.014" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="${prefix}_upper_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <!-- left leg lower -->
+  <joint name="${prefix}_lower_joint" type="revolute">
+    <origin xyz="0 0.1 0.015" rpy="0 0 ${radians(-90)}"/>
+    <parent link="${prefix}_upper_link"/>
+    <child  link="${prefix}_lower_link"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.6" upper="1.5" effort="${effort}" velocity="${velocity}"/>
+  </joint>
+
+  <transmission name="${prefix}_lower_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}_lower_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}_lower_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanismReduction>1</mechanismReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${prefix}_lower_link">
+    <inertial>
+      <origin xyz="0 0.05 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.00008496666" ixy="0.0" ixz="0.0" iyy="0.00000350833" iyz="0.0" izz="0.00008520833"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.05 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.1 0.015" />
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0.05 0.0005" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.1 0.014" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="${prefix}_lower_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+  
+  </xacro:macro>
+
+  <!-- left legs -->
+  <xacro:left_legs_macro prefix="leftfront_leg" xyz1="0.1 0.04 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" effort="1.5" velocity="6.17"/>
+  <xacro:left_legs_macro prefix="leftback_leg" xyz1="-0.1 0.04 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" effort="1.5" velocity="6.17"/>
+
+  <!-- right_legs macro -->
+  <xacro:macro name="right_legs_macro" params="prefix xyz1 effort velocity">
+
+  <!-- right leg shoulder -->
+  <joint name="${prefix}_shoulder_joint" type="revolute">
+    <origin xyz="${xyz1}" rpy="0 ${radians(-90)} 0"/>
+    <parent link="body_link"/>
+    <child  link="${prefix}_shoulder_link"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.5" upper="1" effort="${effort}" velocity="${velocity}"/>
+  </joint>
+
+  <transmission name="${prefix}_shoulder_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}_shoulder_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}_shoulder_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanismReduction>1</mechanismReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${prefix}_shoulder_link">
+    <inertial>
+      <origin xyz="0 -0.025 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.00001208333" ixy="0.0" ixz="0.0" iyy="0.00000375" iyz="0.0" izz="0.00001208333"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.025 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.05 0.015" />
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.0175 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.035 0.015" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="${prefix}_shoulder_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <!-- right leg upper -->
+  <joint name="${prefix}_upper_joint" type="revolute">
+    <origin xyz="0 -0.0425 0" rpy="${radians(-90)} ${radians(135)} 0"/>
+    <parent link="${prefix}_shoulder_link"/>
+    <child  link="${prefix}_upper_link"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.7" upper="0.8" effort="${effort}" velocity="${velocity}"/>
+  </joint>
+
+  <transmission name="${prefix}_upper_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}_upper_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}_upper_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanismReduction>1</mechanismReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${prefix}_upper_link">
+    <inertial>
+      <origin xyz="0 0.05 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.00008496666" ixy="0.0" ixz="0.0" iyy="0.00000350833" iyz="0.0" izz="0.00008520833"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.05 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.1 0.015" />
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0.05 -0.0005" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.1 0.014" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="${prefix}_upper_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <!-- right leg lower -->
+  <joint name="${prefix}_lower_joint" type="revolute">
+    <origin xyz="0 0.1 -0.015" rpy="0 0 ${radians(-90)}"/>
+    <parent link="${prefix}_upper_link"/>
+    <child  link="${prefix}_lower_link"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.6" upper="1.5" effort="${effort}" velocity="${velocity}"/>
+  </joint>
+
+  <transmission name="${prefix}_lower_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}_lower_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}_lower_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanismReduction>1</mechanismReduction>
+    </actuator>
+  </transmission>
+
+  <link name="${prefix}_lower_link">
+    <inertial>
+      <origin xyz="0 0.05 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.00008496666" ixy="0.0" ixz="0.0" iyy="0.00000350833" iyz="0.0" izz="0.00008520833"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0.05 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.1 0.015" />
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0.05 -0.0005" rpy="0 0 0" />
+      <geometry>
+        <box size="0.015 0.1 0.014" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="${prefix}_lower_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.001</minDepth>
+  </gazebo>
+  
+  </xacro:macro>
+
+  <!-- right legs -->
+  <xacro:right_legs_macro prefix="rightfront_leg" xyz1="0.1 -0.04 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" effort="1.5" velocity="6.17"/>
+  <xacro:right_legs_macro prefix="rightback_leg" xyz1="-0.1 -0.04 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" effort="1.5" velocity="6.17"/>
+
+  <!-- gazebo plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+</robot>
