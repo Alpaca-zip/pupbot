@@ -1,0 +1,7 @@
+<launch>
+  <arg name="model" default="$(find quadruped_robot)/urdf/quadruped_robot.xacro" />
+  <arg name="rvizconfig" default="$(find quadruped_robot)/rviz/quadruped_robot.rviz" />
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model) --inorder" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+</launch>

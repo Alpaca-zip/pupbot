@@ -1,4 +1,4 @@
-# Quadruped Robot
+# quadruped robot
 <img src="https://github.com/Alpaca-zip/quadruped_robot_for_melodic/blob/main/quadruped_robot/quadruped_robot%20.png">
 
 You can see the walking algorithm of my quadruped robot. This is recommended for ROS Melodic. 
