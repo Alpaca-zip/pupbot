@@ -9,6 +9,12 @@ You can see the walking algorithm of my quadruped robot. This is recommended for
 roslaunch quadruped_robot quadruped_robot_empty_world.launch
 ```
 
+## Launch Rviz
+
+```
+roslaunch quadruped_robot quadruped_robot_rviz.launch
+```
+
 ## Launch Walking Simulation
 
 ```
