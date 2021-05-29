@@ -13,10 +13,9 @@ roslaunch quadruped_robot quadruped_robot_empty_world.launch
 
 ```
 roslaunch quadruped_robot move_quadruped_robot.launch
-```
-
+```  
 q : Startup,Shutdown  
 w : Increases the value of direction in the x axis (+0.25)  
 a : Increases the value of turn (+0.25)  
 s : Decreases the value of direction in the x axis (-0.25)  
-d : Decreases the value of turn (-0.25)
+d : Decreases the value of turn (-0.25)  
