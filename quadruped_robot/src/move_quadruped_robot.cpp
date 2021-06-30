@@ -27,8 +27,8 @@ void startup_shutdown_Callback(const std_msgs::Bool& startup_shutdown) {
     startup_shutdown_upper = 0.7;
     startup_shutdown_lower = -1.5;
     for (int i=0;i<22;i++) {
-      startup_shutdown_upper -= 0.7/22.0;
-      startup_shutdown_lower += 1.5/22.0;
+      startup_shutdown_upper -= 0.67163087728/22.0;
+      startup_shutdown_lower += 1.67778386273/22.0;
       ssc.leftfront_leg.points[0].positions[0] = 0.0;
       ssc.leftfront_leg.points[0].positions[1] = startup_shutdown_upper;
       ssc.leftfront_leg.points[0].positions[2] = startup_shutdown_lower;
@@ -57,11 +57,11 @@ void startup_shutdown_Callback(const std_msgs::Bool& startup_shutdown) {
     }
     startup_shutdown_bool=true;
   }else if (startup_shutdown_bool==true) {
-    startup_shutdown_upper = 0.0;
-    startup_shutdown_lower = 0.0;
+    startup_shutdown_upper = 0.028369122714;
+    startup_shutdown_lower = 0.17778386273;
     for (int i=0;i<22;i++) {
-      startup_shutdown_upper += 0.7/22.0;
-      startup_shutdown_lower -= 1.5/22.0;
+      startup_shutdown_upper += 0.67163087728/22.0;
+      startup_shutdown_lower -= 1.67778386273/22.0;
       ssc.leftfront_leg.points[0].positions[0] = 0.0;
       ssc.leftfront_leg.points[0].positions[1] = startup_shutdown_upper;
       ssc.leftfront_leg.points[0].positions[2] = startup_shutdown_lower;
@@ -105,7 +105,7 @@ int main(int argc, char** argv)
   key_control_sub2 = nh.subscribe("key_control2", 10, startup_shutdown_Callback);
   key_control_sub3 = nh.subscribe("key_control3", 10, key_controlCallback2);
 
-  Vector step_extent(40, 40, 15);
+  Vector step_extent(40, 40, 5);
   Vector2D direction(0, 0);
   Vector vector(0, 0, 0);
   Data data;

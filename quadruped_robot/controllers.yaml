@@ -11,9 +11,9 @@ leftfront_leg_controller:
     - leftfront_leg_upper_joint
     - leftfront_leg_lower_joint
   gains:
-    leftfront_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.04}
-    leftfront_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.04}
-    leftfront_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.04}
+    leftfront_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.03}
+    leftfront_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.03}
+    leftfront_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.03}
 
 
 leftback_leg_controller:
@@ -23,9 +23,9 @@ leftback_leg_controller:
     - leftback_leg_upper_joint
     - leftback_leg_lower_joint
   gains:
-    leftback_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.04}
-    leftback_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.04}
-    leftback_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.04}
+    leftback_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.03}
+    leftback_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.03}
+    leftback_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.03}
 
 rightfront_leg_controller:
   type: effort_controllers/JointTrajectoryController
@@ -34,9 +34,9 @@ rightfront_leg_controller:
     - rightfront_leg_upper_joint
     - rightfront_leg_lower_joint
   gains:
-    rightfront_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.04}
-    rightfront_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.04}
-    rightfront_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.04}
+    rightfront_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.03}
+    rightfront_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.03}
+    rightfront_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.03}
 
 rightback_leg_controller:
   type: effort_controllers/JointTrajectoryController
@@ -45,6 +45,6 @@ rightback_leg_controller:
     - rightback_leg_upper_joint
     - rightback_leg_lower_joint
   gains:
-    rightback_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.04}
-    rightback_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.04}
-    rightback_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.04}
+    rightback_leg_shoulder_joint : {p: 30.0, i: 0.0, d: 0.03}
+    rightback_leg_upper_joint : {p: 30.0, i: 0.0, d: 0.03}
+    rightback_leg_lower_joint : {p: 30.0, i: 0.0, d: 0.03}

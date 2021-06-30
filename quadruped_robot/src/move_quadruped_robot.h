@@ -82,8 +82,8 @@ class Data{
     rightback_leg.joint_names[2] ="rightback_leg_lower_joint";
     x_offset=-14.0;
     y_offset=-6.0;
-    z_offset=141.421356237;
-    bone_length=100.0;
+    z_offset=118.844;
+    bone_length=78.0;
   }
 
   void trot(double c0_x,double c0_y,double dir_x,double dir_y,bool inv,double step_extent_x,double step_extent_y,double step_extent_z,double* vector_x,double* vector_y,double* vector_z) {

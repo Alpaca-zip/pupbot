@@ -16,31 +16,32 @@
 
   <link name="body_link">
     <inertial>
-      <origin xyz="0 0 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" rpy="0 0 0"/>
-      <mass value="1.0"/>
-      <inertia ixx="0.00043333333" ixy="0.0" ixz="0.0" iyy="0.00763333333" iyz="0.0" izz="0.0078"/>
+      <origin xyz="0 0 0.13" rpy="0 0 0"/>
+      <mass value="0.796"/>
+      <inertia ixx="0.0011654561" ixy="0.0" ixz="0.0" iyy="0.00488505272" iyz="0.0" izz="0.00562999661"/>
     </inertial>
     <visual>
-      <origin xyz="0 0 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" rpy="0 0 0" />
+      <origin xyz="0 0 0.13" rpy="0 0 0" />
       <geometry>
-        <box size="0.3 0.08 0.04" />
+        <mesh filename="package://quadruped_robot/stl/body.stl" />
       </geometry>
       <material name="gray" />
     </visual>
     <collision>
-      <origin xyz="0 0 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" rpy="0 0 0" />
+      <origin xyz="0 0 0.13" rpy="0 0 0" />
       <geometry>
-        <box size="0.3 0.06 0.04" />
+        <box size="0.26547 0.12 0.0563" />
       </geometry>
     </collision>
   </link>
 
   <gazebo reference="body_link">
-    <material>Gazebo/Orange</material>
+    <material>Gazebo/DarkGrey</material>
+    <selfCollide>true</selfCollide>
   </gazebo>
-
+  
   <!-- left_legs macro -->
-  <xacro:macro name="left_legs_macro" params="prefix xyz1 effort velocity">
+  <xacro:macro name="left_legs_macro" params="prefix xyz1 xyz2 xyz3 xyz4 effort velocity">
 
   <!-- left leg shoulder -->
   <joint name="${prefix}_shoulder_joint" type="revolute">
@@ -64,36 +65,37 @@
 
   <link name="${prefix}_shoulder_link">
     <inertial>
-      <origin xyz="0 0.025 0" rpy="0 0 0"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.00001208333" ixy="0.0" ixz="0.0" iyy="0.00000375" iyz="0.0" izz="0.00001208333"/>
+      <origin xyz="0 0.015 ${xyz4}" rpy="0 0 0" />
+      <mass value="0.0090718"/>
+      <inertia ixx="0.00000219235" ixy="0.0" ixz="0.0" iyy="0.00000219235" iyz="0.0" izz="0.000000604786667"/>
     </inertial>
     <visual>
-      <origin xyz="0 0.025 0" rpy="0 0 0" />
+      <origin xyz="${xyz2}" rpy="0 0 0" />
       <geometry>
-        <box size="0.015 0.05 0.015" />
+        <mesh filename="package://quadruped_robot/stl/leg_shoulder.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
     <collision>
-      <origin xyz="0 0.0175 0" rpy="0 0 0" />
+      <origin xyz="0 0.015 ${xyz4}" rpy="0 0 0" />
       <geometry>
-        <box size="0.015 0.035 0.015" />
+        <box size="0.02 0.02 0.05" />
       </geometry>
     </collision>
   </link>
 
   <gazebo reference="${prefix}_shoulder_link">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Grey</material>
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
     <maxVel>1.0</maxVel>
     <minDepth>0.001</minDepth>
+    <selfCollide>true</selfCollide>
   </gazebo>
 
   <!-- left leg upper -->
   <joint name="${prefix}_upper_joint" type="revolute">
-    <origin xyz="0 0.0425 0" rpy="${radians(-90)} ${radians(135)} 0"/>
+    <origin xyz="${xyz3}" rpy="${radians(-90)} ${radians(135)} 0"/>
     <parent link="${prefix}_shoulder_link"/>
     <child  link="${prefix}_upper_link"/>
     <axis xyz="0 0 1"/>
@@ -113,36 +115,37 @@
 
   <link name="${prefix}_upper_link">
     <inertial>
-      <origin xyz="0 0.05 0" rpy="0 0 0"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.00008496666" ixy="0.0" ixz="0.0" iyy="0.00000350833" iyz="0.0" izz="0.00008520833"/>
+      <origin xyz="0 0.04 0.015" rpy="0 0 0" />
+      <mass value="0.1273437"/>
+      <inertia ixx="0.00009550777" ixy="0.0" ixz="0.0" iyy="0.00001379556" iyz="0.0" izz="0.00009020178"/>
     </inertial>
     <visual>
-      <origin xyz="0 0.05 0" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 ${radians(180)}" />
       <geometry>
-        <box size="0.015 0.1 0.015" />
+        <mesh filename="package://quadruped_robot/stl/leg_upper.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
     <collision>
-      <origin xyz="0 0.05 0.0005" rpy="0 0 0" />
+      <origin xyz="0 0.04 0.015" rpy="0 0 0" />
       <geometry>
-        <box size="0.015 0.1 0.014" />
+        <box size="0.02 0.09 0.03" />
       </geometry>
     </collision>
   </link>
 
   <gazebo reference="${prefix}_upper_link">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Grey</material>
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
     <maxVel>1.0</maxVel>
     <minDepth>0.001</minDepth>
+    <selfCollide>true</selfCollide>
   </gazebo>
 
   <!-- left leg lower -->
   <joint name="${prefix}_lower_joint" type="revolute">
-    <origin xyz="0 0.1 0.015" rpy="0 0 ${radians(-90)}"/>
+    <origin xyz="0 0.083 0" rpy="0 0 ${radians(-90)}"/>
     <parent link="${prefix}_upper_link"/>
     <child  link="${prefix}_lower_link"/>
     <axis xyz="0 0 1"/>
@@ -162,41 +165,66 @@
 
   <link name="${prefix}_lower_link">
     <inertial>
-      <origin xyz="0 0.05 0" rpy="0 0 0"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.00008496666" ixy="0.0" ixz="0.0" iyy="0.00000350833" iyz="0.0" izz="0.00008520833"/>
+      <origin xyz="0 0.0365 0.021" rpy="0 0 0" />
+      <mass value="0.0181437"/>
+      <inertia ixx="0.00000820851" ixy="0.0" ixz="0.0" iyy="0.000000302395" iyz="0.0" izz="0.00000820851"/>
     </inertial>
     <visual>
-      <origin xyz="0 0.05 0" rpy="0 0 0" />
+      <origin xyz="0 0 0.042" rpy="0 ${radians(90)} 0" />
       <geometry>
-        <box size="0.015 0.1 0.015" />
+        <mesh filename="package://quadruped_robot/stl/leg_lower.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
     <collision>
-      <origin xyz="0 0.05 0.0005" rpy="0 0 0" />
+      <origin xyz="0 0.0365 0.021" rpy="0 0 0" />
       <geometry>
-        <box size="0.015 0.1 0.014" />
+        <box size="0.01 0.073 0.01" />
       </geometry>
     </collision>
   </link>
 
   <gazebo reference="${prefix}_lower_link">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Grey</material>
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
     <maxVel>1.0</maxVel>
     <minDepth>0.001</minDepth>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <joint name="${prefix}_lower_ball_joint" type="fixed">
+    <origin xyz="0 0.073 0" rpy="0 0 0"/>
+    <parent link="${prefix}_lower_link"/>
+    <child  link="${prefix}_lower_ball"/>
+  </joint>
+
+  <link name="${prefix}_lower_ball">
+    <collision>
+      <origin xyz="0 0.005 0.021" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="${prefix}_lower_ball">
+    <material>Gazebo/Grey</material>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.001</minDepth>
+    <selfCollide>true</selfCollide>
   </gazebo>
   
   </xacro:macro>
 
   <!-- left legs -->
-  <xacro:left_legs_macro prefix="leftfront_leg" xyz1="0.1 0.04 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" effort="1.5" velocity="6.17"/>
-  <xacro:left_legs_macro prefix="leftback_leg" xyz1="-0.1 0.04 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" effort="1.5" velocity="6.17"/>
+  <xacro:left_legs_macro prefix="leftfront_leg" xyz1="0.0834 0.068518 0.13" xyz2="0.0 0.0 0.0" xyz3="0 0.026 0.025" xyz4="0.02" effort="1.5" velocity="6.17"/>
+  <xacro:left_legs_macro prefix="leftback_leg" xyz1="-0.0834 0.068518 0.13" xyz2="0.0 0.0 -0.042" xyz3="0 0.026 -0.025" xyz4="-0.02" effort="1.5" velocity="6.17"/>
 
   <!-- right_legs macro -->
-  <xacro:macro name="right_legs_macro" params="prefix xyz1 effort velocity">
+  <xacro:macro name="right_legs_macro" params="prefix xyz1 xyz2 xyz3 xyz4 effort velocity">
 
   <!-- right leg shoulder -->
   <joint name="${prefix}_shoulder_joint" type="revolute">
@@ -220,36 +248,37 @@
 
   <link name="${prefix}_shoulder_link">
     <inertial>
-      <origin xyz="0 -0.025 0" rpy="0 0 0"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.00001208333" ixy="0.0" ixz="0.0" iyy="0.00000375" iyz="0.0" izz="0.00001208333"/>
+      <origin xyz="0 -0.015 ${xyz4}" rpy="0 0 0" />
+      <mass value="0.0090718"/>
+      <inertia ixx="0.00000219235" ixy="0.0" ixz="0.0" iyy="0.00000219235" iyz="0.0" izz="0.000000604786667"/>
     </inertial>
     <visual>
-      <origin xyz="0 -0.025 0" rpy="0 0 0" />
+      <origin xyz="${xyz2}" rpy="0 0 ${radians(180)}" />
       <geometry>
-        <box size="0.015 0.05 0.015" />
+        <mesh filename="package://quadruped_robot/stl/leg_shoulder.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
     <collision>
-      <origin xyz="0 -0.0175 0" rpy="0 0 0" />
+      <origin xyz="0 -0.015 ${xyz4}" rpy="0 0 0" />
       <geometry>
-        <box size="0.015 0.035 0.015" />
+        <box size="0.02 0.02 0.05" />
       </geometry>
     </collision>
   </link>
 
   <gazebo reference="${prefix}_shoulder_link">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Grey</material>
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
     <maxVel>1.0</maxVel>
     <minDepth>0.001</minDepth>
+    <selfCollide>true</selfCollide>
   </gazebo>
 
   <!-- right leg upper -->
   <joint name="${prefix}_upper_joint" type="revolute">
-    <origin xyz="0 -0.0425 0" rpy="${radians(-90)} ${radians(135)} 0"/>
+    <origin xyz="${xyz3}" rpy="${radians(-90)} ${radians(135)} 0"/>
     <parent link="${prefix}_shoulder_link"/>
     <child  link="${prefix}_upper_link"/>
     <axis xyz="0 0 1"/>
@@ -269,36 +298,37 @@
 
   <link name="${prefix}_upper_link">
     <inertial>
-      <origin xyz="0 0.05 0" rpy="0 0 0"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.00008496666" ixy="0.0" ixz="0.0" iyy="0.00000350833" iyz="0.0" izz="0.00008520833"/>
+      <origin xyz="0 0.04 -0.015" rpy="0 0 0" />
+      <mass value="0.1273437"/>
+      <inertia ixx="0.00009550777" ixy="0.0" ixz="0.0" iyy="0.00001379556" iyz="0.0" izz="0.00009020178"/>
     </inertial>
     <visual>
-      <origin xyz="0 0.05 0" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(180)}" />
       <geometry>
-        <box size="0.015 0.1 0.015" />
+        <mesh filename="package://quadruped_robot/stl/leg_upper.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
     <collision>
-      <origin xyz="0 0.05 -0.0005" rpy="0 0 0" />
+      <origin xyz="0 0.04 -0.015" rpy="0 0 0" />
       <geometry>
-        <box size="0.015 0.1 0.014" />
+        <box size="0.02 0.09 0.03" />
       </geometry>
     </collision>
   </link>
 
   <gazebo reference="${prefix}_upper_link">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Grey</material>
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
     <maxVel>1.0</maxVel>
     <minDepth>0.001</minDepth>
+    <selfCollide>true</selfCollide>
   </gazebo>
 
   <!-- right leg lower -->
   <joint name="${prefix}_lower_joint" type="revolute">
-    <origin xyz="0 0.1 -0.015" rpy="0 0 ${radians(-90)}"/>
+    <origin xyz="0 0.083 0" rpy="0 0 ${radians(-90)}"/>
     <parent link="${prefix}_upper_link"/>
     <child  link="${prefix}_lower_link"/>
     <axis xyz="0 0 1"/>
@@ -318,38 +348,63 @@
 
   <link name="${prefix}_lower_link">
     <inertial>
-      <origin xyz="0 0.05 0" rpy="0 0 0"/>
-      <mass value="0.1"/>
-      <inertia ixx="0.00008496666" ixy="0.0" ixz="0.0" iyy="0.00000350833" iyz="0.0" izz="0.00008520833"/>
+      <origin xyz="0 0.0365 -0.021" rpy="0 0 0" />
+      <mass value="0.0181437"/>
+      <inertia ixx="0.00000820851" ixy="0.0" ixz="0.0" iyy="0.000000302395" iyz="0.0" izz="0.00000820851"/>
     </inertial>
     <visual>
-      <origin xyz="0 0.05 0" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
       <geometry>
-        <box size="0.015 0.1 0.015" />
+        <mesh filename="package://quadruped_robot/stl/leg_lower.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
     <collision>
-      <origin xyz="0 0.05 -0.0005" rpy="0 0 0" />
+      <origin xyz="0 0.0365 -0.021" rpy="0 0 0" />
       <geometry>
-        <box size="0.015 0.1 0.014" />
+        <box size="0.01 0.073 0.01" />
       </geometry>
     </collision>
   </link>
 
   <gazebo reference="${prefix}_lower_link">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Grey</material>
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
     <maxVel>1.0</maxVel>
     <minDepth>0.001</minDepth>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+  <joint name="${prefix}_lower_ball_joint" type="fixed">
+    <origin xyz="0 0.073 0" rpy="0 0 0"/>
+    <parent link="${prefix}_lower_link"/>
+    <child  link="${prefix}_lower_ball"/>
+  </joint>
+
+  <link name="${prefix}_lower_ball">
+    <collision>
+      <origin xyz="0 0.005 -0.021" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="${prefix}_lower_ball">
+    <material>Gazebo/Grey</material>
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <maxVel>1.0</maxVel>
+    <minDepth>0.001</minDepth>
+    <selfCollide>true</selfCollide>
   </gazebo>
   
   </xacro:macro>
 
   <!-- right legs -->
-  <xacro:right_legs_macro prefix="rightfront_leg" xyz1="0.1 -0.04 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" effort="1.5" velocity="6.17"/>
-  <xacro:right_legs_macro prefix="rightback_leg" xyz1="-0.1 -0.04 ${0.1*sqrt(2)+0.0075*(1/sqrt(2))}" effort="1.5" velocity="6.17"/>
+  <xacro:right_legs_macro prefix="rightfront_leg" xyz1="0.0834 -0.068518 0.13" xyz2="0.0 0.0 0.0" xyz3="0 -0.026 0.025" xyz4="0.02" effort="1.5" velocity="6.17"/>
+  <xacro:right_legs_macro prefix="rightback_leg" xyz1="-0.0834 -0.068518 0.13" xyz2="0.0 0.0 -0.042" xyz3="0 -0.026 -0.025" xyz4="-0.02" effort="1.5" velocity="6.17"/>
 
   <!-- gazebo plugin -->
   <gazebo>
