@@ -1,6 +1,6 @@
 # PupBot
 
-![](https://github.com/Alpaca-zip/PupBot/workflows/<ROS-Melodic>/badge.svg)
+![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg)
 
 <img src="https://github.com/Alpaca-zip/PupBot/blob/main/PupBot.png">
 
