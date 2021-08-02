@@ -6,7 +6,7 @@
 
 [![](https://img.shields.io/badge/ROS-Noetic-brightgreen.svg)](https://github.com/Alpaca-zip/PupBot)
 
-You can see the walking algorithm of my quadruped robot. This is recommended for ROS Melodic. 
+ROS package for quadruped robot PupBot.
 
 ## Launch Gazebo
 
@@ -25,3 +25,9 @@ w : Increases the value of direction in the x axis (+0.25)
 a : Increases the value of turn (+0.25)  
 s : Decreases the value of direction in the x axis (-0.25)  
 d : Decreases the value of turn (-0.25)
+
+## Launch Rviz
+
+```
+roslaunch quadruped_robot quadruped_robot_rviz.launch
+```
