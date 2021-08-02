@@ -1,4 +1,7 @@
 # PupBot
+
+![](https://github.com/Alpaca-zip/PupBot/workflows/<ROS-Melodic>/badge.svg)
+
 <img src="https://github.com/Alpaca-zip/PupBot/blob/main/PupBot.png">
 
 You can see the walking algorithm of my quadruped robot. This is recommended for ROS Melodic. 
