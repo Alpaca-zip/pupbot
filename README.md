@@ -2,7 +2,9 @@
 
 <img src="https://github.com/Alpaca-zip/PupBot/blob/main/PupBot.png">
 
-![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg?branch=main)
+[![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg)](https://github.com/Alpaca-zip/PupBot)
+
+[![](https://img.shields.io/badge/ROS-Noetic-brightgreen.svg)](https://github.com/Alpaca-zip/PupBot)
 
 You can see the walking algorithm of my quadruped robot. This is recommended for ROS Melodic. 
 
