@@ -1,0 +1,4 @@
+<launch>
+  <node name="move_pupbot"   pkg="pupbot" type="move_pupbot"/>
+  <node name="pupbot_controller"   pkg="pupbot" type="pupbot_controller" output="screen"/>
+</launch>

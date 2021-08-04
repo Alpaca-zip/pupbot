@@ -1,6 +1,6 @@
 # PupBot
 
-<img src="https://github.com/Alpaca-zip/PupBot/blob/main/PupBot.png">
+<img src="https://github.com/Alpaca-zip/PupBot/blob/main/pupbot.png">
 
 [![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg)](https://github.com/Alpaca-zip/PupBot)
 
@@ -11,13 +11,13 @@ ROS package for quadruped robot PupBot.
 ## Launch Gazebo
 
 ```
-roslaunch quadruped_robot quadruped_robot_empty_world.launch
+roslaunch pupbot pupbot_empty_world.launch
 ```
 
 ## Launch Walking Simulation
 
 ```
-roslaunch quadruped_robot move_quadruped_robot.launch
+roslaunch pupbot move_pupbot.launch
 ```
 
 q : Startup,Shutdown  
@@ -29,5 +29,5 @@ d : Decreases the value of turn (-0.25)
 ## Launch Rviz
 
 ```
-roslaunch quadruped_robot quadruped_robot_rviz.launch
+roslaunch pupbot pupbot_rviz.launch
 ```

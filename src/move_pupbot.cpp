@@ -1,4 +1,4 @@
-#include "move_quadruped_robot.h"
+#include "move_pupbot.h"
 
 ros::Publisher pub_leftfront_leg;
 ros::Publisher pub_leftback_leg;
@@ -21,68 +21,78 @@ void key_controlCallback2(const std_msgs::Float64& turn) {
 
 void startup_shutdown_Callback(const std_msgs::Bool& startup_shutdown) {
   Data ssc;
-  double startup_shutdown_upper = 0.0;
-  double startup_shutdown_lower = 0.0;
+  double startup_shutdown_upper_left = 0.0;
+  double startup_shutdown_lower_left = 0.0;
+  double startup_shutdown_upper_right = 0.0;
+  double startup_shutdown_lower_right = 0.0;
   if (startup_shutdown_bool==false) {
-    startup_shutdown_upper = 0.7;
-    startup_shutdown_lower = -1.5;
+    startup_shutdown_upper_left = 1.5;
+    startup_shutdown_lower_left = 3.0;
+    startup_shutdown_upper_right = -1.5;
+    startup_shutdown_lower_right = -3.0;
     for (int i=0;i<22;i++) {
-      startup_shutdown_upper -= 0.67163087728/22.0;
-      startup_shutdown_lower += 1.67778386273/22.0;
-      ssc.leftfront_leg.points[0].positions[0] = 0.0;
-      ssc.leftfront_leg.points[0].positions[1] = startup_shutdown_upper;
-      ssc.leftfront_leg.points[0].positions[2] = startup_shutdown_lower;
-      ssc.leftfront_leg.header.stamp = ros::Time::now();
-      ssc.leftfront_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_leftfront_leg.publish(ssc.leftfront_leg);    
-      ssc.leftback_leg.points[0].positions[0] = 0.0;
-      ssc.leftback_leg.points[0].positions[1] = startup_shutdown_upper;
-      ssc.leftback_leg.points[0].positions[2] = startup_shutdown_lower;
-      ssc.leftback_leg.header.stamp = ros::Time::now();
-      ssc.leftback_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_leftback_leg.publish(ssc.leftback_leg);
+      startup_shutdown_upper_left -= 0.68623270987/22.0;
+      startup_shutdown_lower_left -= 1.60698754449/22.0;
+      startup_shutdown_upper_right += 0.68623270987/22.0;
+      startup_shutdown_lower_right += 1.60698754449/22.0;
       ssc.rightback_leg.points[0].positions[0] = 0.0;
-      ssc.rightback_leg.points[0].positions[1] = startup_shutdown_upper;
-      ssc.rightback_leg.points[0].positions[2] = startup_shutdown_lower;
+      ssc.rightback_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      ssc.rightback_leg.points[0].positions[2] = startup_shutdown_lower_right;
       ssc.rightback_leg.header.stamp = ros::Time::now();
       ssc.rightback_leg.points[0].time_from_start = ros::Duration(0.1);
       pub_rightback_leg.publish(ssc.rightback_leg);
       ssc.rightfront_leg.points[0].positions[0] = 0.0;
-      ssc.rightfront_leg.points[0].positions[1] = startup_shutdown_upper;
-      ssc.rightfront_leg.points[0].positions[2] = startup_shutdown_lower;
+      ssc.rightfront_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      ssc.rightfront_leg.points[0].positions[2] = startup_shutdown_lower_right;
       ssc.rightfront_leg.header.stamp = ros::Time::now();
       ssc.rightfront_leg.points[0].time_from_start = ros::Duration(0.1);
       pub_rightfront_leg.publish(ssc.rightfront_leg); 
+      ssc.leftfront_leg.points[0].positions[0] = 0.0;
+      ssc.leftfront_leg.points[0].positions[1] = startup_shutdown_upper_left;
+      ssc.leftfront_leg.points[0].positions[2] = startup_shutdown_lower_left;
+      ssc.leftfront_leg.header.stamp = ros::Time::now();
+      ssc.leftfront_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_leftfront_leg.publish(ssc.leftfront_leg);    
+      ssc.leftback_leg.points[0].positions[0] = 0.0;
+      ssc.leftback_leg.points[0].positions[1] = startup_shutdown_upper_left;
+      ssc.leftback_leg.points[0].positions[2] = startup_shutdown_lower_left;
+      ssc.leftback_leg.header.stamp = ros::Time::now();
+      ssc.leftback_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_leftback_leg.publish(ssc.leftback_leg);
       ros::Duration(0.1).sleep();
     }
     startup_shutdown_bool=true;
   }else if (startup_shutdown_bool==true) {
-    startup_shutdown_upper = 0.028369122714;
-    startup_shutdown_lower = 0.17778386273;
+    startup_shutdown_upper_left = 0.81376729013;
+    startup_shutdown_lower_left = 1.39301245551;
+    startup_shutdown_upper_right = -0.81376729013;
+    startup_shutdown_lower_right = -1.39301245551;
     for (int i=0;i<22;i++) {
-      startup_shutdown_upper += 0.67163087728/22.0;
-      startup_shutdown_lower -= 1.67778386273/22.0;
+      startup_shutdown_upper_left += 0.68623270987/22.0;
+      startup_shutdown_lower_left += 1.60698754449/22.0;
+      startup_shutdown_upper_right -= 0.68623270987/22.0;
+      startup_shutdown_lower_right -= 1.60698754449/22.0;
       ssc.leftfront_leg.points[0].positions[0] = 0.0;
-      ssc.leftfront_leg.points[0].positions[1] = startup_shutdown_upper;
-      ssc.leftfront_leg.points[0].positions[2] = startup_shutdown_lower;
+      ssc.leftfront_leg.points[0].positions[1] = startup_shutdown_upper_left;
+      ssc.leftfront_leg.points[0].positions[2] = startup_shutdown_lower_left;
       ssc.leftfront_leg.header.stamp = ros::Time::now();
       ssc.leftfront_leg.points[0].time_from_start = ros::Duration(0.1);
       pub_leftfront_leg.publish(ssc.leftfront_leg);    
       ssc.leftback_leg.points[0].positions[0] = 0.0;
-      ssc.leftback_leg.points[0].positions[1] = startup_shutdown_upper;
-      ssc.leftback_leg.points[0].positions[2] = startup_shutdown_lower;
+      ssc.leftback_leg.points[0].positions[1] = startup_shutdown_upper_left;
+      ssc.leftback_leg.points[0].positions[2] = startup_shutdown_lower_left;
       ssc.leftback_leg.header.stamp = ros::Time::now();
       ssc.leftback_leg.points[0].time_from_start = ros::Duration(0.1);
       pub_leftback_leg.publish(ssc.leftback_leg);
       ssc.rightback_leg.points[0].positions[0] = 0.0;
-      ssc.rightback_leg.points[0].positions[1] = startup_shutdown_upper;
-      ssc.rightback_leg.points[0].positions[2] = startup_shutdown_lower;
+      ssc.rightback_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      ssc.rightback_leg.points[0].positions[2] = startup_shutdown_lower_right;
       ssc.rightback_leg.header.stamp = ros::Time::now();
       ssc.rightback_leg.points[0].time_from_start = ros::Duration(0.1);
       pub_rightback_leg.publish(ssc.rightback_leg);
       ssc.rightfront_leg.points[0].positions[0] = 0.0;
-      ssc.rightfront_leg.points[0].positions[1] = startup_shutdown_upper;
-      ssc.rightfront_leg.points[0].positions[2] = startup_shutdown_lower;
+      ssc.rightfront_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      ssc.rightfront_leg.points[0].positions[2] = startup_shutdown_lower_right;
       ssc.rightfront_leg.header.stamp = ros::Time::now();
       ssc.rightfront_leg.points[0].time_from_start = ros::Duration(0.1);
       pub_rightfront_leg.publish(ssc.rightfront_leg); 
@@ -92,9 +102,10 @@ void startup_shutdown_Callback(const std_msgs::Bool& startup_shutdown) {
   }
 }
 
+
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "move_quadruped_robot");
+  ros::init(argc, argv, "move_pupbot");
   ros::NodeHandle nh;
   ros::Rate loop_rate(50);
   pub_leftfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftfront_leg_controller/command", 10);
@@ -136,34 +147,36 @@ int main(int argc, char** argv)
       data.angle2 = data.angle3/2.0+data.a0;
 
       data.target_leg_shoulder_joint = data.angle1*M_PI/180.0;
-      data.target_leg_upper_joint = (45.0-data.angle2)*M_PI/180.0;
-      data.target_leg_lower_joint = (data.angle3-90.0)*M_PI/180.0;
+      data.target_left_leg_upper_joint = (90.0-data.angle2)*M_PI/180.0;
+      data.target_left_leg_lower_joint = (180.0-data.angle3)*M_PI/180.0;
+      data.target_right_leg_upper_joint = -(90.0-data.angle2)*M_PI/180.0;
+      data.target_right_leg_lower_joint = -(180.0-data.angle3)*M_PI/180.0;
       ROS_INFO("angle:shoulder=%lf upper=%lf lower=%lf",data.angle1, data.angle2, data.angle3);
       if (l==0) {
         data.leftfront_leg.points[0].positions[0] = data.target_leg_shoulder_joint;
-        data.leftfront_leg.points[0].positions[1] = data.target_leg_upper_joint;
-        data.leftfront_leg.points[0].positions[2] = data.target_leg_lower_joint;
+        data.leftfront_leg.points[0].positions[1] = data.target_left_leg_upper_joint;
+        data.leftfront_leg.points[0].positions[2] = data.target_left_leg_lower_joint;
         data.leftfront_leg.header.stamp = ros::Time::now();
         data.leftfront_leg.points[0].time_from_start = ros::Duration(0.02);
         pub_leftfront_leg.publish(data.leftfront_leg);    
       } else if (l==1) {
         data.leftback_leg.points[0].positions[0] = data.target_leg_shoulder_joint;
-        data.leftback_leg.points[0].positions[1] = data.target_leg_upper_joint;
-        data.leftback_leg.points[0].positions[2] = data.target_leg_lower_joint;
+        data.leftback_leg.points[0].positions[1] = data.target_left_leg_upper_joint;
+        data.leftback_leg.points[0].positions[2] = data.target_left_leg_lower_joint;
         data.leftback_leg.header.stamp = ros::Time::now();
         data.leftback_leg.points[0].time_from_start = ros::Duration(0.02);
         pub_leftback_leg.publish(data.leftback_leg);    
       } else if (l==2) {
         data.rightback_leg.points[0].positions[0] = data.target_leg_shoulder_joint;
-        data.rightback_leg.points[0].positions[1] = data.target_leg_upper_joint;
-        data.rightback_leg.points[0].positions[2] = data.target_leg_lower_joint;
+        data.rightback_leg.points[0].positions[1] = data.target_right_leg_upper_joint;
+        data.rightback_leg.points[0].positions[2] = data.target_right_leg_lower_joint;
         data.rightback_leg.header.stamp = ros::Time::now();
         data.rightback_leg.points[0].time_from_start = ros::Duration(0.02);
         pub_rightback_leg.publish(data.rightback_leg);    
       } else if (l==3) {
         data.rightfront_leg.points[0].positions[0] = data.target_leg_shoulder_joint;
-        data.rightfront_leg.points[0].positions[1] = data.target_leg_upper_joint;
-        data.rightfront_leg.points[0].positions[2] = data.target_leg_lower_joint;
+        data.rightfront_leg.points[0].positions[1] = data.target_right_leg_upper_joint;
+        data.rightfront_leg.points[0].positions[2] = data.target_right_leg_lower_joint;
         data.rightfront_leg.header.stamp = ros::Time::now();
         data.rightfront_leg.points[0].time_from_start = ros::Duration(0.02);
         pub_rightfront_leg.publish(data.rightfront_leg);   

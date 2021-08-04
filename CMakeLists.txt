@@ -1,22 +1,37 @@
+################################################################################
+# Set minimum required version of cmake, project name and compile options
+################################################################################
 cmake_minimum_required(VERSION 3.0.2)
-project(quadruped_robot)
+project(pupbot)
 
+################################################################################
+# Find catkin packages and libraries for catkin and system dependencies
+################################################################################
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   trajectory_msgs
 )
 
+################################################################################
+# Declare catkin specific configuration to be passed to dependent projects
+################################################################################
 catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS roscpp std_msgs trajectory_msgs
 )
 
+################################################################################
+# Build
+################################################################################
+link_directories(${GAZEBO_LIBRARY_DIRS})
+
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(move_quadruped_robot src/move_quadruped_robot.cpp)
-add_executable(quadruped_robot_controller src/quadruped_robot_controller.cpp)
-target_link_libraries(move_quadruped_robot ${catkin_LIBRARIES})
-target_link_libraries(quadruped_robot_controller ${catkin_LIBRARIES})
+add_executable(move_pupbot src/move_pupbot.cpp)
+add_executable(pupbot_controller src/pupbot_controller.cpp)
+target_link_libraries(move_pupbot ${catkin_LIBRARIES})
+target_link_libraries(pupbot_controller ${catkin_LIBRARIES})

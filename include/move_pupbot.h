@@ -52,7 +52,7 @@ class Data{
   double bone_length;
   double dir;
   bool c_inv;
-  double target_leg_shoulder_joint, target_leg_upper_joint, target_leg_lower_joint;
+  double target_leg_shoulder_joint, target_left_leg_upper_joint, target_left_leg_lower_joint, target_right_leg_upper_joint, target_right_leg_lower_joint;
   double l_inv[4][2] = {{1.0, -1.0},{-1.0, -1.0},{1.0, 1.0},{-1.0, 1.0}};
   trajectory_msgs::JointTrajectory leftfront_leg, leftback_leg, rightfront_leg, rightback_leg;
   void init() {
@@ -81,9 +81,8 @@ class Data{
     rightback_leg.joint_names[1] ="rightback_leg_upper_joint";
     rightback_leg.joint_names[2] ="rightback_leg_lower_joint";
     x_offset=-14.0;
-    y_offset=-6.0;
-    z_offset=118.844;
-    bone_length=78.0;
+    z_offset=117.379725677;
+    bone_length=83.0;
   }
 
   void trot(double c0_x,double c0_y,double dir_x,double dir_y,bool inv,double step_extent_x,double step_extent_y,double step_extent_z,double* vector_x,double* vector_y,double* vector_z) {

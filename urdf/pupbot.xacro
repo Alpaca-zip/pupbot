@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="quadruped_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="pupbot" xmlns:xacro="http://ros.org/wiki/xacro">
   <material name="gray">
     <color rgba="0.5 0.5 0.5 2.5"/>
   </material>
@@ -23,7 +23,7 @@
     <visual>
       <origin xyz="0 0 0.13" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://quadruped_robot/stl/body.stl" />
+        <mesh filename="package://pupbot/stl/body.stl" />
       </geometry>
       <material name="gray" />
     </visual>
@@ -72,7 +72,7 @@
     <visual>
       <origin xyz="${xyz2}" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://quadruped_robot/stl/leg_shoulder.stl" />
+        <mesh filename="package://pupbot/stl/leg_shoulder.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
@@ -95,11 +95,11 @@
 
   <!-- left leg upper -->
   <joint name="${prefix}_upper_joint" type="revolute">
-    <origin xyz="${xyz3}" rpy="${radians(-90)} ${radians(135)} 0"/>
+    <origin xyz="${xyz3}" rpy="${radians(-90)} ${radians(90)} 0"/>
     <parent link="${prefix}_shoulder_link"/>
     <child  link="${prefix}_upper_link"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-1.7" upper="0.8" effort="${effort}" velocity="${velocity}"/>
+    <limit lower="-1.0" upper="2.0" effort="${effort}" velocity="${velocity}"/>
   </joint>
 
   <transmission name="${prefix}_upper_trans">
@@ -122,7 +122,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 ${radians(180)}" />
       <geometry>
-        <mesh filename="package://quadruped_robot/stl/leg_upper.stl" />
+        <mesh filename="package://pupbot/stl/leg_upper.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
@@ -145,11 +145,11 @@
 
   <!-- left leg lower -->
   <joint name="${prefix}_lower_joint" type="revolute">
-    <origin xyz="0 0.083 0" rpy="0 0 ${radians(-90)}"/>
+    <origin xyz="0 0.083 0" rpy="0 ${radians(180)} 0"/>
     <parent link="${prefix}_upper_link"/>
     <child  link="${prefix}_lower_link"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-1.6" upper="1.5" effort="${effort}" velocity="${velocity}"/>
+    <limit lower="0.0" upper="3.0" effort="${effort}" velocity="${velocity}"/>
   </joint>
 
   <transmission name="${prefix}_lower_trans">
@@ -165,19 +165,19 @@
 
   <link name="${prefix}_lower_link">
     <inertial>
-      <origin xyz="0 0.0365 0.021" rpy="0 0 0" />
+      <origin xyz="0 0.0365 -0.021" rpy="0 ${radians(-180)} 0" />
       <mass value="0.0181437"/>
       <inertia ixx="0.00000820851" ixy="0.0" ixz="0.0" iyy="0.000000302395" iyz="0.0" izz="0.00000820851"/>
     </inertial>
     <visual>
-      <origin xyz="0 0 0.042" rpy="0 ${radians(90)} 0" />
+      <origin xyz="0 0 -0.042" rpy="0 ${radians(-90)} 0" />
       <geometry>
-        <mesh filename="package://quadruped_robot/stl/leg_lower.stl" />
+        <mesh filename="package://pupbot/stl/leg_lower.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
     <collision>
-      <origin xyz="0 0.0365 0.021" rpy="0 0 0" />
+      <origin xyz="0 0.0365 -0.021" rpy="0 0 0" />
       <geometry>
         <box size="0.01 0.073 0.01" />
       </geometry>
@@ -201,7 +201,7 @@
 
   <link name="${prefix}_lower_ball">
     <collision>
-      <origin xyz="0 0.005 0.021" rpy="0 0 0" />
+      <origin xyz="0 0.005 -0.021" rpy="0 0 0" />
       <geometry>
         <sphere radius="0.005"/>
       </geometry>
@@ -255,7 +255,7 @@
     <visual>
       <origin xyz="${xyz2}" rpy="0 0 ${radians(180)}" />
       <geometry>
-        <mesh filename="package://quadruped_robot/stl/leg_shoulder.stl" />
+        <mesh filename="package://pupbot/stl/leg_shoulder.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
@@ -278,11 +278,11 @@
 
   <!-- right leg upper -->
   <joint name="${prefix}_upper_joint" type="revolute">
-    <origin xyz="${xyz3}" rpy="${radians(-90)} ${radians(135)} 0"/>
+    <origin xyz="${xyz3}" rpy="${radians(90)} ${radians(-90)} 0"/>
     <parent link="${prefix}_shoulder_link"/>
     <child  link="${prefix}_upper_link"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-1.7" upper="0.8" effort="${effort}" velocity="${velocity}"/>
+    <limit lower="-2.0" upper="1.0" effort="${effort}" velocity="${velocity}"/>
   </joint>
 
   <transmission name="${prefix}_upper_trans">
@@ -298,19 +298,19 @@
 
   <link name="${prefix}_upper_link">
     <inertial>
-      <origin xyz="0 0.04 -0.015" rpy="0 0 0" />
+      <origin xyz="0 0.04 0.015" rpy="0 ${radians(180)} 0" />
       <mass value="0.1273437"/>
       <inertia ixx="0.00009550777" ixy="0.0" ixz="0.0" iyy="0.00001379556" iyz="0.0" izz="0.00009020178"/>
     </inertial>
     <visual>
-      <origin xyz="0 0 0" rpy="0 ${radians(180)} ${radians(180)}" />
+      <origin xyz="0 0 0" rpy="0 ${radians(0)} ${radians(180)}" />
       <geometry>
-        <mesh filename="package://quadruped_robot/stl/leg_upper.stl" />
+        <mesh filename="package://pupbot/stl/leg_upper.stl" />
       </geometry>
       <material name="gray"/>
     </visual>
     <collision>
-      <origin xyz="0 0.04 -0.015" rpy="0 0 0" />
+      <origin xyz="0 0.04 0.015" rpy="0 0 0" />
       <geometry>
         <box size="0.02 0.09 0.03" />
       </geometry>
@@ -328,11 +328,11 @@
 
   <!-- right leg lower -->
   <joint name="${prefix}_lower_joint" type="revolute">
-    <origin xyz="0 0.083 0" rpy="0 0 ${radians(-90)}"/>
+    <origin xyz="0 0.083 0" rpy="0 ${radians(180)} 0"/>
     <parent link="${prefix}_upper_link"/>
     <child  link="${prefix}_lower_link"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-1.6" upper="1.5" effort="${effort}" velocity="${velocity}"/>
+    <limit lower="-3.0" upper="0.0" effort="${effort}" velocity="${velocity}"/>
   </joint>
 
   <transmission name="${prefix}_lower_trans">
@@ -355,7 +355,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
       <geometry>
-        <mesh filename="package://quadruped_robot/stl/leg_lower.stl" />
+        <mesh filename="package://pupbot/stl/leg_lower.stl" />
       </geometry>
       <material name="gray"/>
     </visual>

@@ -18,7 +18,7 @@ int getch() {
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "quadruped_robot_controller");
+  ros::init(argc, argv, "pupbot_controller");
   ros::NodeHandle nh;
   ros::Publisher key_control_pub1 = nh.advertise<std_msgs::Float64>("key_control1", 10);
   ros::Publisher key_control_pub2 = nh.advertise<std_msgs::Bool>("key_control2", 10);
