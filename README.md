@@ -1,6 +1,6 @@
 # PupBot
 
-<img src="https://github.com/Alpaca-zip/PupBot/blob/main/pupbot.png">
+<img src="https://github.com/Alpaca-zip/PupBot/blob/main/PupBot.png">
 
 [![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg)](https://github.com/Alpaca-zip/PupBot)
 
