@@ -1,17 +1,140 @@
 #include "move_pupbot.h"
 
-ros::Publisher pub_leftfront_leg;
-ros::Publisher pub_leftback_leg;
-ros::Publisher pub_rightfront_leg;
-ros::Publisher pub_rightback_leg;
-ros::Subscriber key_control_sub1;
-ros::Subscriber key_control_sub2;
-ros::Subscriber key_control_sub3;
-double dirupdate_x=0.0;
-double turn0=0.0;
-bool startup_shutdown_bool=false;
+/* ++++++++++++++++++++++++++++++++++
+           Vector2D class
+++++++++++++++++++++++++++++++++++ */
+Vector2D::Vector2D(double x,double y){
+  double_x = x;
+  double_y = y;
+}
 
-void key_controlCallback1(const std_msgs::Float64& direction_x) {
+double Vector2D::x(){
+  return double_x;
+}
+
+double Vector2D::y(){
+  return double_y;
+}
+
+/* ++++++++++++++++++++++++++++++++++
+           Vector class
+++++++++++++++++++++++++++++++++++ */
+Vector::Vector(double x,double y,double z){
+  double_x = x;
+  double_y = y;
+  double_z = z;
+}
+
+double Vector::x(){
+  return double_x;
+}
+
+double Vector::y(){
+  return double_y;
+}
+
+double Vector::z(){
+  return double_z;
+}
+
+/* ++++++++++++++++++++++++++++++++++
+            Data class
+++++++++++++++++++++++++++++++++++ */
+Data::Data(){
+  init();
+}
+
+void Data::init(){
+  leftfront_leg.joint_names.resize(3);
+  leftfront_leg.points.resize(1);
+  leftfront_leg.points[0].positions.resize(3);
+  leftfront_leg.joint_names[0] = "leftfront_leg_shoulder_joint";
+  leftfront_leg.joint_names[1] = "leftfront_leg_upper_joint";
+  leftfront_leg.joint_names[2] = "leftfront_leg_lower_joint";
+  leftback_leg.joint_names.resize(3);
+  leftback_leg.points.resize(1);
+  leftback_leg.points[0].positions.resize(3);
+  leftback_leg.joint_names[0] = "leftback_leg_shoulder_joint";
+  leftback_leg.joint_names[1] = "leftback_leg_upper_joint";
+  leftback_leg.joint_names[2] = "leftback_leg_lower_joint";
+  rightfront_leg.joint_names.resize(3);
+  rightfront_leg.points.resize(1);
+  rightfront_leg.points[0].positions.resize(3);
+  rightfront_leg.joint_names[0] = "rightfront_leg_shoulder_joint";
+  rightfront_leg.joint_names[1] = "rightfront_leg_upper_joint";
+  rightfront_leg.joint_names[2] = "rightfront_leg_lower_joint";
+  rightback_leg.joint_names.resize(3);
+  rightback_leg.points.resize(1);
+  rightback_leg.points[0].positions.resize(3);
+  rightback_leg.joint_names[0] = "rightback_leg_shoulder_joint";
+  rightback_leg.joint_names[1] = "rightback_leg_upper_joint";
+  rightback_leg.joint_names[2] = "rightback_leg_lower_joint";
+  x_offset = -14.0;
+  z_offset = 117.379725677;
+  bone_length = 83.0;
+}
+
+void Data::trot(double c0_x,double c0_y,double dir_x,double dir_y,bool inv,double step_extent_x,double step_extent_y,double step_extent_z,double* vector_x,double* vector_y,double* vector_z){
+  double w0 = step_extent_x*0.1/2.0*dir_x;
+  double l0 = step_extent_y*0.1*4.0*dir_y;
+  double h0 = step_extent_z*0.1;
+  if(inv==false){
+    c0_x =- c0_x;
+    c0_y =- c0_y;
+  }
+  if(w0 == 0.0 && l0 == 0.0){
+    *vector_x = 0.0;
+    *vector_y = 0.0;
+    *vector_z = 0.0;
+  }else if(w0 == 0.0){
+    double h1 = sqrt(abs((1.0-(c0_y/l0)*(c0_y/l0))*h0*h0));
+    *vector_x = c0_x/0.1;
+    *vector_y = c0_y/0.1;
+    *vector_z = h1/0.1*int(inv);
+  }else if(l0 == 0.0){
+    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0))*h0*h0));
+    *vector_x = c0_x/0.1;
+    *vector_y = c0_y/0.1;
+    *vector_z = h1/0.1*int(inv);
+  }else{
+    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0)-(c0_y/l0)*(c0_y/l0))*h0*h0));
+    *vector_x = c0_x/0.1;
+    *vector_y = c0_y/0.1;
+    *vector_z =h1/0.1*int(inv);
+  }
+}
+
+void Data::count_c(int l,double dir_x,double dir_y,double step_extent_x,double c_iter[],double c[],double c_inv[]){
+  int number = 22;
+  double w0 = step_extent_x*0.1*std::max(abs(dir_x),abs(dir_y))/2.0;
+  double a0 = (2.0*w0)*(c_iter[l]/number)-w0;
+  c[l] = a0;
+  c_iter[l] += 1.0;
+  if(c_iter[l] > number){
+    c[l] = -w0; 
+    c_iter[l] = 1.0;
+    c_inv[l] += 1.0;
+    if (c_inv[l] > 31) c_inv[l] = 0.0;
+  }
+}
+
+double Data::rDir_x(double dir_x, double dir_y){
+  if (dir_x != 0.0 || dir_y != 0.0){
+    return dir_x/std::max(abs(dir_x),abs(dir_y));
+  }else{
+    return 1.0;
+  } 
+}
+
+double Data::rDir_y(double dir_x, double dir_y){
+  if (dir_x != 0.0 || dir_y != 0.0){
+    return dir_y/std::max(abs(dir_x),abs(dir_y));
+  }else{
+    return 1.0;
+  } 
+}
+
+void key_controlCallback1(const std_msgs::Float64& direction_x){
   dirupdate_x=direction_x.data;
 }
 
