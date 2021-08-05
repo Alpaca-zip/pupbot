@@ -45,6 +45,19 @@ Data::Data(){
 }
 
 void Data::init(){
+  pub_leftfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftfront_leg_controller/command", 10);
+  pub_leftback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftback_leg_controller/command", 10);
+  pub_rightfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightfront_leg_controller/command", 10);
+  pub_rightback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightback_leg_controller/command", 10);
+  key_control_sub1 = nh.subscribe("key_control1",10,&Data::key_controlCallback1,this);
+  key_control_sub2 = nh.subscribe("key_control2",10,&Data::startup_shutdown_Callback,this);
+  key_control_sub3 = nh.subscribe("key_control3",10,&Data::key_controlCallback2,this);
+  x_offset = -14.0;
+  z_offset = 117.379725677;
+  bone_length = 83.0;
+  dirupdate_x = 0.0;
+  turn0 = 0.0;
+  startup_shutdown_bool=false;
   leftfront_leg.joint_names.resize(3);
   leftfront_leg.points.resize(1);
   leftfront_leg.points[0].positions.resize(3);
@@ -69,9 +82,6 @@ void Data::init(){
   rightback_leg.joint_names[0] = "rightback_leg_shoulder_joint";
   rightback_leg.joint_names[1] = "rightback_leg_upper_joint";
   rightback_leg.joint_names[2] = "rightback_leg_lower_joint";
-  x_offset = -14.0;
-  z_offset = 117.379725677;
-  bone_length = 83.0;
 }
 
 void Data::trot(double c0_x,double c0_y,double dir_x,double dir_y,bool inv,double step_extent_x,double step_extent_y,double step_extent_z,double* vector_x,double* vector_y,double* vector_z){
@@ -118,7 +128,97 @@ void Data::count_c(int l,double dir_x,double dir_y,double step_extent_x,double c
   }
 }
 
-double Data::rDir_x(double dir_x, double dir_y){
+void Data::key_controlCallback1(const std_msgs::Float64& direction_x){
+  dirupdate_x=direction_x.data;
+}
+
+void Data::key_controlCallback2(const std_msgs::Float64& turn){
+  turn0=turn.data;
+}
+
+void Data::startup_shutdown_Callback(const std_msgs::Bool& startup_shutdown){
+  double startup_shutdown_upper_left = 0.0;
+  double startup_shutdown_lower_left = 0.0;
+  double startup_shutdown_upper_right = 0.0;
+  double startup_shutdown_lower_right = 0.0;
+  if(startup_shutdown_bool == false){
+    startup_shutdown_upper_left = 1.5;
+    startup_shutdown_lower_left = 3.0;
+    startup_shutdown_upper_right = -1.5;
+    startup_shutdown_lower_right = -3.0;
+    for(int i=0;i<22;i++){
+      startup_shutdown_upper_left -= 0.68623270987/22.0;
+      startup_shutdown_lower_left -= 1.60698754449/22.0;
+      startup_shutdown_upper_right += 0.68623270987/22.0;
+      startup_shutdown_lower_right += 1.60698754449/22.0;
+      rightback_leg.points[0].positions[0] = 0.0;
+      rightback_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      rightback_leg.points[0].positions[2] = startup_shutdown_lower_right;
+      rightback_leg.header.stamp = ros::Time::now();
+      rightback_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_rightback_leg.publish(rightback_leg);
+      rightfront_leg.points[0].positions[0] = 0.0;
+      rightfront_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      rightfront_leg.points[0].positions[2] = startup_shutdown_lower_right;
+      rightfront_leg.header.stamp = ros::Time::now();
+      rightfront_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_rightfront_leg.publish(rightfront_leg); 
+      leftfront_leg.points[0].positions[0] = 0.0;
+      leftfront_leg.points[0].positions[1] = startup_shutdown_upper_left;
+      leftfront_leg.points[0].positions[2] = startup_shutdown_lower_left;
+      leftfront_leg.header.stamp = ros::Time::now();
+      leftfront_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_leftfront_leg.publish(leftfront_leg);    
+      leftback_leg.points[0].positions[0] = 0.0;
+      leftback_leg.points[0].positions[1] = startup_shutdown_upper_left;
+      leftback_leg.points[0].positions[2] = startup_shutdown_lower_left;
+      leftback_leg.header.stamp = ros::Time::now();
+      leftback_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_leftback_leg.publish(leftback_leg);
+      ros::Duration(0.1).sleep();
+    }
+    startup_shutdown_bool=true;
+  }else if(startup_shutdown_bool == true){
+    startup_shutdown_upper_left = 0.81376729013;
+    startup_shutdown_lower_left = 1.39301245551;
+    startup_shutdown_upper_right = -0.81376729013;
+    startup_shutdown_lower_right = -1.39301245551;
+    for(int i=0;i<22;i++){
+      startup_shutdown_upper_left += 0.68623270987/22.0;
+      startup_shutdown_lower_left += 1.60698754449/22.0;
+      startup_shutdown_upper_right -= 0.68623270987/22.0;
+      startup_shutdown_lower_right -= 1.60698754449/22.0;
+      leftfront_leg.points[0].positions[0] = 0.0;
+      leftfront_leg.points[0].positions[1] = startup_shutdown_upper_left;
+      leftfront_leg.points[0].positions[2] = startup_shutdown_lower_left;
+      leftfront_leg.header.stamp = ros::Time::now();
+      leftfront_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_leftfront_leg.publish(leftfront_leg);    
+      leftback_leg.points[0].positions[0] = 0.0;
+      leftback_leg.points[0].positions[1] = startup_shutdown_upper_left;
+      leftback_leg.points[0].positions[2] = startup_shutdown_lower_left;
+      leftback_leg.header.stamp = ros::Time::now();
+      leftback_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_leftback_leg.publish(leftback_leg);
+      rightback_leg.points[0].positions[0] = 0.0;
+      rightback_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      rightback_leg.points[0].positions[2] = startup_shutdown_lower_right;
+      rightback_leg.header.stamp = ros::Time::now();
+      rightback_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_rightback_leg.publish(rightback_leg);
+      rightfront_leg.points[0].positions[0] = 0.0;
+      rightfront_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      rightfront_leg.points[0].positions[2] = startup_shutdown_lower_right;
+      rightfront_leg.header.stamp = ros::Time::now();
+      rightfront_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_rightfront_leg.publish(rightfront_leg); 
+      ros::Duration(0.1).sleep();
+    }
+    startup_shutdown_bool=false;
+  }
+}
+
+double Data::rDir_x(double dir_x,double dir_y){
   if (dir_x != 0.0 || dir_y != 0.0){
     return dir_x/std::max(abs(dir_x),abs(dir_y));
   }else{
@@ -126,7 +226,7 @@ double Data::rDir_x(double dir_x, double dir_y){
   } 
 }
 
-double Data::rDir_y(double dir_x, double dir_y){
+double Data::rDir_y(double dir_x,double dir_y){
   if (dir_x != 0.0 || dir_y != 0.0){
     return dir_y/std::max(abs(dir_x),abs(dir_y));
   }else{
@@ -134,115 +234,16 @@ double Data::rDir_y(double dir_x, double dir_y){
   } 
 }
 
-void key_controlCallback1(const std_msgs::Float64& direction_x){
-  dirupdate_x=direction_x.data;
-}
-
-void key_controlCallback2(const std_msgs::Float64& turn) {
-  turn0=turn.data;
-}
-
-void startup_shutdown_Callback(const std_msgs::Bool& startup_shutdown) {
-  Data ssc;
-  double startup_shutdown_upper_left = 0.0;
-  double startup_shutdown_lower_left = 0.0;
-  double startup_shutdown_upper_right = 0.0;
-  double startup_shutdown_lower_right = 0.0;
-  if (startup_shutdown_bool==false) {
-    startup_shutdown_upper_left = 1.5;
-    startup_shutdown_lower_left = 3.0;
-    startup_shutdown_upper_right = -1.5;
-    startup_shutdown_lower_right = -3.0;
-    for (int i=0;i<22;i++) {
-      startup_shutdown_upper_left -= 0.68623270987/22.0;
-      startup_shutdown_lower_left -= 1.60698754449/22.0;
-      startup_shutdown_upper_right += 0.68623270987/22.0;
-      startup_shutdown_lower_right += 1.60698754449/22.0;
-      ssc.rightback_leg.points[0].positions[0] = 0.0;
-      ssc.rightback_leg.points[0].positions[1] = startup_shutdown_upper_right;
-      ssc.rightback_leg.points[0].positions[2] = startup_shutdown_lower_right;
-      ssc.rightback_leg.header.stamp = ros::Time::now();
-      ssc.rightback_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_rightback_leg.publish(ssc.rightback_leg);
-      ssc.rightfront_leg.points[0].positions[0] = 0.0;
-      ssc.rightfront_leg.points[0].positions[1] = startup_shutdown_upper_right;
-      ssc.rightfront_leg.points[0].positions[2] = startup_shutdown_lower_right;
-      ssc.rightfront_leg.header.stamp = ros::Time::now();
-      ssc.rightfront_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_rightfront_leg.publish(ssc.rightfront_leg); 
-      ssc.leftfront_leg.points[0].positions[0] = 0.0;
-      ssc.leftfront_leg.points[0].positions[1] = startup_shutdown_upper_left;
-      ssc.leftfront_leg.points[0].positions[2] = startup_shutdown_lower_left;
-      ssc.leftfront_leg.header.stamp = ros::Time::now();
-      ssc.leftfront_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_leftfront_leg.publish(ssc.leftfront_leg);    
-      ssc.leftback_leg.points[0].positions[0] = 0.0;
-      ssc.leftback_leg.points[0].positions[1] = startup_shutdown_upper_left;
-      ssc.leftback_leg.points[0].positions[2] = startup_shutdown_lower_left;
-      ssc.leftback_leg.header.stamp = ros::Time::now();
-      ssc.leftback_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_leftback_leg.publish(ssc.leftback_leg);
-      ros::Duration(0.1).sleep();
-    }
-    startup_shutdown_bool=true;
-  }else if (startup_shutdown_bool==true) {
-    startup_shutdown_upper_left = 0.81376729013;
-    startup_shutdown_lower_left = 1.39301245551;
-    startup_shutdown_upper_right = -0.81376729013;
-    startup_shutdown_lower_right = -1.39301245551;
-    for (int i=0;i<22;i++) {
-      startup_shutdown_upper_left += 0.68623270987/22.0;
-      startup_shutdown_lower_left += 1.60698754449/22.0;
-      startup_shutdown_upper_right -= 0.68623270987/22.0;
-      startup_shutdown_lower_right -= 1.60698754449/22.0;
-      ssc.leftfront_leg.points[0].positions[0] = 0.0;
-      ssc.leftfront_leg.points[0].positions[1] = startup_shutdown_upper_left;
-      ssc.leftfront_leg.points[0].positions[2] = startup_shutdown_lower_left;
-      ssc.leftfront_leg.header.stamp = ros::Time::now();
-      ssc.leftfront_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_leftfront_leg.publish(ssc.leftfront_leg);    
-      ssc.leftback_leg.points[0].positions[0] = 0.0;
-      ssc.leftback_leg.points[0].positions[1] = startup_shutdown_upper_left;
-      ssc.leftback_leg.points[0].positions[2] = startup_shutdown_lower_left;
-      ssc.leftback_leg.header.stamp = ros::Time::now();
-      ssc.leftback_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_leftback_leg.publish(ssc.leftback_leg);
-      ssc.rightback_leg.points[0].positions[0] = 0.0;
-      ssc.rightback_leg.points[0].positions[1] = startup_shutdown_upper_right;
-      ssc.rightback_leg.points[0].positions[2] = startup_shutdown_lower_right;
-      ssc.rightback_leg.header.stamp = ros::Time::now();
-      ssc.rightback_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_rightback_leg.publish(ssc.rightback_leg);
-      ssc.rightfront_leg.points[0].positions[0] = 0.0;
-      ssc.rightfront_leg.points[0].positions[1] = startup_shutdown_upper_right;
-      ssc.rightfront_leg.points[0].positions[2] = startup_shutdown_lower_right;
-      ssc.rightfront_leg.header.stamp = ros::Time::now();
-      ssc.rightfront_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_rightfront_leg.publish(ssc.rightfront_leg); 
-      ros::Duration(0.1).sleep();
-    }
-    startup_shutdown_bool=false;
-  }
-}
-
-
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv){
   ros::init(argc, argv, "move_pupbot");
-  ros::NodeHandle nh;
+  Data data;
   ros::Rate loop_rate(50);
-  pub_leftfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftfront_leg_controller/command", 10);
-  pub_leftback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftback_leg_controller/command", 10);
-  pub_rightfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightfront_leg_controller/command", 10);
-  pub_rightback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightback_leg_controller/command", 10);
-  key_control_sub1 = nh.subscribe("key_control1", 10, key_controlCallback1);
-  key_control_sub2 = nh.subscribe("key_control2", 10, startup_shutdown_Callback);
-  key_control_sub3 = nh.subscribe("key_control3", 10, key_controlCallback2);
+
+
 
   Vector step_extent(40, 40, 5);
   Vector2D direction(0, 0);
   Vector vector(0, 0, 0);
-  Data data;
   int l=0;
   double c_iter[4];
   double c[4];
@@ -252,8 +253,8 @@ int main(int argc, char** argv)
   while (ros::ok()) {
 
     for (l=0;l<4;l++) {
-      if (startup_shutdown_bool==false) continue;
-      Vector2D direction(dirupdate_x+turn0*data.l_inv[l][1], turn0*data.l_inv[l][0]);
+      if (data.startup_shutdown_bool == false) continue;
+      Vector2D direction(data.dirupdate_x+data.turn0*data.l_inv[l][1],data.turn0*data.l_inv[l][0]);
       data.count_c(l, direction.x(), direction.y(), step_extent.x(), c_iter, c, c_inv);
       data.trot(data.rDir_x(direction.x(),direction.y())*c[l], data.l_inv[l][1]*data.rDir_y(direction.x(),direction.y())*c[l], direction.x(), direction.y(), bool(l%2) ^ bool(fmod(c_inv[l],2.0)), step_extent.x(), step_extent.y(), step_extent.z(), &vector_x, &vector_y, &vector_z);
       Vector vector(vector_x, vector_y, vector_z);
@@ -281,28 +282,28 @@ int main(int argc, char** argv)
         data.leftfront_leg.points[0].positions[2] = data.target_left_leg_lower_joint;
         data.leftfront_leg.header.stamp = ros::Time::now();
         data.leftfront_leg.points[0].time_from_start = ros::Duration(0.02);
-        pub_leftfront_leg.publish(data.leftfront_leg);    
+        data.pub_leftfront_leg.publish(data.leftfront_leg);    
       } else if (l==1) {
         data.leftback_leg.points[0].positions[0] = data.target_leg_shoulder_joint;
         data.leftback_leg.points[0].positions[1] = data.target_left_leg_upper_joint;
         data.leftback_leg.points[0].positions[2] = data.target_left_leg_lower_joint;
         data.leftback_leg.header.stamp = ros::Time::now();
         data.leftback_leg.points[0].time_from_start = ros::Duration(0.02);
-        pub_leftback_leg.publish(data.leftback_leg);    
+        data.pub_leftback_leg.publish(data.leftback_leg);    
       } else if (l==2) {
         data.rightback_leg.points[0].positions[0] = data.target_leg_shoulder_joint;
         data.rightback_leg.points[0].positions[1] = data.target_right_leg_upper_joint;
         data.rightback_leg.points[0].positions[2] = data.target_right_leg_lower_joint;
         data.rightback_leg.header.stamp = ros::Time::now();
         data.rightback_leg.points[0].time_from_start = ros::Duration(0.02);
-        pub_rightback_leg.publish(data.rightback_leg);    
+        data.pub_rightback_leg.publish(data.rightback_leg);    
       } else if (l==3) {
         data.rightfront_leg.points[0].positions[0] = data.target_leg_shoulder_joint;
         data.rightfront_leg.points[0].positions[1] = data.target_right_leg_upper_joint;
         data.rightfront_leg.points[0].positions[2] = data.target_right_leg_lower_joint;
         data.rightfront_leg.header.stamp = ros::Time::now();
         data.rightfront_leg.points[0].time_from_start = ros::Duration(0.02);
-        pub_rightfront_leg.publish(data.rightfront_leg);   
+        data.pub_rightfront_leg.publish(data.rightfront_leg);   
       }
     }
     ros::spinOnce();
