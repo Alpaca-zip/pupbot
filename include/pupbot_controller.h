@@ -16,6 +16,7 @@ class Pupbot_Controller{
   std_msgs::Float64 direction_x;
   std_msgs::Float64 turn;
   std_msgs::Bool startup_shutdown;
+  
   void init();
   int getch();
 };

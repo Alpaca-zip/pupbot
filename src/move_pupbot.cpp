@@ -235,7 +235,7 @@ void Move_Pupbot::controlLoop(){
 }
 
 double Move_Pupbot::rDir_x(){
-  if (dir_x != 0.0 || dir_y != 0.0){
+  if(dir_x != 0.0 || dir_y != 0.0){
     return dir_x/std::max(abs(dir_x), abs(dir_y));
   }else{
     return 1.0;
@@ -243,7 +243,7 @@ double Move_Pupbot::rDir_x(){
 }
 
 double Move_Pupbot::rDir_y(){
-  if (dir_x != 0.0 || dir_y != 0.0){
+  if(dir_x != 0.0 || dir_y != 0.0){
     return dir_y/std::max(abs(dir_x), abs(dir_y));
   }else{
     return 1.0;
@@ -259,7 +259,7 @@ int main(int argc, char** argv){
 
   ros::Rate loop_rate(50);
 
-  while (ros::ok()){
+  while(ros::ok()){
     PupBot.controlLoop();
     ros::spinOnce();
     loop_rate.sleep();
