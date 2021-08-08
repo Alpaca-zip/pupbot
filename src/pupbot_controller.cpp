@@ -5,11 +5,11 @@
 ++++++++++++++++++++++++++++++++++ */
 Pupbot_Controller::Pupbot_Controller(){
   init();
-  std::cout << "w : Increases the value of direction in the x axis (+0.25)" << std::endl;
-  std::cout << "a : Increases the value of turn (+0.25)" << std::endl;
-  std::cout << "s : Decreases the value of direction in the x axis (-0.25)" << std::endl;
-  std::cout << "d : Decreases the value of turn (-0.25)" << std::endl;
-  std::cout << "q : Startup,Shutdown" << std::endl;
+  printf("q : Startup,Shutdown\n");
+  printf("w : Increases the value of direction in the x axis (+0.25)\n");
+  printf("a : Increases the value of turn (+0.25)\n");
+  printf("s : Decreases the value of direction in the x axis (-0.25)\n");
+  printf("d : Decreases the value of turn (-0.25)\n");
 }
 
 void Pupbot_Controller::init(){

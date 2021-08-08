@@ -32,39 +32,39 @@ void Dynamixel_Writer::controlLoop(){
   }
   result = dxl_wb.syncWrite(handler_index, &goal_position[0], &log);
   if(result == false){
-    std::cout << log << std::endl;
-    std::cout << "Failed to sync write position" << std::endl;
+    printf("%s\n", log);
+    printf("Failed to sync write position\n");
   }
 }
 
 void Dynamixel_Writer::dxl_init(){
   result = dxl_wb.init(port_name, baud_rate, &log);
   if(result == false){
-    std::cout << log << std::endl;
-    std::cout << "Failed to init" << std::endl;
-  }else std::cout << "Succeed to init" << baud_rate << std::endl;
+    printf("%s\n", log);
+    printf("Failed to init\n");
+  }else printf("Succeed to init(%d)\n", baud_rate);
 }
 
 void Dynamixel_Writer::dxl_torqueOn(){
   for(int cnt=0;cnt<3;cnt++){
     result = dxl_wb.ping(dxl_id[cnt], &model_number, &log);
     if(result == false){
-      std::cout << log << std::endl;
-      std::cout << "Failed to ping" << std::endl;
+      printf("%s\n", log);
+      printf("Failed to ping\n");
     }else{
-      std::cout << "Succeeded to ping" << std::endl;
-      std::cout << "id : " << dxl_id[cnt] << ", model_number : " << model_number << std::endl;
+      printf("Succeeded to ping\n");
+      printf("id : %d, model_number : %d\n", dxl_id[cnt], model_number);
     }
     result = dxl_wb.torqueOn(dxl_id[cnt]);
-    if(result == false) std::cout << "torqueOn ERROR" << std::endl;
+    if(result == false) printf("torqueOn ERROR \n");
   }
 }
 
 void Dynamixel_Writer::dxl_addSyncWriteHandler(){
   result = dxl_wb.addSyncWriteHandler(dxl_id[0], "Goal_Position", &log);
   if(result == false){
-    std::cout << log << std::endl;
-    std::cout << "Failed to add sync write handler" << std::endl;
+    printf("%s\n", log);
+    printf("Failed to add sync write handler\n");
   }
 }
 

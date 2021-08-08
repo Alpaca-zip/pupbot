@@ -1,0 +1,3 @@
+<launch>
+  <node name="dynamixel_writer"   pkg="pupbot" type="dynamixel_writer"/>
+</launch>
