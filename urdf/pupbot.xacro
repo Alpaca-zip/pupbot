@@ -418,5 +418,5 @@
             <jointName>leftfront_leg_shoulder_joint, leftback_leg_shoulder_joint, rightfront_leg_shoulder_joint, rightback_leg_shoulder_joint, leftfront_leg_upper_joint, leftback_leg_upper_joint, rightfront_leg_upper_joint, rightback_leg_upper_joint, leftfront_leg_lower_joint, leftback_leg_lower_joint, rightfront_leg_lower_joint, rightback_leg_lower_joint</jointName>
         </plugin>
   </gazebo>
-
+  
 </robot>

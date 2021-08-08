@@ -4,41 +4,38 @@
 #include "ros/time.h"
 #include "trajectory_msgs/JointTrajectory.h"
 
-class Vector2D{
-  private:
-  double double_x,double_y;
+#define X_OFFSET -14.0
+#define Z_OFFSET 117.379725677
+#define BONE_LENGTH 83.0
+#define STEP_EXTENT_X 40
+#define STEP_EXTENT_Y 40
+#define STEP_EXTENT_Z 5
 
+class Move_Pupbot{
   public:
-  Vector2D(double x,double y);
-  double x();
-  double y();
-};
+  Move_Pupbot();
+  void controlLoop();
 
-class Vector{
   private:
-  double double_x,double_y,double_z;
-
-  public:
-  Vector(double x,double y,double z);
-  double x();
-  double y();
-  double z();
-};
-
-class Data{
-  private:
-
-  public:
-  double x,y,z,a0,a1,b0;
-  double angle1,angle2,angle3;
-  double x_offset,y_offset,z_offset;
+  int l;
+  int number;
+  double x, y, z, a0, a1, b0;
+  double angle1, angle2, angle3;
+  double x_offset, z_offset;
   double bone_length;
-  double dir;
   double target_leg_shoulder_joint, target_left_leg_upper_joint, target_left_leg_lower_joint, target_right_leg_upper_joint, target_right_leg_lower_joint;
-  double l_inv[4][2] = {{1.0, -1.0},{-1.0, -1.0},{1.0, 1.0},{-1.0, 1.0}};
   double dirupdate_x;
   double turn0;
-  bool c_inv;
+  double vector_x, vector_y, vector_z;
+  double step_extent_x, step_extent_y, step_extent_z;
+  double dir_x, dir_y;
+  double w0, l0, h0;
+  double w0_count_c, a0_count_c;
+  double startup_shutdown_upper_left, startup_shutdown_lower_left, startup_shutdown_upper_right, startup_shutdown_lower_right;
+  double l_inv[4][2] = {{1.0, -1.0}, {-1.0, -1.0}, {1.0, 1.0}, {-1.0, 1.0}};
+  double c_iter[4] = {0.0, 0.0, 0.0, 0.0};
+  double c[4] = {0.0, 0.0, 0.0, 0.0};
+  double c_inv[4] = {0.0, 0.0, 0.0, 0.0};
   bool startup_shutdown_bool;
   
   ros::NodeHandle nh;
@@ -51,13 +48,12 @@ class Data{
   ros::Subscriber key_control_sub3;
   trajectory_msgs::JointTrajectory leftfront_leg, leftback_leg, rightfront_leg, rightback_leg;
 
-  Data();
   void init();
-  void trot(double c0_x,double c0_y,double dir_x,double dir_y,bool inv,double step_extent_x,double step_extent_y,double step_extent_z,double* vector_x,double* vector_y,double* vector_z);
-  void count_c(int l, double dir_x, double dir_y, double step_extent_x, double c_iter[], double c[], double c_inv[]);
+  void trot(double c0_x, double c0_y, bool inv);
+  void count_c();
   void key_controlCallback1(const std_msgs::Float64& direction_x);
   void key_controlCallback2(const std_msgs::Float64& turn);
   void startup_shutdown_Callback(const std_msgs::Bool& startup_shutdown);
-  double rDir_x(double dir_x,double dir_y);
-  double rDir_y(double dir_x,double dir_y);
+  double rDir_x();
+  double rDir_y();
 };
