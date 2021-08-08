@@ -37,18 +37,18 @@ void Move_Pupbot::init(){
   leftback_leg.joint_names[0] = "leftback_leg_shoulder_joint";
   leftback_leg.joint_names[1] = "leftback_leg_upper_joint";
   leftback_leg.joint_names[2] = "leftback_leg_lower_joint";
-  rightfront_leg.joint_names.resize(3);
-  rightfront_leg.points.resize(1);
-  rightfront_leg.points[0].positions.resize(3);
-  rightfront_leg.joint_names[0] = "rightfront_leg_shoulder_joint";
-  rightfront_leg.joint_names[1] = "rightfront_leg_upper_joint";
-  rightfront_leg.joint_names[2] = "rightfront_leg_lower_joint";
   rightback_leg.joint_names.resize(3);
   rightback_leg.points.resize(1);
   rightback_leg.points[0].positions.resize(3);
   rightback_leg.joint_names[0] = "rightback_leg_shoulder_joint";
   rightback_leg.joint_names[1] = "rightback_leg_upper_joint";
   rightback_leg.joint_names[2] = "rightback_leg_lower_joint";
+  rightfront_leg.joint_names.resize(3);
+  rightfront_leg.points.resize(1);
+  rightfront_leg.points[0].positions.resize(3);
+  rightfront_leg.joint_names[0] = "rightfront_leg_shoulder_joint";
+  rightfront_leg.joint_names[1] = "rightfront_leg_upper_joint";
+  rightfront_leg.joint_names[2] = "rightfront_leg_lower_joint";
 }
 
 void Move_Pupbot::trot(double c0_x, double c0_y, bool inv){
@@ -112,19 +112,7 @@ void Move_Pupbot::startup_shutdown_Callback(const std_msgs::Bool& startup_shutdo
       startup_shutdown_upper_left -= 0.68623270987/22.0;
       startup_shutdown_lower_left -= 1.60698754449/22.0;
       startup_shutdown_upper_right += 0.68623270987/22.0;
-      startup_shutdown_lower_right += 1.60698754449/22.0;
-      rightback_leg.points[0].positions[0] = 0.0;
-      rightback_leg.points[0].positions[1] = startup_shutdown_upper_right;
-      rightback_leg.points[0].positions[2] = startup_shutdown_lower_right;
-      rightback_leg.header.stamp = ros::Time::now();
-      rightback_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_rightback_leg.publish(rightback_leg);
-      rightfront_leg.points[0].positions[0] = 0.0;
-      rightfront_leg.points[0].positions[1] = startup_shutdown_upper_right;
-      rightfront_leg.points[0].positions[2] = startup_shutdown_lower_right;
-      rightfront_leg.header.stamp = ros::Time::now();
-      rightfront_leg.points[0].time_from_start = ros::Duration(0.1);
-      pub_rightfront_leg.publish(rightfront_leg); 
+      startup_shutdown_lower_right += 1.60698754449/22.0; 
       leftfront_leg.points[0].positions[0] = 0.0;
       leftfront_leg.points[0].positions[1] = startup_shutdown_upper_left;
       leftfront_leg.points[0].positions[2] = startup_shutdown_lower_left;
@@ -137,6 +125,18 @@ void Move_Pupbot::startup_shutdown_Callback(const std_msgs::Bool& startup_shutdo
       leftback_leg.header.stamp = ros::Time::now();
       leftback_leg.points[0].time_from_start = ros::Duration(0.1);
       pub_leftback_leg.publish(leftback_leg);
+      rightback_leg.points[0].positions[0] = 0.0;
+      rightback_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      rightback_leg.points[0].positions[2] = startup_shutdown_lower_right;
+      rightback_leg.header.stamp = ros::Time::now();
+      rightback_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_rightback_leg.publish(rightback_leg);
+      rightfront_leg.points[0].positions[0] = 0.0;
+      rightfront_leg.points[0].positions[1] = startup_shutdown_upper_right;
+      rightfront_leg.points[0].positions[2] = startup_shutdown_lower_right;
+      rightfront_leg.header.stamp = ros::Time::now();
+      rightfront_leg.points[0].time_from_start = ros::Duration(0.1);
+      pub_rightfront_leg.publish(rightfront_leg);
       ros::Duration(0.1).sleep();
     }
     startup_shutdown_bool = true;

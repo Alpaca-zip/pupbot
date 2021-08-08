@@ -8,10 +8,10 @@ Dynamixel_Writer::Dynamixel_Writer(){
 }
 
 void Dynamixel_Writer::init(){
-  baud_rate = 1000000;
-  model_number = 12;
+  baud_rate = BAUD_RATE;
+  model_number = MODEL_NUMBER;
   result = false;
-  sub_joints = nh.subscribe("/joint_states", 1, &Dynamixel_Writer::monitorJointState_callback, this);
+  sub_leftfront_leg = nh.subscribe("/leftfront_leg_controller/command", 10, &Dynamixel_Writer::monitor_leftfront_leg_callback, this);
   joint_name[0].data = "leftfront_leg_shoulder_joint";
   joint_name[1].data = "leftfront_leg_upper_joint";
   joint_name[2].data = "leftfront_leg_lower_joint";
@@ -20,13 +20,9 @@ void Dynamixel_Writer::init(){
   dxl_addSyncWriteHandler();
 }
 
-void Dynamixel_Writer::monitorJointState_callback(const sensor_msgs::JointState::ConstPtr& jointstate){
+void Dynamixel_Writer::monitor_leftfront_leg_callback(const trajectory_msgs::JointTrajectory& leftfront_leg){
   for(int i=0;i<3;i++){
-    for(int j=0;j<12;j++){
-      if(joint_name[i].data == jointstate->name[j]){
-        joint_pos[i].data = jointstate->position[j];
-      }
-    }
+    joint_pos[i].data = leftfront_leg.points[0].positions[i];
   }
 }
 
@@ -36,39 +32,39 @@ void Dynamixel_Writer::controlLoop(){
   }
   result = dxl_wb.syncWrite(handler_index, &goal_position[0], &log);
   if(result == false){
-    printf("%s\n", log);
-    printf("Failed to sync write position\n");
+    std::cout << log << std::endl;
+    std::cout << "Failed to sync write position" << std::endl;
   }
 }
 
 void Dynamixel_Writer::dxl_init(){
   result = dxl_wb.init(port_name, baud_rate, &log);
   if(result == false){
-    printf("%s\n", log);
-    printf("Failed to init\n");
-  }else printf("Succeed to init(%d)\n", baud_rate);
+    std::cout << log << std::endl;
+    std::cout << "Failed to init" << std::endl;
+  }else std::cout << "Succeed to init" << baud_rate << std::endl;
 }
 
 void Dynamixel_Writer::dxl_torqueOn(){
   for(int cnt=0;cnt<3;cnt++){
     result = dxl_wb.ping(dxl_id[cnt], &model_number, &log);
     if(result == false){
-      printf("%s\n", log);
-      printf("Failed to ping\n");
+      std::cout << log << std::endl;
+      std::cout << "Failed to ping" << std::endl;
     }else{
-      printf("Succeeded to ping\n");
-      printf("id : %d, model_number : %d\n", dxl_id[cnt], model_number);
+      std::cout << "Succeeded to ping" << std::endl;
+      std::cout << "id : " << dxl_id[cnt] << ", model_number : " << model_number << std::endl;
     }
     result = dxl_wb.torqueOn(dxl_id[cnt]);
-    if(result == false) printf("torqueOn ERROR \n");
+    if(result == false) std::cout << "torqueOn ERROR" << std::endl;
   }
 }
 
 void Dynamixel_Writer::dxl_addSyncWriteHandler(){
   result = dxl_wb.addSyncWriteHandler(dxl_id[0], "Goal_Position", &log);
   if(result == false){
-    printf("%s\n", log);
-    printf("Failed to add sync write handler\n");
+    std::cout << log << std::endl;
+    std::cout << "Failed to add sync write handler" << std::endl;
   }
 }
 
@@ -79,7 +75,7 @@ int main(int argc, char **argv){
   ros::init(argc, argv, "dynamixel_writer"); 
   Dynamixel_Writer PupBot;
 
-  ros::Rate loop_rate(50);
+  ros::Rate loop_rate(100);
 
   while(ros::ok()){
     PupBot.controlLoop();
