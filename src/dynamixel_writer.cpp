@@ -12,9 +12,33 @@ void Dynamixel_Writer::init(){
   model_number = MODEL_NUMBER;
   result = false;
   sub_leftfront_leg = nh.subscribe("/leftfront_leg_controller/command", 10, &Dynamixel_Writer::monitor_leftfront_leg_callback, this);
+  sub_rightfront_leg = nh.subscribe("/rightfront_leg_controller/command", 10, &Dynamixel_Writer::monitor_rightfront_leg_callback, this);
+  sub_leftback_leg = nh.subscribe("/leftback_leg_controller/command", 10, &Dynamixel_Writer::monitor_leftback_leg_callback, this);
+  sub_rightback_leg = nh.subscribe("/rightback_leg_controller/command", 10, &Dynamixel_Writer::monitor_rightback_leg_callback, this);
   joint_name[0].data = "leftfront_leg_shoulder_joint";
   joint_name[1].data = "leftfront_leg_upper_joint";
   joint_name[2].data = "leftfront_leg_lower_joint";
+  joint_name[3].data = "rightfront_leg_shoulder_joint";
+  joint_name[4].data = "rightfront_leg_upper_joint";
+  joint_name[5].data = "rightfront_leg_lower_joint";
+  joint_name[6].data = "leftback_leg_shoulder_joint";
+  joint_name[7].data = "leftback_leg_upper_joint";
+  joint_name[8].data = "leftback_leg_lower_joint";
+  joint_name[9].data = "rightback_leg_shoulder_joint";
+  joint_name[10].data = "rightback_leg_upper_joint";
+  joint_name[11].data = "rightback_leg_lower_joint";
+  joint_pos[0].data = 0;
+  joint_pos[1].data = 1.5;
+  joint_pos[2].data = 2.5;
+  joint_pos[3].data = 0;
+  joint_pos[4].data = -1.5;
+  joint_pos[5].data = -2.5;
+  joint_pos[6].data = 0;
+  joint_pos[7].data = 1.5;
+  joint_pos[8].data = 2.5;
+  joint_pos[9].data = 0;
+  joint_pos[10].data = -1.5;
+  joint_pos[11].data = -2.5;
   dxl_init();
   dxl_torqueOn();
   dxl_addSyncWriteHandler();
@@ -26,8 +50,26 @@ void Dynamixel_Writer::monitor_leftfront_leg_callback(const trajectory_msgs::Joi
   }
 }
 
+void Dynamixel_Writer::monitor_rightfront_leg_callback(const trajectory_msgs::JointTrajectory& rightfront_leg){
+  for(int i=3;i<6;i++){
+    joint_pos[i].data = rightfront_leg.points[0].positions[i-3];
+  }
+}
+
+void Dynamixel_Writer::monitor_leftback_leg_callback(const trajectory_msgs::JointTrajectory& leftback_leg){
+  for(int i=6;i<9;i++){
+    joint_pos[i].data = leftback_leg.points[0].positions[i-6];
+  }
+}
+
+void Dynamixel_Writer::monitor_rightback_leg_callback(const trajectory_msgs::JointTrajectory& rightback_leg){
+  for(int i=9;i<12;i++){
+    joint_pos[i].data = rightback_leg.points[0].positions[i-9];
+  }
+}
+
 void Dynamixel_Writer::controlLoop(){
-  for(int i=0;i<3;i++){
+  for(int i=0;i<12;i++){
     goal_position[i] = 512+3.41*180*(joint_pos[i].data/M_PI);
   }
   result = dxl_wb.syncWrite(handler_index, &goal_position[0], &log);
@@ -46,7 +88,7 @@ void Dynamixel_Writer::dxl_init(){
 }
 
 void Dynamixel_Writer::dxl_torqueOn(){
-  for(int cnt=0;cnt<3;cnt++){
+  for(int cnt=0;cnt<12;cnt++){
     result = dxl_wb.ping(dxl_id[cnt], &model_number, &log);
     if(result == false){
       printf("%s\n", log);

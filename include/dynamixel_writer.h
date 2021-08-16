@@ -12,6 +12,15 @@
 #define LEFTFRONT_LEG_SHOULDER_ID 3
 #define LEFTFRONT_LEG_UPPER_ID 21
 #define LEFTFRONT_LEG_LOWER_ID 5
+#define RIGHTFRONT_LEG_SHOULDER_ID 2
+#define RIGHTFRONT_LEG_UPPER_ID 1
+#define RIGHTFRONT_LEG_LOWER_ID 13
+#define LEFTBACK_LEG_SHOULDER_ID 16
+#define LEFTBACK_LEG_UPPER_ID 8
+#define LEFTBACK_LEG_LOWER_ID 6
+#define RIGHTBACK_LEG_SHOULDER_ID 7
+#define RIGHTBACK_LEG_UPPER_ID 18
+#define RIGHTBACK_LEG_LOWER_ID 14
 
 class Dynamixel_Writer{
   public:
@@ -21,9 +30,9 @@ class Dynamixel_Writer{
   private:
   const char *log;
   int baud_rate;
-  int32_t goal_position[3];
+  int32_t goal_position[12];
   uint16_t model_number;
-  uint8_t dxl_id[3] = {LEFTFRONT_LEG_SHOULDER_ID, LEFTFRONT_LEG_UPPER_ID, LEFTFRONT_LEG_LOWER_ID};
+  uint8_t dxl_id[12] = {LEFTFRONT_LEG_SHOULDER_ID, LEFTFRONT_LEG_UPPER_ID, LEFTFRONT_LEG_LOWER_ID, RIGHTFRONT_LEG_SHOULDER_ID, RIGHTFRONT_LEG_UPPER_ID, RIGHTFRONT_LEG_LOWER_ID, LEFTBACK_LEG_SHOULDER_ID, LEFTBACK_LEG_UPPER_ID, LEFTBACK_LEG_LOWER_ID, RIGHTBACK_LEG_SHOULDER_ID, RIGHTBACK_LEG_UPPER_ID, RIGHTBACK_LEG_LOWER_ID};
   bool result;
   const char* port_name = PORT_NAME;
   const uint8_t handler_index = 0;
@@ -31,11 +40,17 @@ class Dynamixel_Writer{
 
   ros::NodeHandle nh;
   ros::Subscriber sub_leftfront_leg;
-  std_msgs::String joint_name[3];
-  std_msgs::Float64 joint_pos[3];
+  ros::Subscriber sub_rightfront_leg;
+  ros::Subscriber sub_leftback_leg;
+  ros::Subscriber sub_rightback_leg;
+  std_msgs::String joint_name[12];
+  std_msgs::Float64 joint_pos[12];
 
   void init();
   void monitor_leftfront_leg_callback(const trajectory_msgs::JointTrajectory& leftfront_leg);
+  void monitor_rightfront_leg_callback(const trajectory_msgs::JointTrajectory& rightfront_leg);
+  void monitor_leftback_leg_callback(const trajectory_msgs::JointTrajectory& leftback_leg);
+  void monitor_rightback_leg_callback(const trajectory_msgs::JointTrajectory& leftback_leg);
   void dxl_init();
   void dxl_torqueOn();
   void dxl_addSyncWriteHandler();
