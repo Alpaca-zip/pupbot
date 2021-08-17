@@ -34,26 +34,34 @@ int Pupbot_Controller::getch(){
 
 void Pupbot_Controller::controlLoop(){
   int c = getch();
-  if (c == 'w'){
-    direction_x.data += 0.25;
+  if(c == 'w'){
+    if(direction_x.data < 1.25){
+      direction_x.data += 0.25;
+    }
     std::cout << "x:" << direction_x.data << std::endl;
     key_control_pub1.publish(direction_x);
-  }else if (c == 'a') {
-    turn.data += 0.25;
+  }else if(c == 'a'){
+    if(turn.data < 1.0){
+      turn.data += 0.25;
+    }
     std::cout << "turn:" << turn.data << std::endl;
     key_control_pub3.publish(turn);
-  }else if (c == 's') {
-    direction_x.data -= 0.25;
+  }else if(c == 's'){
+    if(direction_x.data > -1.25){
+      direction_x.data -= 0.25;
+    }
     std::cout << "x:" << direction_x.data << std::endl;
     key_control_pub1.publish(direction_x);
-  }else if (c == 'd') {
-    turn.data -= 0.25;
+  }else if(c == 'd'){
+    if(turn.data > -1.0){
+      turn.data -= 0.25;
+    }
     std::cout << "turn:" << turn.data << std::endl;
     key_control_pub3.publish(turn);
-  }else if (c == 'q') {
+  }else if(c == 'q'){
     startup_shutdown.data=true;
     std::cout << "Power" << std::endl;
-    key_control_pub2.publish( startup_shutdown);
+    key_control_pub2.publish(startup_shutdown);
     startup_shutdown.data = false;
   }
 }

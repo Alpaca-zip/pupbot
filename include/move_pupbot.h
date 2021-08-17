@@ -9,7 +9,7 @@
 #define BONE_LENGTH 83.0
 #define STEP_EXTENT_X 40
 #define STEP_EXTENT_Y 40
-#define STEP_EXTENT_Z 5
+#define STEP_EXTENT_Z 10
 
 class Move_Pupbot{
   public:
