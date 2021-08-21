@@ -34,7 +34,7 @@ include_directories(
 
 add_executable(move_pupbot src/move_pupbot.cpp)
 add_executable(pupbot_controller src/pupbot_controller.cpp)
-add_executable(dynamixel_writer src/dynamixel_writer.cpp)
+add_executable(dynamixel_controller src/dynamixel_controller.cpp)
 target_link_libraries(move_pupbot ${catkin_LIBRARIES})
 target_link_libraries(pupbot_controller ${catkin_LIBRARIES})
-target_link_libraries(dynamixel_writer ${catkin_LIBRARIES})
+target_link_libraries(dynamixel_controller ${catkin_LIBRARIES})

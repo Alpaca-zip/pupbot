@@ -2,6 +2,7 @@
 #include "ros/time.h"
 #include "std_msgs/Float64.h"
 #include "std_msgs/String.h"
+#include "std_msgs/Int32.h"
 #include "trajectory_msgs/JointTrajectory.h"
 #include "dynamixel_workbench_toolbox/dynamixel_workbench.h"
 
@@ -22,15 +23,16 @@
 #define RIGHTBACK_LEG_UPPER_ID 18
 #define RIGHTBACK_LEG_LOWER_ID 14
 
-class Dynamixel_Writer{
+class Dynamixel_Controller{
   public:
-  Dynamixel_Writer();
+  Dynamixel_Controller();
   void controlLoop();
 
   private:
   const char *log;
   int baud_rate;
   int32_t goal_position[12];
+  int32_t getdata_from_dynamixel;
   uint16_t model_number;
   uint8_t dxl_id[12] = {LEFTFRONT_LEG_SHOULDER_ID, LEFTFRONT_LEG_UPPER_ID, LEFTFRONT_LEG_LOWER_ID, RIGHTFRONT_LEG_SHOULDER_ID, RIGHTFRONT_LEG_UPPER_ID, RIGHTFRONT_LEG_LOWER_ID, LEFTBACK_LEG_SHOULDER_ID, LEFTBACK_LEG_UPPER_ID, LEFTBACK_LEG_LOWER_ID, RIGHTBACK_LEG_SHOULDER_ID, RIGHTBACK_LEG_UPPER_ID, RIGHTBACK_LEG_LOWER_ID};
   bool result;
@@ -39,12 +41,17 @@ class Dynamixel_Writer{
   DynamixelWorkbench dxl_wb;
 
   ros::NodeHandle nh;
+  ros::Publisher dynamixel_state_leftfront_leg;
+  ros::Publisher dynamixel_state_leftback_leg;
+  ros::Publisher dynamixel_state_rightfront_leg;
+  ros::Publisher dynamixel_state_rightback_leg;
   ros::Subscriber sub_leftfront_leg;
   ros::Subscriber sub_rightfront_leg;
   ros::Subscriber sub_leftback_leg;
   ros::Subscriber sub_rightback_leg;
   std_msgs::String joint_name[12];
   std_msgs::Float64 joint_pos[12];
+  std_msgs::Int32 leftfront_leg_position, leftback_leg_position, rightfront_leg_position, rightback_leg_position;
 
   void init();
   void monitor_leftfront_leg_callback(const trajectory_msgs::JointTrajectory& leftfront_leg);

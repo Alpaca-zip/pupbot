@@ -8,7 +8,6 @@ Move_Pupbot::Move_Pupbot(){
 }
 
 void Move_Pupbot::init(){
-  result = dxl_wb.init(port_name, baud_rate, &log);
   number = 22;
   x_offset = X_OFFSET;
   z_offset = Z_OFFSET;
@@ -23,10 +22,6 @@ void Move_Pupbot::init(){
   pub_leftback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftback_leg_controller/command", 10);
   pub_rightfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightfront_leg_controller/command", 10);
   pub_rightback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightback_leg_controller/command", 10);
-  deynamixel_state_leftfront_leg = nh.advertise<std_msgs::Int32>("/dynamixelstate/leftfront_leg", 10);
-  deynamixel_state_leftback_leg = nh.advertise<std_msgs::Int32>("/dynamixelstate/leftback_leg", 10);
-  deynamixel_state_rightfront_leg = nh.advertise<std_msgs::Int32>("/dynamixelstate/rightfront_leg", 10);
-  deynamixel_state_rightback_leg = nh.advertise<std_msgs::Int32>("/dynamixelstate/rightback_leg", 10);
   key_control_sub1 = nh.subscribe("key_control1", 10, &Move_Pupbot::key_controlCallback1, this);
   key_control_sub2 = nh.subscribe("key_control2", 10, &Move_Pupbot::startup_shutdown_Callback, this);
   key_control_sub3 = nh.subscribe("key_control3", 10, &Move_Pupbot::key_controlCallback2, this);
@@ -214,35 +209,20 @@ void Move_Pupbot::controlLoop(){
       leftfront_leg.header.stamp = ros::Time::now();
       leftfront_leg.points[0].time_from_start = ros::Duration(0.02);
       pub_leftfront_leg.publish(leftfront_leg);
-      result = dxl_wb.itemRead(LEFTFRONT_LEG_LOWER_ID, "Present_Position", &leftfront_leg_get_data, &log);
-      if(result == true){
-        dynamixel_posisiton_state.data = leftfront_leg_get_data;
-        deynamixel_state_leftfront_leg.publish(dynamixel_posisiton_state);
-      }
     }else if(l == 1){
       leftback_leg.points[0].positions[0] = target_leg_shoulder_joint;
       leftback_leg.points[0].positions[1] = target_left_leg_upper_joint;
       leftback_leg.points[0].positions[2] = target_left_leg_lower_joint;
       leftback_leg.header.stamp = ros::Time::now();
       leftback_leg.points[0].time_from_start = ros::Duration(0.02);
-      pub_leftback_leg.publish(leftback_leg);
-      result = dxl_wb.itemRead(LEFTBACK_LEG_LOWER_ID, "Present_Position", &leftback_leg_get_data, &log);
-      if(result == true){
-        dynamixel_posisiton_state.data = leftback_leg_get_data;
-        deynamixel_state_leftback_leg.publish(dynamixel_posisiton_state);
-      }    
+      pub_leftback_leg.publish(leftback_leg);  
     }else if(l == 2){
       rightback_leg.points[0].positions[0] = target_leg_shoulder_joint;
       rightback_leg.points[0].positions[1] = target_right_leg_upper_joint;
       rightback_leg.points[0].positions[2] = target_right_leg_lower_joint;
       rightback_leg.header.stamp = ros::Time::now();
       rightback_leg.points[0].time_from_start = ros::Duration(0.02);
-      pub_rightback_leg.publish(rightback_leg);
-      result = dxl_wb.itemRead(RIGHTFRONT_LEG_LOWER_ID, "Present_Position", &rightfront_leg_get_data, &log);
-      if(result == true){
-        dynamixel_posisiton_state.data = rightfront_leg_get_data;
-        deynamixel_state_rightfront_leg.publish(dynamixel_posisiton_state);
-      }    
+      pub_rightback_leg.publish(rightback_leg); 
     }else if(l == 3){
       rightfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
       rightfront_leg.points[0].positions[1] = target_right_leg_upper_joint;
@@ -250,11 +230,6 @@ void Move_Pupbot::controlLoop(){
       rightfront_leg.header.stamp = ros::Time::now();
       rightfront_leg.points[0].time_from_start = ros::Duration(0.02);
       pub_rightfront_leg.publish(rightfront_leg);
-      result = dxl_wb.itemRead(RIGHTBACK_LEG_LOWER_ID, "Present_Position", &rightback_leg_get_data, &log);
-      if(result == true){
-        dynamixel_posisiton_state.data = rightback_leg_get_data;
-        deynamixel_state_rightback_leg.publish(dynamixel_posisiton_state);
-      }   
     }
   }
 }
