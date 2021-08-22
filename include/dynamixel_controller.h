@@ -51,7 +51,7 @@ class Dynamixel_Controller{
   ros::Subscriber sub_rightback_leg;
   std_msgs::String joint_name[12];
   std_msgs::Float64 joint_pos[12];
-  std_msgs::Int32 leftfront_leg_position, leftback_leg_position, rightfront_leg_position, rightback_leg_position;
+  std_msgs::Int32 leftfront_leg_load, leftback_leg_load, rightfront_leg_load, rightback_leg_load;
 
   void init();
   void monitor_leftfront_leg_callback(const trajectory_msgs::JointTrajectory& leftfront_leg);
