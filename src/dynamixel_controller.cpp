@@ -54,8 +54,9 @@ void Dynamixel_Controller::monitor_leftfront_leg_callback(const trajectory_msgs:
   }
   result = dxl_wb.itemRead(LEFTFRONT_LEG_LOWER_ID, "Present_Load", &getdata_from_dynamixel, &log);
   if(result == true){
-    if(getdata_from_dynamixel > 1023) leftfront_leg_load.data = getdata_from_dynamixel-1024;
-    leftfront_leg_load.data = getdata_from_dynamixel;
+    if(getdata_from_dynamixel > 1023){
+      leftfront_leg_load.data = getdata_from_dynamixel-1024;
+    }else leftfront_leg_load.data = getdata_from_dynamixel;
     dynamixel_state_leftfront_leg.publish(leftfront_leg_load);
   }
 }
@@ -66,8 +67,9 @@ void Dynamixel_Controller::monitor_rightfront_leg_callback(const trajectory_msgs
   }
   result = dxl_wb.itemRead(RIGHTFRONT_LEG_LOWER_ID, "Present_Load", &getdata_from_dynamixel, &log);
   if(result == true){
-    if(getdata_from_dynamixel > 1023) rightfront_leg_load.data = getdata_from_dynamixel-1024;
-    rightfront_leg_load.data = getdata_from_dynamixel;
+    if(getdata_from_dynamixel > 1023){
+      rightfront_leg_load.data = getdata_from_dynamixel-1024;
+    }else rightfront_leg_load.data = getdata_from_dynamixel;
     dynamixel_state_rightfront_leg.publish(rightfront_leg_load);
   }
 }
@@ -78,8 +80,9 @@ void Dynamixel_Controller::monitor_leftback_leg_callback(const trajectory_msgs::
   }
   result = dxl_wb.itemRead(LEFTBACK_LEG_LOWER_ID, "Present_Load", &getdata_from_dynamixel, &log);
   if(result == true){
-    if(getdata_from_dynamixel > 1023) leftback_leg_load.data = getdata_from_dynamixel-1024;
-    leftback_leg_load.data = getdata_from_dynamixel;
+    if(getdata_from_dynamixel > 1023){
+      leftback_leg_load.data = getdata_from_dynamixel-1024;
+    }else leftback_leg_load.data = getdata_from_dynamixel;
     dynamixel_state_leftback_leg.publish(leftback_leg_load);
   }
 }
@@ -90,8 +93,9 @@ void Dynamixel_Controller::monitor_rightback_leg_callback(const trajectory_msgs:
   }
   result = dxl_wb.itemRead(RIGHTBACK_LEG_LOWER_ID, "Present_Load", &getdata_from_dynamixel, &log);
   if(result == true){
-    if(getdata_from_dynamixel > 1023) rightback_leg_load.data = getdata_from_dynamixel-1024;
-    rightback_leg_load.data = getdata_from_dynamixel;
+    if(getdata_from_dynamixel > 1023){
+      rightback_leg_load.data = getdata_from_dynamixel-1024;
+    }else rightback_leg_load.data = getdata_from_dynamixel;
     dynamixel_state_rightback_leg.publish(rightback_leg_load);
   }
 }

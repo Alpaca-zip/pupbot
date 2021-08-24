@@ -10,6 +10,7 @@ project(pupbot)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  sensor_msgs
   trajectory_msgs
   dynamixel_workbench_toolbox
 )
@@ -19,7 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
 ################################################################################
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs trajectory_msgs
+  CATKIN_DEPENDS roscpp std_msgs sensor_msgs trajectory_msgs
 )
 
 ################################################################################
@@ -34,7 +35,9 @@ include_directories(
 
 add_executable(move_pupbot src/move_pupbot.cpp)
 add_executable(pupbot_controller src/pupbot_controller.cpp)
+add_executable(pupbot_controller_ds4 src/pupbot_controller_ds4.cpp)
 add_executable(dynamixel_controller src/dynamixel_controller.cpp)
 target_link_libraries(move_pupbot ${catkin_LIBRARIES})
 target_link_libraries(pupbot_controller ${catkin_LIBRARIES})
+target_link_libraries(pupbot_controller_ds4 ${catkin_LIBRARIES})
 target_link_libraries(dynamixel_controller ${catkin_LIBRARIES})
