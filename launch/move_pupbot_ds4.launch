@@ -1,5 +1,0 @@
-<launch>
-  <include file="$(find joy)/launch/ps4joy.launch"/>
-  <node name="move_pupbot"   pkg="pupbot" type="move_pupbot"/>
-  <node name="pupbot_controller_ds4"   pkg="pupbot" type="pupbot_controller_ds4" output="screen"/>
-</launch>

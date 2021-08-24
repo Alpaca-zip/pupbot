@@ -5,7 +5,7 @@
 ++++++++++++++++++++++++++++++++++ */
 Pupbot_Controller::Pupbot_Controller(){
   init();
-  printf("q : Startup/Shutdown\n");
+  printf("q : Startup,Shutdown\n");
   printf("w : Increases the value of direction in the x axis (+0.25)\n");
   printf("a : Increases the value of turn (+0.25)\n");
   printf("s : Decreases the value of direction in the x axis (-0.25)\n");
