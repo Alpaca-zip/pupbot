@@ -26,13 +26,14 @@ void Pupbot_Controller_ds4::joy_callback(const sensor_msgs::Joy& joy_msg){
   key_control_pub1.publish(direction_x);
   std::cout << "x:" << direction_x.data << std::endl;
 
-  turn.data = joy_msg.axes[2];
+  turn.data = joy_msg.axes[3];
   key_control_pub3.publish(turn);
   std::cout << "turn:" << turn.data << std::endl;
 
-  startup_shutdown.data = joy_msg.buttons[13];
-  if(startup_shutdown.data == 1){
+  if(joy_msg.buttons[1] == 1){
+    startup_shutdown.data=true;
     key_control_pub2.publish(startup_shutdown);
+    startup_shutdown.data=false;
     std::cout << "Power" << std::endl;
   }
 }
