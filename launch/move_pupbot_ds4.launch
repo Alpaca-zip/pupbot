@@ -1,5 +1,6 @@
 <launch>
   <node name="move_pupbot" pkg="pupbot" type="move_pupbot"/>
+  <node name="dynamixel_controller" pkg="pupbot" type="dynamixel_controller"/>
   <node name="pupbot_controller_ds4" pkg="pupbot" type="pupbot_controller_ds4" output="screen"/>
   <node name="joy_node" pkg="joy" type="joy_node" output="screen">
     <param name="~dev" value="/dev/input/js2"/>

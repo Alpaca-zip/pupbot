@@ -19,6 +19,9 @@ class Move_Pupbot{
   private:
   int l;
   int number;
+  int gait_state_num;
+  int crawl_pattern[4] = {2, 0, 1, 3};
+  int crawl_succession[4] = {2, 1, 3, 0};
   double x, y, z, a0, a1, b0;
   double angle1, angle2, angle3;
   double x_offset, z_offset;
@@ -46,14 +49,17 @@ class Move_Pupbot{
   ros::Subscriber key_control_sub1;
   ros::Subscriber key_control_sub2;
   ros::Subscriber key_control_sub3;
+  ros::Subscriber key_control_sub4;
   trajectory_msgs::JointTrajectory leftfront_leg, leftback_leg, rightfront_leg, rightback_leg;
 
   void init();
   void trot(double c0_x, double c0_y, bool inv);
+  void crawl(double c0_x, double c0_y, bool inv, int i0);
   void count_c();
   void key_controlCallback1(const std_msgs::Float64& direction_x);
   void key_controlCallback2(const std_msgs::Float64& turn);
   void startup_shutdown_Callback(const std_msgs::Bool& startup_shutdown);
+  void gait_state_Callback(const std_msgs::Bool& gait_state);
   double rDir_x();
   double rDir_y();
 };

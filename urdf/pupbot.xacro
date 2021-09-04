@@ -5,16 +5,16 @@
   </material>
 
   <!-- base -->
-  <link name="base_link"/>
+  <link name="world"/>
 
   <!-- body -->
   <joint name="base_joint" type="fixed">
-    <parent link="base_link"/>
-    <child  link="body_link"/>
+    <parent link="world"/>    <!-- <parent link="base_link"/> -->
+    <child  link="base_link"/>    <!-- <child link="body_link"/> -->
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
-  <link name="body_link">
+  <link name="base_link">
     <inertial>
       <origin xyz="0 0 0.13" rpy="0 0 0"/>
       <mass value="0.796"/>
@@ -35,7 +35,7 @@
     </collision>
   </link>
 
-  <gazebo reference="body_link">
+  <gazebo reference="base_link">    <!-- <gazebo reference="body_link"> -->
     <material>Gazebo/DarkGrey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
@@ -46,7 +46,7 @@
   <!-- left leg shoulder -->
   <joint name="${prefix}_shoulder_joint" type="revolute">
     <origin xyz="${xyz1}" rpy="0 ${radians(-90)} 0"/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>    <!-- <parent link="body_link"/> -->
     <child  link="${prefix}_shoulder_link"/>
     <axis xyz="0 0 1"/>
     <limit lower="-1" upper="1.5" effort="${effort}" velocity="${velocity}"/>
@@ -229,7 +229,7 @@
   <!-- right leg shoulder -->
   <joint name="${prefix}_shoulder_joint" type="revolute">
     <origin xyz="${xyz1}" rpy="0 ${radians(-90)} 0"/>
-    <parent link="body_link"/>
+    <parent link="base_link"/>    <!-- <parent link="body_link"/> -->
     <child  link="${prefix}_shoulder_link"/>
     <axis xyz="0 0 1"/>
     <limit lower="-1.5" upper="1" effort="${effort}" velocity="${velocity}"/>

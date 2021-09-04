@@ -6,14 +6,16 @@
   <arg name="z_pos" default="0.0"/>   
   <param name="robot_description" command="$(find xacro)/xacro $(arg model) --inorder"/>
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="gui" value="true"/>
+    <arg name="output" default="log"/>
   </include>
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model pupbot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos)
   -J leftfront_leg_shoulder_joint -0.5 -J leftback_leg_shoulder_joint -0.5 -J leftfront_leg_upper_joint 1.5 -J leftback_leg_upper_joint 1.5
   -J leftfront_leg_lower_joint 2.5 -J leftback_leg_lower_joint 2.5 -J rightfront_leg_shoulder_joint 0.5 -J rightback_leg_shoulder_joint 0.5
   -J rightfront_leg_upper_joint -1.5 -J rightback_leg_upper_joint -1.5 -J rightfront_leg_lower_joint -2.5 -J rightback_leg_lower_joint -2.5" />
   <rosparam file="$(find pupbot)/controllers.yaml" command="load"/>
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" 
   args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+  <node name="move_pupbot" pkg="pupbot" type="move_pupbot"/>
+  <node name="pupbot_controller" pkg="pupbot" type="pupbot_controller" output="screen"/>
 </launch>

@@ -13,10 +13,12 @@ class Pupbot_Controller{
   ros::Publisher key_control_pub1;
   ros::Publisher key_control_pub2;
   ros::Publisher key_control_pub3;
+  ros::Publisher key_control_pub4;
   std_msgs::Float64 direction_x;
   std_msgs::Float64 turn;
   std_msgs::Bool startup_shutdown;
-  
+  std_msgs::Bool gait_state;
+
   void init();
   int getch();
 };

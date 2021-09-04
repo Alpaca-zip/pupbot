@@ -9,6 +9,7 @@ Move_Pupbot::Move_Pupbot(){
 
 void Move_Pupbot::init(){
   number = 22;
+  gait_state_num = 0;
   x_offset = X_OFFSET;
   z_offset = Z_OFFSET;
   bone_length = BONE_LENGTH;
@@ -25,6 +26,7 @@ void Move_Pupbot::init(){
   key_control_sub1 = nh.subscribe("key_control1", 10, &Move_Pupbot::key_controlCallback1, this);
   key_control_sub2 = nh.subscribe("key_control2", 10, &Move_Pupbot::startup_shutdown_Callback, this);
   key_control_sub3 = nh.subscribe("key_control3", 10, &Move_Pupbot::key_controlCallback2, this);
+  key_control_sub4 = nh.subscribe("key_control4", 10, &Move_Pupbot::gait_state_Callback, this);
   leftfront_leg.joint_names.resize(3);
   leftfront_leg.points.resize(1);
   leftfront_leg.points[0].positions.resize(3);
@@ -56,9 +58,40 @@ void Move_Pupbot::trot(double c0_x, double c0_y, bool inv){
   l0 = step_extent_y*0.1*4.0*dir_y;
   h0 = step_extent_z*0.1;
   if(inv == false){
-    c0_x =- c0_x;
-    c0_y =- c0_y;
+    c0_x = -c0_x;
+    c0_y = -c0_y;
   }
+  if(w0 == 0.0 && l0 == 0.0){
+    vector_x = 0.0;
+    vector_y = 0.0;
+    vector_z = 0.0;
+  }else if(w0 == 0.0){
+    double h1 = sqrt(abs((1.0-(c0_y/l0)*(c0_y/l0))*h0*h0));
+    vector_x = c0_x/0.1;
+    vector_y = c0_y/0.1;
+    vector_z = h1/0.1*int(inv);
+  }else if(l0 == 0.0){
+    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0))*h0*h0));
+    vector_x = c0_x/0.1;
+    vector_y = c0_y/0.1;
+    vector_z = h1/0.1*int(inv);
+  }else{
+    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0)-(c0_y/l0)*(c0_y/l0))*h0*h0));
+    vector_x = c0_x/0.1;
+    vector_y = c0_y/0.1;
+    vector_z = h1/0.1*int(inv);
+  }
+}
+
+void Move_Pupbot::crawl(double c0_x, double c0_y, bool inv, int i0){
+  w0 = step_extent_x*0.1/2.0*dir_x;
+  l0 = step_extent_y*0.1*4.0*dir_y*l_inv[l][1];
+  h0 = step_extent_z*0.1;
+  if(inv == false){
+    c0_x = -(c0_x+(2*i0-2)*w0)/3;
+    c0_y = -(c0_y+(2*i0-2)*(l0/8))/3;
+  }
+  
   if(w0 == 0.0 && l0 == 0.0){
     vector_x = 0.0;
     vector_y = 0.0;
@@ -180,13 +213,25 @@ void Move_Pupbot::startup_shutdown_Callback(const std_msgs::Bool& startup_shutdo
   }
 }
 
+void Move_Pupbot::gait_state_Callback(const std_msgs::Bool& gait_state){
+  if(gait_state.data == true){
+    gait_state_num = 1;
+  }else{
+    gait_state_num = 0;
+  }
+}
+
 void Move_Pupbot::controlLoop(){
   for(l=0;l<4;l++){
     if(startup_shutdown_bool == false)continue;
     dir_x = dirupdate_x+turn0*l_inv[l][1];
     dir_y = turn0*l_inv[l][0];
     count_c();
-    trot(rDir_x()*c[l], l_inv[l][1]*rDir_y()*c[l], bool(l%2)^bool(fmod(c_inv[l], 2.0)));
+    if(gait_state_num == 1){
+      trot(rDir_x()*c[l], l_inv[l][1]*rDir_y()*c[l], bool(l%2)^bool(fmod(c_inv[l], 2.0)));
+    }else{
+      crawl(rDir_x()*c[l], l_inv[l][1]*rDir_y()*c[l], l == crawl_pattern[(int)(c_inv[l])%4], (int)(c_inv[l] + crawl_succession[l])%4);
+    }
     x = x_offset+vector_x;
     y = vector_y;
     z = z_offset-vector_z;
@@ -201,7 +246,7 @@ void Move_Pupbot::controlLoop(){
     target_left_leg_lower_joint = (180.0-angle3)*M_PI/180.0;
     target_right_leg_upper_joint = -(90.0-angle2)*M_PI/180.0;
     target_right_leg_lower_joint = -(180.0-angle3)*M_PI/180.0;
-    ROS_INFO("angle:shoulder=%lf upper=%lf lower=%lf", angle1,angle2,angle3);
+    //ROS_INFO("angle:shoulder=%lf upper=%lf lower=%lf", angle1,angle2,angle3);
     if(l == 0){
       leftfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
       leftfront_leg.points[0].positions[1] = target_left_leg_upper_joint;
