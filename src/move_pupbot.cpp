@@ -15,10 +15,21 @@ void Move_Pupbot::init(){
   bone_length = BONE_LENGTH;
   dirupdate_x = 0.0;
   turn0 = 0.0;
-  step_extent_x = STEP_EXTENT_X;
-  step_extent_y = STEP_EXTENT_Y;
-  step_extent_z = STEP_EXTENT_Z;
+  trot_step_extent_x = TROT_STEP_EXTENT_X;
+  trot_step_extent_y = TROT_STEP_EXTENT_Y;
+  trot_step_extent_z = TROT_STEP_EXTENT_Z;
+  crawl_step_extent_x = CRAWL_STEP_EXTENT_X;
+  crawl_step_extent_y = CRAWL_STEP_EXTENT_Y;
+  crawl_step_extent_z = CRAWL_STEP_EXTENT_Z;
   startup_shutdown_bool=false;
+  crawl_bool_0 = false;
+  crawl_bool_1 = false;
+  crawl_bool_2 = false;
+  crawl_bool_3 = false;
+  crawl_num_0 = 0;
+  crawl_num_1 = 0;
+  crawl_num_2 = 0;
+  crawl_num_3 = 0;
   pub_leftfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftfront_leg_controller/command", 10);
   pub_leftback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftback_leg_controller/command", 10);
   pub_rightfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightfront_leg_controller/command", 10);
@@ -54,9 +65,9 @@ void Move_Pupbot::init(){
 }
 
 void Move_Pupbot::trot(double c0_x, double c0_y, bool inv){
-  w0 = step_extent_x*0.1/2.0*dir_x;
-  l0 = step_extent_y*0.1*4.0*dir_y;
-  h0 = step_extent_z*0.1;
+  w0 = trot_step_extent_x*0.1/2.0*dir_x;
+  l0 = trot_step_extent_y*0.1*4.0*dir_y;
+  h0 = trot_step_extent_z*0.1;
   if(inv == false){
     c0_x = -c0_x;
     c0_y = -c0_y;
@@ -84,14 +95,65 @@ void Move_Pupbot::trot(double c0_x, double c0_y, bool inv){
 }
 
 void Move_Pupbot::crawl(double c0_x, double c0_y, bool inv, int i0){
-  w0 = step_extent_x*0.1/2.0*dir_x;
-  l0 = step_extent_y*0.1*4.0*dir_y*l_inv[l][1];
-  h0 = step_extent_z*0.1;
+  w0 = crawl_step_extent_x*0.1/2.0*dir_x;
+  l0 = crawl_step_extent_y*0.1*4.0*dir_y*l_inv[l][1];
+  h0 = crawl_step_extent_z*0.1;
+
+  if(l == 0){
+    if(inv){
+      crawl_bool_0 = false;
+      crawl_num_0 = 0;
+    }else{
+      if(crawl_num_0 == 0){
+        crawl_bool_0 = true;
+        crawl_num_0 = 1;
+      }else{
+        crawl_bool_0 = false;
+      }
+    }
+  }else if(l == 1){
+    if(inv){
+      crawl_bool_1 = false;
+      crawl_num_1 = 0;
+    }else{
+      if(crawl_num_1 == 0){
+        crawl_bool_1 = true;
+        crawl_num_1 = 1;
+      }else{
+        crawl_bool_1 = false;
+      }
+    }
+  }else if(l == 2){
+    if(inv){
+      crawl_bool_2 = false;
+      crawl_num_2 = 0;
+    }else{
+      if(crawl_num_2 == 0){
+        crawl_bool_2 = true;
+        crawl_num_2 = 1;
+      }else{
+        crawl_bool_2 = false;
+      }
+    }
+  }else if(l == 3){
+    if(inv){
+      crawl_bool_3 = false;
+      crawl_num_3 = 0;
+    }else{
+      if(crawl_num_3 == 0){
+        crawl_bool_3 = true;
+        crawl_num_3 = 1;
+      }else{
+        crawl_bool_3 = false;
+      }
+    }
+  }
+
   if(inv == false){
     c0_x = -(c0_x+(2*i0-2)*w0)/3;
     c0_y = -(c0_y+(2*i0-2)*(l0/8))/3;
   }
-  
+
   if(w0 == 0.0 && l0 == 0.0){
     vector_x = 0.0;
     vector_y = 0.0;
@@ -114,7 +176,7 @@ void Move_Pupbot::crawl(double c0_x, double c0_y, bool inv, int i0){
   }
 }
 
-void Move_Pupbot::count_c(){
+void Move_Pupbot::count_c(double step_extent_x){
   w0_count_c = step_extent_x*0.1*std::max(abs(dir_x),abs(dir_y))/2.0;
   a0_count_c = (2.0*w0_count_c)*(c_iter[l]/number)-w0_count_c;
   c[l] = a0_count_c;
@@ -221,17 +283,13 @@ void Move_Pupbot::gait_state_Callback(const std_msgs::Bool& gait_state){
   }
 }
 
-void Move_Pupbot::controlLoop(){
+void Move_Pupbot::controlLoop_trot(){
   for(l=0;l<4;l++){
     if(startup_shutdown_bool == false)continue;
     dir_x = dirupdate_x+turn0*l_inv[l][1];
     dir_y = turn0*l_inv[l][0];
-    count_c();
-    if(gait_state_num == 1){
-      trot(rDir_x()*c[l], l_inv[l][1]*rDir_y()*c[l], bool(l%2)^bool(fmod(c_inv[l], 2.0)));
-    }else{
-      crawl(rDir_x()*c[l], l_inv[l][1]*rDir_y()*c[l], l == crawl_pattern[(int)(c_inv[l])%4], (int)(c_inv[l] + crawl_succession[l])%4);
-    }
+    count_c(trot_step_extent_x);
+    trot(rDir_x()*c[l], l_inv[l][1]*rDir_y()*c[l], bool(l%2)^bool(fmod(c_inv[l], 2.0)));
     x = x_offset+vector_x;
     y = vector_y;
     z = z_offset-vector_z;
@@ -260,14 +318,14 @@ void Move_Pupbot::controlLoop(){
       leftback_leg.points[0].positions[2] = target_left_leg_lower_joint;
       leftback_leg.header.stamp = ros::Time::now();
       leftback_leg.points[0].time_from_start = ros::Duration(0.02);
-      pub_leftback_leg.publish(leftback_leg);  
+      pub_leftback_leg.publish(leftback_leg);
     }else if(l == 2){
       rightback_leg.points[0].positions[0] = target_leg_shoulder_joint;
       rightback_leg.points[0].positions[1] = target_right_leg_upper_joint;
       rightback_leg.points[0].positions[2] = target_right_leg_lower_joint;
       rightback_leg.header.stamp = ros::Time::now();
       rightback_leg.points[0].time_from_start = ros::Duration(0.02);
-      pub_rightback_leg.publish(rightback_leg); 
+      pub_rightback_leg.publish(rightback_leg);
     }else if(l == 3){
       rightfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
       rightfront_leg.points[0].positions[1] = target_right_leg_upper_joint;
@@ -277,6 +335,64 @@ void Move_Pupbot::controlLoop(){
       pub_rightfront_leg.publish(rightfront_leg);
     }
   }
+  ros::Duration(0.02).sleep();
+}
+
+void Move_Pupbot::controlLoop_crawl(){
+  for(l=0;l<4;l++){
+    if(startup_shutdown_bool == false)continue;
+    dir_x = dirupdate_x+turn0*l_inv[l][1];
+    dir_y = turn0*l_inv[l][0];
+    count_c(crawl_step_extent_x);
+    crawl(rDir_x()*c[l], l_inv[l][1]*rDir_y()*c[l], l == crawl_pattern[(int)(c_inv[l])%4], (int)(c_inv[l] + crawl_succession[l])%4);
+    x = x_offset+vector_x;
+    y = vector_y;
+    z = z_offset-vector_z;
+    a0 = (atan(x/z))*180.0/M_PI;
+    a1 = (atan(y/z))*180.0/M_PI;
+    b0 = sqrt(x*x+z*z);
+    angle1 = a1;
+    angle3 = (asin((b0/2.0)/bone_length))*180.0/M_PI*2.0;
+    angle2 = angle3/2.0+a0;
+    target_leg_shoulder_joint = angle1*M_PI/180.0;
+    target_left_leg_upper_joint = (90.0-angle2)*M_PI/180.0;
+    target_left_leg_lower_joint = (180.0-angle3)*M_PI/180.0;
+    target_right_leg_upper_joint = -(90.0-angle2)*M_PI/180.0;
+    target_right_leg_lower_joint = -(180.0-angle3)*M_PI/180.0;
+    //ROS_INFO("angle:shoulder=%lf upper=%lf lower=%lf", angle1,angle2,angle3);
+    if(crawl_bool_0 || crawl_bool_1 || crawl_bool_2 || crawl_bool_3){
+      ros::Duration(0.5).sleep();
+    }else if(l == 0){
+      leftfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
+      leftfront_leg.points[0].positions[1] = target_left_leg_upper_joint;
+      leftfront_leg.points[0].positions[2] = target_left_leg_lower_joint;
+      leftfront_leg.header.stamp = ros::Time::now();
+      leftfront_leg.points[0].time_from_start = ros::Duration(0.01);
+      pub_leftfront_leg.publish(leftfront_leg);
+    }else if(l == 1){
+      leftback_leg.points[0].positions[0] = target_leg_shoulder_joint;
+      leftback_leg.points[0].positions[1] = target_left_leg_upper_joint;
+      leftback_leg.points[0].positions[2] = target_left_leg_lower_joint;
+      leftback_leg.header.stamp = ros::Time::now();
+      leftback_leg.points[0].time_from_start = ros::Duration(0.01);
+      pub_leftback_leg.publish(leftback_leg);  
+    }else if(l == 2){
+      rightback_leg.points[0].positions[0] = target_leg_shoulder_joint;
+      rightback_leg.points[0].positions[1] = target_right_leg_upper_joint;
+      rightback_leg.points[0].positions[2] = target_right_leg_lower_joint;
+      rightback_leg.header.stamp = ros::Time::now();
+      rightback_leg.points[0].time_from_start = ros::Duration(0.01);
+      pub_rightback_leg.publish(rightback_leg); 
+    }else if(l == 3){
+      rightfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
+      rightfront_leg.points[0].positions[1] = target_right_leg_upper_joint;
+      rightfront_leg.points[0].positions[2] = target_right_leg_lower_joint;
+      rightfront_leg.header.stamp = ros::Time::now();
+      rightfront_leg.points[0].time_from_start = ros::Duration(0.01);
+      pub_rightfront_leg.publish(rightfront_leg);
+    }
+  }
+  ros::Duration(0.01).sleep();
 }
 
 double Move_Pupbot::rDir_x(){
@@ -302,12 +418,13 @@ int main(int argc, char** argv){
   ros::init(argc,argv, "move_pupbot");
   Move_Pupbot PupBot;
 
-  ros::Rate loop_rate(50);
-
   while(ros::ok()){
-    PupBot.controlLoop();
+    if(PupBot.gait_state_num == 1){
+      PupBot.controlLoop_trot();
+    }else{
+      PupBot.controlLoop_crawl();
+    }
     ros::spinOnce();
-    loop_rate.sleep();
   }
   return 0;
 }

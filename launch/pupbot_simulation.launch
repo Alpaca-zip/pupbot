@@ -16,6 +16,6 @@
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" 
   args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-  <node name="move_pupbot" pkg="pupbot" type="move_pupbot"/>
+  <node name="move_pupbot" pkg="pupbot" type="move_pupbot" output="screen"/>
   <node name="pupbot_controller" pkg="pupbot" type="pupbot_controller" output="screen"/>
 </launch>
