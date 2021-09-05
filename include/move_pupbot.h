@@ -12,7 +12,7 @@
 #define TROT_STEP_EXTENT_Z  7.0
 #define CRAWL_STEP_EXTENT_X 40.0
 #define CRAWL_STEP_EXTENT_Y 40.0
-#define CRAWL_STEP_EXTENT_Z  20.0
+#define CRAWL_STEP_EXTENT_Z  7.0
 
 class Move_Pupbot{
   public:

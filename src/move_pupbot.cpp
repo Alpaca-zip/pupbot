@@ -361,7 +361,7 @@ void Move_Pupbot::controlLoop_crawl(){
     target_right_leg_lower_joint = -(180.0-angle3)*M_PI/180.0;
     //ROS_INFO("angle:shoulder=%lf upper=%lf lower=%lf", angle1,angle2,angle3);
     if(crawl_bool_0 || crawl_bool_1 || crawl_bool_2 || crawl_bool_3){
-      ros::Duration(0.5).sleep();
+      //ros::Duration(0.5).sleep();
     }else if(l == 0){
       leftfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
       leftfront_leg.points[0].positions[1] = target_left_leg_upper_joint;
