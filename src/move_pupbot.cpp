@@ -21,7 +21,7 @@ void Move_Pupbot::init(){
   crawl_step_extent_x = CRAWL_STEP_EXTENT_X;
   crawl_step_extent_y = CRAWL_STEP_EXTENT_Y;
   crawl_step_extent_z = CRAWL_STEP_EXTENT_Z;
-  startup_shutdown_bool=false;
+  startup_shutdown_bool = false;
   crawl_bool_0 = false;
   crawl_bool_1 = false;
   crawl_bool_2 = false;
@@ -34,6 +34,7 @@ void Move_Pupbot::init(){
   pub_leftback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftback_leg_controller/command", 10);
   pub_rightfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightfront_leg_controller/command", 10);
   pub_rightback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightback_leg_controller/command", 10);
+  gait_stop = nh.advertise<std_msgs::Bool>("/gait_stop", 10);
   key_control_sub1 = nh.subscribe("key_control1", 10, &Move_Pupbot::key_controlCallback1, this);
   key_control_sub2 = nh.subscribe("key_control2", 10, &Move_Pupbot::startup_shutdown_Callback, this);
   key_control_sub3 = nh.subscribe("key_control3", 10, &Move_Pupbot::key_controlCallback2, this);
@@ -62,6 +63,7 @@ void Move_Pupbot::init(){
   rightfront_leg.joint_names[0] = "rightfront_leg_shoulder_joint";
   rightfront_leg.joint_names[1] = "rightfront_leg_upper_joint";
   rightfront_leg.joint_names[2] = "rightfront_leg_lower_joint";
+  gait_stop_bool.data = false;
 }
 
 void Move_Pupbot::trot(double c0_x, double c0_y, bool inv){
@@ -174,6 +176,11 @@ void Move_Pupbot::crawl(double c0_x, double c0_y, bool inv, int i0){
     vector_y = c0_y/0.1;
     vector_z = h1/0.1*int(inv);
   }
+  
+  //if(l==0)printf("0z=%lf ",  vector_z*0.1);
+  //if(l==1)printf("1z=%lf ",  vector_z*0.1);
+  //if(l==2)printf("2z=%lf ",  vector_z*0.1);
+  //if(l==3)printf("3z=%lf\n",  vector_z*0.1);
 }
 
 void Move_Pupbot::count_c(double step_extent_x){
@@ -304,7 +311,6 @@ void Move_Pupbot::controlLoop_trot(){
     target_left_leg_lower_joint = (180.0-angle3)*M_PI/180.0;
     target_right_leg_upper_joint = -(90.0-angle2)*M_PI/180.0;
     target_right_leg_lower_joint = -(180.0-angle3)*M_PI/180.0;
-    //ROS_INFO("angle:shoulder=%lf upper=%lf lower=%lf", angle1,angle2,angle3);
     if(l == 0){
       leftfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
       leftfront_leg.points[0].positions[1] = target_left_leg_upper_joint;
@@ -359,9 +365,15 @@ void Move_Pupbot::controlLoop_crawl(){
     target_left_leg_lower_joint = (180.0-angle3)*M_PI/180.0;
     target_right_leg_upper_joint = -(90.0-angle2)*M_PI/180.0;
     target_right_leg_lower_joint = -(180.0-angle3)*M_PI/180.0;
-    //ROS_INFO("angle:shoulder=%lf upper=%lf lower=%lf", angle1,angle2,angle3);
     if(crawl_bool_0 || crawl_bool_1 || crawl_bool_2 || crawl_bool_3){
-      //ros::Duration(0.5).sleep();
+      //printf("true\n");
+      gait_stop_bool.data = true;
+      gait_stop.publish(gait_stop_bool);
+      ros::Duration(0.1).sleep();
+      crawl_bool_0 = false;
+      crawl_bool_1 = false;
+      crawl_bool_2 = false;
+      crawl_bool_3 = false;
     }else if(l == 0){
       leftfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
       leftfront_leg.points[0].positions[1] = target_left_leg_upper_joint;

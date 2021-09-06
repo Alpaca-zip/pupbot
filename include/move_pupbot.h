@@ -52,11 +52,13 @@ class Move_Pupbot{
   ros::Publisher pub_leftback_leg;
   ros::Publisher pub_rightfront_leg;
   ros::Publisher pub_rightback_leg;
+  ros::Publisher gait_stop;
   ros::Subscriber key_control_sub1;
   ros::Subscriber key_control_sub2;
   ros::Subscriber key_control_sub3;
   ros::Subscriber key_control_sub4;
   trajectory_msgs::JointTrajectory leftfront_leg, leftback_leg, rightfront_leg, rightback_leg;
+  std_msgs::Bool gait_stop_bool;
 
   void init();
   void trot(double c0_x, double c0_y, bool inv);
