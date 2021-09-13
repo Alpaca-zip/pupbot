@@ -19,6 +19,7 @@ void Dynamixel_Controller::init(){
   sub_rightfront_leg = nh.subscribe("/rightfront_leg_controller/command", 10, &Dynamixel_Controller::monitor_rightfront_leg_callback, this);
   sub_leftback_leg = nh.subscribe("/leftback_leg_controller/command", 10, &Dynamixel_Controller::monitor_leftback_leg_callback, this);
   sub_rightback_leg = nh.subscribe("/rightback_leg_controller/command", 10, &Dynamixel_Controller::monitor_rightback_leg_callback, this);
+  sub_gait_stop = nh.subscribe("/gait_stop", 10, &Dynamixel_Controller::monitor_load_callback, this);
   joint_name[0].data = "leftfront_leg_shoulder_joint";
   joint_name[1].data = "leftfront_leg_upper_joint";
   joint_name[2].data = "leftfront_leg_lower_joint";
@@ -52,18 +53,33 @@ void Dynamixel_Controller::monitor_leftfront_leg_callback(const trajectory_msgs:
   for(int i=0;i<3;i++){
     joint_pos[i].data = leftfront_leg.points[0].positions[i];
   }
+}
+
+void Dynamixel_Controller::monitor_rightfront_leg_callback(const trajectory_msgs::JointTrajectory& rightfront_leg){
+  for(int i=3;i<6;i++){
+    joint_pos[i].data = rightfront_leg.points[0].positions[i-3];
+  }
+}
+
+void Dynamixel_Controller::monitor_leftback_leg_callback(const trajectory_msgs::JointTrajectory& leftback_leg){
+  for(int i=6;i<9;i++){
+    joint_pos[i].data = leftback_leg.points[0].positions[i-6];
+  }
+}
+
+void Dynamixel_Controller::monitor_rightback_leg_callback(const trajectory_msgs::JointTrajectory& rightback_leg){
+  for(int i=9;i<12;i++){
+    joint_pos[i].data = rightback_leg.points[0].positions[i-9];
+  }
+}
+
+void Dynamixel_Controller::monitor_load_callback(const std_msgs::Bool& gait_stop_bool){
   result = dxl_wb.itemRead(LEFTFRONT_LEG_LOWER_ID, "Present_Load", &getdata_from_dynamixel, &log);
   if(result == true){
     if(getdata_from_dynamixel > 1023){
       leftfront_leg_load.data = getdata_from_dynamixel-1024;
     }else leftfront_leg_load.data = getdata_from_dynamixel;
     dynamixel_state_leftfront_leg.publish(leftfront_leg_load);
-  }
-}
-
-void Dynamixel_Controller::monitor_rightfront_leg_callback(const trajectory_msgs::JointTrajectory& rightfront_leg){
-  for(int i=3;i<6;i++){
-    joint_pos[i].data = rightfront_leg.points[0].positions[i-3];
   }
   result = dxl_wb.itemRead(RIGHTFRONT_LEG_LOWER_ID, "Present_Load", &getdata_from_dynamixel, &log);
   if(result == true){
@@ -72,24 +88,12 @@ void Dynamixel_Controller::monitor_rightfront_leg_callback(const trajectory_msgs
     }else rightfront_leg_load.data = getdata_from_dynamixel;
     dynamixel_state_rightfront_leg.publish(rightfront_leg_load);
   }
-}
-
-void Dynamixel_Controller::monitor_leftback_leg_callback(const trajectory_msgs::JointTrajectory& leftback_leg){
-  for(int i=6;i<9;i++){
-    joint_pos[i].data = leftback_leg.points[0].positions[i-6];
-  }
   result = dxl_wb.itemRead(LEFTBACK_LEG_LOWER_ID, "Present_Load", &getdata_from_dynamixel, &log);
   if(result == true){
     if(getdata_from_dynamixel > 1023){
       leftback_leg_load.data = getdata_from_dynamixel-1024;
     }else leftback_leg_load.data = getdata_from_dynamixel;
     dynamixel_state_leftback_leg.publish(leftback_leg_load);
-  }
-}
-
-void Dynamixel_Controller::monitor_rightback_leg_callback(const trajectory_msgs::JointTrajectory& rightback_leg){
-  for(int i=9;i<12;i++){
-    joint_pos[i].data = rightback_leg.points[0].positions[i-9];
   }
   result = dxl_wb.itemRead(RIGHTBACK_LEG_LOWER_ID, "Present_Load", &getdata_from_dynamixel, &log);
   if(result == true){

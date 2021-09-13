@@ -26,10 +26,12 @@ void Move_Pupbot::init(){
   crawl_bool_1 = false;
   crawl_bool_2 = false;
   crawl_bool_3 = false;
+  trot_bool = false;
   crawl_num_0 = 0;
   crawl_num_1 = 0;
   crawl_num_2 = 0;
   crawl_num_3 = 0;
+  trot_num = 0;
   pub_leftfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftfront_leg_controller/command", 10);
   pub_leftback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftback_leg_controller/command", 10);
   pub_rightfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/rightfront_leg_controller/command", 10);
@@ -70,6 +72,21 @@ void Move_Pupbot::trot(double c0_x, double c0_y, bool inv){
   w0 = trot_step_extent_x*0.1/2.0*dir_x;
   l0 = trot_step_extent_y*0.1*4.0*dir_y;
   h0 = trot_step_extent_z*0.1;
+
+  if(l == 0){
+    if(!inv){
+      trot_bool = false;
+      trot_num = 0;
+    }else{
+      if(trot_num == 0){
+        trot_bool = true;
+        trot_num = 1;
+      }else{
+        trot_bool = false;
+      }
+    }
+  }
+
   if(inv == false){
     c0_x = -c0_x;
     c0_y = -c0_y;
@@ -94,6 +111,10 @@ void Move_Pupbot::trot(double c0_x, double c0_y, bool inv){
     vector_y = c0_y/0.1;
     vector_z = h1/0.1*int(inv);
   }
+  //if(l==0)printf("0z=%lf ",  vector_z*0.1);
+  //if(l==1)printf("1z=%lf ",  vector_z*0.1);
+  //if(l==2)printf("2z=%lf ",  vector_z*0.1);
+  //if(l==3)printf("3z=%lf\n",  vector_z*0.1);
 }
 
 void Move_Pupbot::crawl(double c0_x, double c0_y, bool inv, int i0){
@@ -176,7 +197,6 @@ void Move_Pupbot::crawl(double c0_x, double c0_y, bool inv, int i0){
     vector_y = c0_y/0.1;
     vector_z = h1/0.1*int(inv);
   }
-  
   //if(l==0)printf("0z=%lf ",  vector_z*0.1);
   //if(l==1)printf("1z=%lf ",  vector_z*0.1);
   //if(l==2)printf("2z=%lf ",  vector_z*0.1);
@@ -311,7 +331,14 @@ void Move_Pupbot::controlLoop_trot(){
     target_left_leg_lower_joint = (180.0-angle3)*M_PI/180.0;
     target_right_leg_upper_joint = -(90.0-angle2)*M_PI/180.0;
     target_right_leg_lower_joint = -(180.0-angle3)*M_PI/180.0;
-    if(l == 0){
+    if(trot_bool){
+      //printf("true\n");
+      gait_stop_bool.data = true;
+      gait_stop.publish(gait_stop_bool);
+      gait_stop_bool.data = false;
+      ros::Duration(0.1).sleep();
+      trot_bool = false;
+    }else if(l == 0){
       leftfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
       leftfront_leg.points[0].positions[1] = target_left_leg_upper_joint;
       leftfront_leg.points[0].positions[2] = target_left_leg_lower_joint;
@@ -369,6 +396,7 @@ void Move_Pupbot::controlLoop_crawl(){
       //printf("true\n");
       gait_stop_bool.data = true;
       gait_stop.publish(gait_stop_bool);
+      gait_stop_bool.data = false;
       ros::Duration(0.1).sleep();
       crawl_bool_0 = false;
       crawl_bool_1 = false;

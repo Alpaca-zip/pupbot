@@ -3,6 +3,7 @@
 #include "std_msgs/Float64.h"
 #include "std_msgs/String.h"
 #include "std_msgs/Int32.h"
+#include "std_msgs/Bool.h"
 #include "trajectory_msgs/JointTrajectory.h"
 #include "dynamixel_workbench_toolbox/dynamixel_workbench.h"
 
@@ -49,6 +50,7 @@ class Dynamixel_Controller{
   ros::Subscriber sub_rightfront_leg;
   ros::Subscriber sub_leftback_leg;
   ros::Subscriber sub_rightback_leg;
+  ros::Subscriber sub_gait_stop;
   std_msgs::String joint_name[12];
   std_msgs::Float64 joint_pos[12];
   std_msgs::Int32 leftfront_leg_load, leftback_leg_load, rightfront_leg_load, rightback_leg_load;
@@ -58,6 +60,7 @@ class Dynamixel_Controller{
   void monitor_rightfront_leg_callback(const trajectory_msgs::JointTrajectory& rightfront_leg);
   void monitor_leftback_leg_callback(const trajectory_msgs::JointTrajectory& leftback_leg);
   void monitor_rightback_leg_callback(const trajectory_msgs::JointTrajectory& leftback_leg);
+  void monitor_load_callback(const std_msgs::Bool& gait_stop_bool);
   void dxl_init();
   void dxl_torqueOn();
   void dxl_addSyncWriteHandler();
