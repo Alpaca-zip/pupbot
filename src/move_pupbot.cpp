@@ -334,9 +334,10 @@ void Move_Pupbot::controlLoop_trot(){
     if(trot_bool){
       //printf("true\n");
       gait_stop_bool.data = true;
+      ros::Duration(0.2).sleep();
       gait_stop.publish(gait_stop_bool);
       gait_stop_bool.data = false;
-      ros::Duration(0.1).sleep();
+      ros::Duration(0.2).sleep();
       trot_bool = false;
     }else if(l == 0){
       leftfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
@@ -395,9 +396,10 @@ void Move_Pupbot::controlLoop_crawl(){
     if(crawl_bool_0 || crawl_bool_1 || crawl_bool_2 || crawl_bool_3){
       //printf("true\n");
       gait_stop_bool.data = true;
+      ros::Duration(0.2).sleep();
       gait_stop.publish(gait_stop_bool);
       gait_stop_bool.data = false;
-      ros::Duration(0.1).sleep();
+      ros::Duration(0.2).sleep();
       crawl_bool_0 = false;
       crawl_bool_1 = false;
       crawl_bool_2 = false;
