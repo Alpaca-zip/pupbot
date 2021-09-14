@@ -45,24 +45,24 @@ void Pupbot_stabilizer::monitor_rightback_leg_load_callback(const std_msgs::Int3
 void Pupbot_stabilizer::controlLoop(){
   average = (leftfront_leg_state+leftback_leg_state+rightfront_leg_state+rightback_leg_state)/4;
   if(average < leftfront_leg_state){
-    leftfront_leg_z_offset.data -= 1;
+    if(leftfront_leg_z_offset.data > 110) leftfront_leg_z_offset.data -= 1;
   }else if(average > leftfront_leg_state){
-    leftfront_leg_z_offset.data += 1;
+    if(leftfront_leg_z_offset.data < 130) leftfront_leg_z_offset.data += 1;
   }
   if(average < leftback_leg_state){
-    leftback_leg_z_offset.data -= 1;
+    if(leftback_leg_z_offset.data > 110) leftback_leg_z_offset.data -= 1;
   }else if(average > leftback_leg_state){
-    leftback_leg_z_offset.data += 1;
+    if(leftback_leg_z_offset.data < 130) leftback_leg_z_offset.data += 1;
   }
   if(average < rightfront_leg_state){
-    rightfront_leg_z_offset.data -= 1;
+    if(rightfront_leg_z_offset.data > 110) rightfront_leg_z_offset.data -= 1;
   }else if(average > rightfront_leg_state){
-    rightfront_leg_z_offset.data += 1;
+    if(rightfront_leg_z_offset.data < 130) rightfront_leg_z_offset.data += 1;
   }
   if(average < rightback_leg_state){
-    rightback_leg_z_offset.data -= 1;
+    if(rightback_leg_z_offset.data > 110) rightback_leg_z_offset.data -= 1;
   }else if(average > rightback_leg_state){
-    rightback_leg_z_offset.data += 1;
+    if(rightback_leg_z_offset.data < 120) rightback_leg_z_offset.data += 1;
   }
   pub_leftfront_leg_z_offset.publish(leftfront_leg_z_offset);
   pub_leftback_leg_z_offset.publish(leftback_leg_z_offset);

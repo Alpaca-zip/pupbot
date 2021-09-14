@@ -5,7 +5,7 @@
 #include "trajectory_msgs/JointTrajectory.h"
 
 #define X_OFFSET 0.0
-#define Z_OFFSET 120
+//#define Z_OFFSET 120
 #define BONE_LENGTH 83.0
 #define TROT_STEP_EXTENT_X 40.0
 #define TROT_STEP_EXTENT_Y 40.0
@@ -29,7 +29,7 @@ class Move_Pupbot{
   int crawl_num_0, crawl_num_1, crawl_num_2, crawl_num_3, trot_num;
   double x, y, z, a0, a1, b0;
   double angle1, angle2, angle3;
-  double x_offset, z_offset, z_offset_leftfront_leg, z_offset_leftback_leg, z_offset_rightfront_leg, z_offset_rightback_leg;
+  double x_offset, z_offset_leftfront_leg, z_offset_leftback_leg, z_offset_rightfront_leg, z_offset_rightback_leg;
   double bone_length;
   double target_leg_shoulder_joint, target_left_leg_upper_joint, target_left_leg_lower_joint, target_right_leg_upper_joint, target_right_leg_lower_joint;
   double dirupdate_x;

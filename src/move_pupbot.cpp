@@ -11,11 +11,10 @@ void Move_Pupbot::init(){
   number = 22;
   gait_state_num = 0;
   x_offset = X_OFFSET;
-  z_offset = Z_OFFSET;
-  z_offset_leftfront_leg = Z_OFFSET;
-  z_offset_leftback_leg = Z_OFFSET;
-  z_offset_rightfront_leg = Z_OFFSET;
-  z_offset_rightback_leg = Z_OFFSET;
+  z_offset_leftfront_leg = 113;
+  z_offset_leftback_leg = 120;
+  z_offset_rightfront_leg = 115;
+  z_offset_rightback_leg = 118;
   bone_length = BONE_LENGTH;
   dirupdate_x = 0.0;
   turn0 = 0.0;
@@ -412,7 +411,15 @@ void Move_Pupbot::controlLoop_crawl(){
     crawl(rDir_x()*c[l], l_inv[l][1]*rDir_y()*c[l], l == crawl_pattern[(int)(c_inv[l])%4], (int)(c_inv[l] + crawl_succession[l])%4);
     x = x_offset+vector_x;
     y = vector_y;
-    z = z_offset-vector_z;
+    if(l == 0){
+      z = z_offset_leftfront_leg-vector_z;
+    }else if(l == 1){
+      z = z_offset_leftback_leg-vector_z;
+    }else if(l == 2){
+      z = z_offset_rightback_leg-vector_z;
+    }else{
+      z = z_offset_rightfront_leg-vector_z;
+    }
     a0 = (atan(x/z))*180.0/M_PI;
     a1 = (atan(y/z))*180.0/M_PI;
     b0 = sqrt(x*x+z*z);
