@@ -5,6 +5,14 @@
 ++++++++++++++++++++++++++++++++++ */
 Pupbot_stabilizer::Pupbot_stabilizer(){
   init();
+  leftfront_leg_z_offset.data = Z_OFFSET;
+  leftback_leg_z_offset.data = Z_OFFSET;
+  rightfront_leg_z_offset.data = Z_OFFSET;
+  rightback_leg_z_offset.data = Z_OFFSET;
+  pub_leftfront_leg_z_offset = nh.advertise<std_msgs::Float64>("/leftfront_leg_z_offset", 10);
+  pub_leftback_leg_z_offset = nh.advertise<std_msgs::Float64>("/leftback_leg_z_offset", 10);
+  pub_rightfront_leg_z_offset = nh.advertise<std_msgs::Float64>("/rightfront_leg_z_offset", 10);
+  pub_rightback_leg_z_offset = nh.advertise<std_msgs::Float64>("/rightback_leg_z_offset", 10);
 }
 
 void Pupbot_stabilizer::init(){
@@ -35,7 +43,31 @@ void Pupbot_stabilizer::monitor_rightback_leg_load_callback(const std_msgs::Int3
 }
 
 void Pupbot_stabilizer::controlLoop(){
-
+  average = (leftfront_leg_state+leftback_leg_state+rightfront_leg_state+rightback_leg_state)/4;
+  if(average < leftfront_leg_state){
+    leftfront_leg_z_offset.data -= 1;
+  }else if(average > leftfront_leg_state){
+    leftfront_leg_z_offset.data += 1;
+  }
+  if(average < leftback_leg_state){
+    leftback_leg_z_offset.data -= 1;
+  }else if(average > leftback_leg_state){
+    leftback_leg_z_offset.data += 1;
+  }
+  if(average < rightfront_leg_state){
+    rightfront_leg_z_offset.data -= 1;
+  }else if(average > rightfront_leg_state){
+    rightfront_leg_z_offset.data += 1;
+  }
+  if(average < rightback_leg_state){
+    rightback_leg_z_offset.data -= 1;
+  }else if(average > rightback_leg_state){
+    rightback_leg_z_offset.data += 1;
+  }
+  pub_leftfront_leg_z_offset.publish(leftfront_leg_z_offset);
+  pub_leftback_leg_z_offset.publish(leftback_leg_z_offset);
+  pub_rightfront_leg_z_offset.publish(rightfront_leg_z_offset);
+  pub_rightback_leg_z_offset.publish(rightback_leg_z_offset);
 }
 
 /* ++++++++++++++++++++++++++++++++++

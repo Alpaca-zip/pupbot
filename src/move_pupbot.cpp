@@ -12,6 +12,10 @@ void Move_Pupbot::init(){
   gait_state_num = 0;
   x_offset = X_OFFSET;
   z_offset = Z_OFFSET;
+  z_offset_leftfront_leg = Z_OFFSET;
+  z_offset_leftback_leg = Z_OFFSET;
+  z_offset_rightfront_leg = Z_OFFSET;
+  z_offset_rightback_leg = Z_OFFSET;
   bone_length = BONE_LENGTH;
   dirupdate_x = 0.0;
   turn0 = 0.0;
@@ -41,6 +45,10 @@ void Move_Pupbot::init(){
   key_control_sub2 = nh.subscribe("key_control2", 10, &Move_Pupbot::startup_shutdown_Callback, this);
   key_control_sub3 = nh.subscribe("key_control3", 10, &Move_Pupbot::key_controlCallback2, this);
   key_control_sub4 = nh.subscribe("key_control4", 10, &Move_Pupbot::gait_state_Callback, this);
+  sub_leftfront_leg_z_offset = nh.subscribe("/leftfront_leg_z_offset", 10, &Move_Pupbot::leftfront_leg_z_offset_Callback, this);
+  sub_leftback_leg_z_offset = nh.subscribe("/leftback_leg_z_offset", 10, &Move_Pupbot::leftback_leg_z_offset_Callback, this);
+  sub_rightfront_leg_z_offset = nh.subscribe("/rightfront_leg_z_offset", 10, &Move_Pupbot::rightfront_leg_z_offset_Callback, this);
+  sub_rightback_leg_z_offset = nh.subscribe("/rightback_leg_z_offset", 10, &Move_Pupbot::rightback_leg_z_offset_Callback, this);
   leftfront_leg.joint_names.resize(3);
   leftfront_leg.points.resize(1);
   leftfront_leg.points[0].positions.resize(3);
@@ -310,6 +318,22 @@ void Move_Pupbot::gait_state_Callback(const std_msgs::Bool& gait_state){
   }
 }
 
+void Move_Pupbot::leftfront_leg_z_offset_Callback(const std_msgs::Float64& leftfront_leg_z_offset){
+  z_offset_leftfront_leg = leftfront_leg_z_offset.data;
+}
+
+void Move_Pupbot::leftback_leg_z_offset_Callback(const std_msgs::Float64& leftback_leg_z_offset){
+  z_offset_leftback_leg = leftback_leg_z_offset.data;
+}
+
+void Move_Pupbot::rightfront_leg_z_offset_Callback(const std_msgs::Float64& rightfront_leg_z_offset){
+  z_offset_rightfront_leg = rightfront_leg_z_offset.data;
+}
+
+void Move_Pupbot::rightback_leg_z_offset_Callback(const std_msgs::Float64& rightback_leg_z_offset){
+  z_offset_rightback_leg = rightback_leg_z_offset.data;
+}
+
 void Move_Pupbot::controlLoop_trot(){
   for(l=0;l<4;l++){
     if(startup_shutdown_bool == false)continue;
@@ -319,7 +343,15 @@ void Move_Pupbot::controlLoop_trot(){
     trot(rDir_x()*c[l], l_inv[l][1]*rDir_y()*c[l], bool(l%2)^bool(fmod(c_inv[l], 2.0)));
     x = x_offset+vector_x;
     y = vector_y;
-    z = z_offset-vector_z;
+    if(l == 0){
+      z = z_offset_leftfront_leg-vector_z;
+    }else if(l == 1){
+      z = z_offset_leftback_leg-vector_z;
+    }else if(l == 2){
+      z = z_offset_rightback_leg-vector_z;
+    }else{
+      z = z_offset_rightfront_leg-vector_z;
+    }
     a0 = (atan(x/z))*180.0/M_PI;
     a1 = (atan(y/z))*180.0/M_PI;
     b0 = sqrt(x*x+z*z);
@@ -334,10 +366,9 @@ void Move_Pupbot::controlLoop_trot(){
     if(trot_bool){
       //printf("true\n");
       gait_stop_bool.data = true;
-      ros::Duration(0.2).sleep();
+      ros::Duration(0.3).sleep();
       gait_stop.publish(gait_stop_bool);
       gait_stop_bool.data = false;
-      ros::Duration(0.2).sleep();
       trot_bool = false;
     }else if(l == 0){
       leftfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
@@ -396,10 +427,9 @@ void Move_Pupbot::controlLoop_crawl(){
     if(crawl_bool_0 || crawl_bool_1 || crawl_bool_2 || crawl_bool_3){
       //printf("true\n");
       gait_stop_bool.data = true;
-      ros::Duration(0.2).sleep();
+      ros::Duration(0.3).sleep();
       gait_stop.publish(gait_stop_bool);
       gait_stop_bool.data = false;
-      ros::Duration(0.2).sleep();
       crawl_bool_0 = false;
       crawl_bool_1 = false;
       crawl_bool_2 = false;

@@ -29,7 +29,7 @@ class Move_Pupbot{
   int crawl_num_0, crawl_num_1, crawl_num_2, crawl_num_3, trot_num;
   double x, y, z, a0, a1, b0;
   double angle1, angle2, angle3;
-  double x_offset, z_offset;
+  double x_offset, z_offset, z_offset_leftfront_leg, z_offset_leftback_leg, z_offset_rightfront_leg, z_offset_rightback_leg;
   double bone_length;
   double target_leg_shoulder_joint, target_left_leg_upper_joint, target_left_leg_lower_joint, target_right_leg_upper_joint, target_right_leg_lower_joint;
   double dirupdate_x;
@@ -57,6 +57,10 @@ class Move_Pupbot{
   ros::Subscriber key_control_sub2;
   ros::Subscriber key_control_sub3;
   ros::Subscriber key_control_sub4;
+  ros::Subscriber sub_leftfront_leg_z_offset;
+  ros::Subscriber sub_leftback_leg_z_offset;
+  ros::Subscriber sub_rightfront_leg_z_offset;
+  ros::Subscriber sub_rightback_leg_z_offset;
   trajectory_msgs::JointTrajectory leftfront_leg, leftback_leg, rightfront_leg, rightback_leg;
   std_msgs::Bool gait_stop_bool;
 
@@ -68,6 +72,10 @@ class Move_Pupbot{
   void key_controlCallback2(const std_msgs::Float64& turn);
   void startup_shutdown_Callback(const std_msgs::Bool& startup_shutdown);
   void gait_state_Callback(const std_msgs::Bool& gait_state);
+  void leftfront_leg_z_offset_Callback(const std_msgs::Float64& leftfront_leg_z_offset);
+  void leftback_leg_z_offset_Callback(const std_msgs::Float64& leftback_leg_z_offset);
+  void rightfront_leg_z_offset_Callback(const std_msgs::Float64& rightfront_leg_z_offset);
+  void rightback_leg_z_offset_Callback(const std_msgs::Float64& rightback_leg_z_offset);
   double rDir_x();
   double rDir_y();
 };
