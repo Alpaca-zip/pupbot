@@ -26,7 +26,6 @@ class Move_Pupbot{
   int number;
   int crawl_pattern[4] = {2, 0, 1, 3};
   int crawl_succession[4] = {2, 1, 3, 0};
-  int crawl_num_0, crawl_num_1, crawl_num_2, crawl_num_3, trot_num;
   double x, y, z, a0, a1, b0;
   double angle1, angle2, angle3;
   double x_offset, z_offset_leftfront_leg, z_offset_leftback_leg, z_offset_rightfront_leg, z_offset_rightback_leg;
@@ -45,14 +44,12 @@ class Move_Pupbot{
   double c[4] = {0.0, 0.0, 0.0, 0.0};
   double c_inv[4] = {0.0, 0.0, 0.0, 0.0};
   bool startup_shutdown_bool;
-  bool crawl_bool_0, crawl_bool_1, crawl_bool_2, crawl_bool_3, trot_bool;
   
   ros::NodeHandle nh;
   ros::Publisher pub_leftfront_leg;
   ros::Publisher pub_leftback_leg;
   ros::Publisher pub_rightfront_leg;
   ros::Publisher pub_rightback_leg;
-  ros::Publisher gait_stop;
   ros::Subscriber key_control_sub1;
   ros::Subscriber key_control_sub2;
   ros::Subscriber key_control_sub3;
@@ -62,7 +59,6 @@ class Move_Pupbot{
   ros::Subscriber sub_rightfront_leg_z_offset;
   ros::Subscriber sub_rightback_leg_z_offset;
   trajectory_msgs::JointTrajectory leftfront_leg, leftback_leg, rightfront_leg, rightback_leg;
-  std_msgs::Bool gait_stop_bool;
 
   void init();
   void trot(double c0_x, double c0_y, bool inv);
