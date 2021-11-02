@@ -22,6 +22,14 @@ void Pupbot_Controller::init(){
   turn.data = 0.0;
   startup_shutdown.data = false;
   gait_state.data = false;
+
+  /* ++++++++++++++++++++++++++++++++++
+         Pose initialization
+  ++++++++++++++++++++++++++++++++++ */
+  std::cout << "+++++++++++++++" << std::endl;
+  std::cout << "Initializing..." << std::endl;
+  std::cout << "+++++++++++++++" << std::endl;
+  ros::Duration(5.0).sleep();
 }
 
 int Pupbot_Controller::getch(){

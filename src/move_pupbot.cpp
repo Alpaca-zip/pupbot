@@ -61,6 +61,35 @@ void Move_Pupbot::init(){
   rightfront_leg.joint_names[0] = "rightfront_leg_shoulder_joint";
   rightfront_leg.joint_names[1] = "rightfront_leg_upper_joint";
   rightfront_leg.joint_names[2] = "rightfront_leg_lower_joint";
+
+  /* ++++++++++++++++++++++++++++++++++
+         Pose initialization
+  ++++++++++++++++++++++++++++++++++ */
+  ros::Duration(5.0).sleep();
+  leftfront_leg.points[0].positions[0] = 0.0;
+  leftfront_leg.points[0].positions[1] = 1.5;
+  leftfront_leg.points[0].positions[2] = 3.0;
+  leftfront_leg.header.stamp = ros::Time::now();
+  leftfront_leg.points[0].time_from_start = ros::Duration(0.05);
+  pub_leftfront_leg.publish(leftfront_leg);    
+  leftback_leg.points[0].positions[0] = 0.0;
+  leftback_leg.points[0].positions[1] = 1.5;
+  leftback_leg.points[0].positions[2] = 3.0;
+  leftback_leg.header.stamp = ros::Time::now();
+  leftback_leg.points[0].time_from_start = ros::Duration(0.05);
+  pub_leftback_leg.publish(leftback_leg);
+  rightback_leg.points[0].positions[0] = 0.0;
+  rightback_leg.points[0].positions[1] = -1.5;
+  rightback_leg.points[0].positions[2] = -3.0;
+  rightback_leg.header.stamp = ros::Time::now();
+  rightback_leg.points[0].time_from_start = ros::Duration(0.05);
+  pub_rightback_leg.publish(rightback_leg);
+  rightfront_leg.points[0].positions[0] = 0.0;
+  rightfront_leg.points[0].positions[1] = -1.5;
+  rightfront_leg.points[0].positions[2] = -3.0;
+  rightfront_leg.header.stamp = ros::Time::now();
+  rightfront_leg.points[0].time_from_start = ros::Duration(0.05);
+  pub_rightfront_leg.publish(rightfront_leg); 
 }
 
 void Move_Pupbot::trot(double c0_x, double c0_y, bool inv){
@@ -405,6 +434,7 @@ double Move_Pupbot::rDir_y(){
 int main(int argc, char** argv){
   ros::init(argc,argv, "move_pupbot");
   Move_Pupbot PupBot;
+  ros::Rate loop_rate(100);
 
   while(ros::ok()){
     if(PupBot.gait_state_num == 1){
@@ -413,6 +443,7 @@ int main(int argc, char** argv){
       PupBot.controlLoop_crawl();
     }
     ros::spinOnce();
+    loop_rate.sleep();
   }
   return 0;
 }

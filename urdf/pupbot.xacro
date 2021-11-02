@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <robot name="pupbot" xmlns:xacro="http://ros.org/wiki/xacro">
-  <material name="gray">
-    <color rgba="0.5 0.5 0.5 2.5"/>
+  <material name="grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
   </material>
 
   <!-- base -->
-  <link name="world"/>
+  <link name="world"/>    <!-- <link name="base_link"/> -->
 
   <!-- body -->
   <joint name="base_joint" type="fixed">
@@ -14,7 +14,7 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
-  <link name="base_link">
+  <link name="base_link">    <!-- <link name="body_link"/> -->
     <inertial>
       <origin xyz="0 0 0.13" rpy="0 0 0"/>
       <mass value="0.796"/>
@@ -25,7 +25,7 @@
       <geometry>
         <mesh filename="package://pupbot/stl/body.stl" />
       </geometry>
-      <material name="gray" />
+      <material name="grey" />
     </visual>
     <collision>
       <origin xyz="0 0 0.13" rpy="0 0 0" />
@@ -74,7 +74,7 @@
       <geometry>
         <mesh filename="package://pupbot/stl/leg_shoulder.stl" />
       </geometry>
-      <material name="gray"/>
+      <material name="grey"/>
     </visual>
     <collision>
       <origin xyz="0 0.015 ${xyz4}" rpy="0 0 0" />
@@ -124,7 +124,7 @@
       <geometry>
         <mesh filename="package://pupbot/stl/leg_upper.stl" />
       </geometry>
-      <material name="gray"/>
+      <material name="grey"/>
     </visual>
     <collision>
       <origin xyz="0 0.04 0.015" rpy="0 0 0" />
@@ -174,7 +174,7 @@
       <geometry>
         <mesh filename="package://pupbot/stl/leg_lower.stl" />
       </geometry>
-      <material name="gray"/>
+      <material name="grey"/>
     </visual>
     <collision>
       <origin xyz="0 0.0365 -0.021" rpy="0 0 0" />
@@ -257,7 +257,7 @@
       <geometry>
         <mesh filename="package://pupbot/stl/leg_shoulder.stl" />
       </geometry>
-      <material name="gray"/>
+      <material name="grey"/>
     </visual>
     <collision>
       <origin xyz="0 -0.015 ${xyz4}" rpy="0 0 0" />
@@ -307,7 +307,7 @@
       <geometry>
         <mesh filename="package://pupbot/stl/leg_upper.stl" />
       </geometry>
-      <material name="gray"/>
+      <material name="grey"/>
     </visual>
     <collision>
       <origin xyz="0 0.04 0.015" rpy="0 0 0" />
@@ -357,7 +357,7 @@
       <geometry>
         <mesh filename="package://pupbot/stl/leg_lower.stl" />
       </geometry>
-      <material name="gray"/>
+      <material name="grey"/>
     </visual>
     <collision>
       <origin xyz="0 0.0365 -0.021" rpy="0 0 0" />
