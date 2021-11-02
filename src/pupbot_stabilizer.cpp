@@ -38,6 +38,16 @@ void Pupbot_stabilizer::controlLoop(){
   leftback_leg_z_offset.data += Y_OFFSET*sin(roll_data/180.0 * M_PI);
   rightfront_leg_z_offset.data -= Y_OFFSET*sin(roll_data/180.0 * M_PI);
   rightback_leg_z_offset.data -= Y_OFFSET*sin(roll_data/180.0 * M_PI);
+  
+  if(leftfront_leg_z_offset.data > 160.0) leftfront_leg_z_offset.data  = 160.0;
+  if(leftback_leg_z_offset.data > 160.0) leftback_leg_z_offset.data  = 160.0;
+  if(rightfront_leg_z_offset.data > 160.0) rightfront_leg_z_offset.data  = 160.0;
+  if(rightback_leg_z_offset.data > 160.0) rightback_leg_z_offset.data  = 160.0;
+  
+  if(leftfront_leg_z_offset.data < 15.0) leftfront_leg_z_offset.data  = 15.0;
+  if(leftback_leg_z_offset.data < 15.0) leftback_leg_z_offset.data  = 15.0;
+  if(rightfront_leg_z_offset.data < 15.0) rightfront_leg_z_offset.data  = 15.0;
+  if(rightback_leg_z_offset.data < 15.0) rightback_leg_z_offset.data  = 15.0;
 
   leftfront_leg_z_offset.data -= X_OFFSET*sin(pitch_data/180.0 * M_PI);
   leftback_leg_z_offset.data += X_OFFSET*sin(pitch_data/180.0 * M_PI);
