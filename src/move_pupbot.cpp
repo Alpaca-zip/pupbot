@@ -65,7 +65,7 @@ void Move_Pupbot::init(){
   /* ++++++++++++++++++++++++++++++++++
          Pose initialization
   ++++++++++++++++++++++++++++++++++ */
-  ros::Duration(5.0).sleep();
+  ros::Duration(2.0).sleep();
   leftfront_leg.points[0].positions[0] = 0.0;
   leftfront_leg.points[0].positions[1] = 1.5;
   leftfront_leg.points[0].positions[2] = 3.0;

@@ -29,7 +29,7 @@ void Pupbot_Controller::init(){
   std::cout << "+++++++++++++++" << std::endl;
   std::cout << "Initializing..." << std::endl;
   std::cout << "+++++++++++++++" << std::endl;
-  ros::Duration(5.0).sleep();
+  ros::Duration(2.0).sleep();
 }
 
 int Pupbot_Controller::getch(){
