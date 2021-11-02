@@ -50,13 +50,13 @@ A : Increases the value of turn (+0.25)
 S : Decreases the value of direction in the x axis (-0.25)  
 D : Decreases the value of turn (-0.25)  
 
-## Launch Walking Simulation
+## Launch Gazebo
 
 ```
-roslaunch pupbot pupbot_simulation.launch
+roslaunch pupbot pupbot_gazebo.launch
 ```
 
-## Launch Rviz(additional)
+## Launch Rviz
 
 ```
 roslaunch pupbot pupbot_rviz.launch
