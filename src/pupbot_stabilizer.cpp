@@ -16,8 +16,8 @@ void Pupbot_stabilizer::init(){
   pub_leftback_leg_z_offset = nh.advertise<std_msgs::Float64>("/leftback_leg_z_offset", 10);
   pub_rightfront_leg_z_offset = nh.advertise<std_msgs::Float64>("/rightfront_leg_z_offset", 10);
   pub_rightback_leg_z_offset = nh.advertise<std_msgs::Float64>("/rightback_leg_z_offset", 10);
-  roll_sub = nh.subscribe("roll", 10, &Pupbot_stabilizer::roll_callback, this);
-  pitch_sub = nh.subscribe("pitch", 10, &Pupbot_stabilizer::pitch_callback, this);
+  roll_sub = nh.subscribe("/roll", 10, &Pupbot_stabilizer::roll_callback, this);
+  pitch_sub = nh.subscribe("/pitch", 10, &Pupbot_stabilizer::pitch_callback, this);
 }
 
 void Pupbot_stabilizer::roll_callback(const std_msgs::Float64& roll){
@@ -29,16 +29,21 @@ void Pupbot_stabilizer::pitch_callback(const std_msgs::Float64& pitch){
 }
 
 void Pupbot_stabilizer::controlLoop(){
-  leftfront_leg_z_offset.data += Y_OFFSET*cos(roll_data/180.0 * M_PI);
-  leftback_leg_z_offset.data += Y_OFFSET*cos(roll_data/180.0 * M_PI);
-  rightfront_leg_z_offset.data -= Y_OFFSET*cos(roll_data/180.0 * M_PI);
-  rightback_leg_z_offset.data -= Y_OFFSET*cos(roll_data/180.0 * M_PI);
+  leftfront_leg_z_offset.data = LEFTFRONTLEG_Z_OFFSET;
+  leftback_leg_z_offset.data = LEFTBACKLEG_Z_OFFSET;
+  rightfront_leg_z_offset.data = RIGHTFRONTLEG_Z_OFFSET;
+  rightback_leg_z_offset.data = RIGHTBACKLEG_Z_OFFSET;
 
-  leftfront_leg_z_offset.data -= X_OFFSET*cos(pitch_data/180.0 * M_PI);
-  leftback_leg_z_offset.data += X_OFFSET*cos(pitch_data/180.0 * M_PI);
-  rightfront_leg_z_offset.data -= X_OFFSET*cos(pitch_data/180.0 * M_PI);
-  rightback_leg_z_offset.data += X_OFFSET*cos(pitch_data/180.0 * M_PI);
+  leftfront_leg_z_offset.data += Y_OFFSET*sin(roll_data/180.0 * M_PI);
+  leftback_leg_z_offset.data += Y_OFFSET*sin(roll_data/180.0 * M_PI);
+  rightfront_leg_z_offset.data -= Y_OFFSET*sin(roll_data/180.0 * M_PI);
+  rightback_leg_z_offset.data -= Y_OFFSET*sin(roll_data/180.0 * M_PI);
 
+  leftfront_leg_z_offset.data -= X_OFFSET*sin(pitch_data/180.0 * M_PI);
+  leftback_leg_z_offset.data += X_OFFSET*sin(pitch_data/180.0 * M_PI);
+  rightfront_leg_z_offset.data -= X_OFFSET*sin(pitch_data/180.0 * M_PI);
+  rightback_leg_z_offset.data += X_OFFSET*sin(pitch_data/180.0 * M_PI);
+  
   pub_leftfront_leg_z_offset.publish(leftfront_leg_z_offset);
   pub_leftback_leg_z_offset.publish(leftback_leg_z_offset);
   pub_rightfront_leg_z_offset.publish(rightfront_leg_z_offset);
