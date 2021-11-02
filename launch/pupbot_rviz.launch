@@ -23,6 +23,7 @@
   args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
   <node name="move_pupbot" pkg="pupbot" type="move_pupbot"/>
+  <node name="pupbot_stabilizer" pkg="pupbot" type="pupbot_stabilizer"/>
   <node name="pupbot_controller" pkg="pupbot" type="pupbot_controller" output="screen"/>
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
 </launch>

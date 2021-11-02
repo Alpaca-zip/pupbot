@@ -11,10 +11,10 @@ void Move_Pupbot::init(){
   number = 22;
   gait_state_num = 0;
   x_offset = X_OFFSET;
-  z_offset_leftfront_leg = 113;
-  z_offset_leftback_leg = 120;
-  z_offset_rightfront_leg = 115;
-  z_offset_rightback_leg = 118;
+  z_offset_leftfront_leg = LEFTFRONTLEG_Z_OFFSET;
+  z_offset_leftback_leg = LEFTBACKLEG_Z_OFFSET;
+  z_offset_rightfront_leg = RIGHTFRONTLEG_Z_OFFSET;
+  z_offset_rightback_leg = RIGHTBACKLEG_Z_OFFSET;
   bone_length = BONE_LENGTH;
   dirupdate_x = 0.0;
   turn0 = 0.0;
