@@ -2,7 +2,7 @@
 #include "std_msgs/Float64.h"
 
 #define X_OFFSET 61
-#define Y_OFFSET 116
+#define Y_OFFSET 94
 #define LEFTFRONTLEG_Z_OFFSET 113
 #define LEFTBACKLEG_Z_OFFSET 120
 #define RIGHTFRONTLEG_Z_OFFSET 115
