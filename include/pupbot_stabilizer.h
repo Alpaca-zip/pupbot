@@ -16,6 +16,7 @@ class Pupbot_stabilizer{
   private:
   double roll_data;
   double pitch_data;
+  double Kp;
 
   ros::NodeHandle nh;
   ros::Publisher pub_leftfront_leg_z_offset;
