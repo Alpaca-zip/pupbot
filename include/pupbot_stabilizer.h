@@ -16,7 +16,14 @@ class Pupbot_stabilizer{
   private:
   double roll_data;
   double pitch_data;
+  double M_leftfront_leg, M_leftback_leg, M_rightfront_leg, M_rightback_leg;
+  double M1_leftfront_leg, M1_leftback_leg, M1_rightfront_leg, M1_rightback_leg;
+  double e_leftfront_leg, e_leftback_leg, e_rightfront_leg, e_rightback_leg;
+  double e1_leftfront_leg, e1_leftback_leg, e1_rightfront_leg, e1_rightback_leg;
+  double e2_leftfront_leg, e2_leftback_leg, e2_rightfront_leg, e2_rightback_leg;
   double Kp;
+  double Ki;
+  double Kd;
 
   ros::NodeHandle nh;
   ros::Publisher pub_leftfront_leg_z_offset;
