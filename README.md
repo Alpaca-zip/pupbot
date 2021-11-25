@@ -26,8 +26,6 @@ Open source ROS package for quadruped robot PupBot.
 ## Control the PupBot with DualShock 4
 
 ```
-rosrun pupbot dynamixel_controller
-
 roslaunch pupbot move_pupbot_ds4.launch
 ```
 ○ : Startup/Shutdown  
@@ -38,8 +36,6 @@ Right stick : Turn left/right
 ## Control the PupBot with laptop
 
 ```
-rosrun pupbot dynamixel_controller
-
 roslaunch pupbot move_pupbot.launch
 ```
 
