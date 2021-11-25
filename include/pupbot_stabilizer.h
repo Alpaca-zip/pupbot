@@ -21,9 +21,9 @@ class Pupbot_stabilizer{
   double e_leftfront_leg, e_leftback_leg, e_rightfront_leg, e_rightback_leg;
   double e1_leftfront_leg, e1_leftback_leg, e1_rightfront_leg, e1_rightback_leg;
   double e2_leftfront_leg, e2_leftback_leg, e2_rightfront_leg, e2_rightback_leg;
-  double Kp;
-  double Ki;
-  double Kd;
+  double P;
+  double I;
+  double D;
 
   ros::NodeHandle nh;
   ros::Publisher pub_leftfront_leg_z_offset;
@@ -32,6 +32,16 @@ class Pupbot_stabilizer{
   ros::Publisher pub_rightback_leg_z_offset;
   ros::Subscriber roll_sub;
   ros::Subscriber pitch_sub;
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  //PID control section
+  //This has been deprecated, and could be removed in a future release.
+  ros::Subscriber key_control_sub_Kp;
+  ros::Subscriber key_control_sub_Ki;
+  ros::Subscriber key_control_sub_Kd;
+  void Kp_callback(const std_msgs::Float64& Kp);
+  void Ki_callback(const std_msgs::Float64& Ki);
+  void Kd_callback(const std_msgs::Float64& Kd);
+  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   std_msgs::Float64 leftfront_leg_z_offset, leftback_leg_z_offset, rightfront_leg_z_offset, rightback_leg_z_offset;
 
   void init();

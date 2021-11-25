@@ -7,7 +7,7 @@
 #include "trajectory_msgs/JointTrajectory.h"
 #include "dynamixel_workbench_toolbox/dynamixel_workbench.h"
 
-#define PORT_NAME "/dev/ttyACM0"
+#define PORT_NAME "/dev/ttyACM1"
 #define MODEL_NUMBER 12
 #define BAUD_RATE 1000000
 
@@ -31,13 +31,13 @@ class Dynamixel_Controller{
 
   private:
   const char *log;
+  const char* port_name = PORT_NAME;
   int baud_rate;
   int32_t goal_position[12];
   int32_t getdata_from_dynamixel;
   uint16_t model_number;
   uint8_t dxl_id[12] = {LEFTFRONT_LEG_SHOULDER_ID, LEFTFRONT_LEG_UPPER_ID, LEFTFRONT_LEG_LOWER_ID, RIGHTFRONT_LEG_SHOULDER_ID, RIGHTFRONT_LEG_UPPER_ID, RIGHTFRONT_LEG_LOWER_ID, LEFTBACK_LEG_SHOULDER_ID, LEFTBACK_LEG_UPPER_ID, LEFTBACK_LEG_LOWER_ID, RIGHTBACK_LEG_SHOULDER_ID, RIGHTBACK_LEG_UPPER_ID, RIGHTBACK_LEG_LOWER_ID};
   bool result;
-  const char* port_name = PORT_NAME;
   const uint8_t handler_index = 0;
   DynamixelWorkbench dxl_wb;
 

@@ -150,7 +150,7 @@ void Dynamixel_Controller::dxl_addSyncWriteHandler(){
                main
 ++++++++++++++++++++++++++++++++++ */
 int main(int argc, char **argv){
-  ros::init(argc, argv, "dynamixel_controller"); 
+  ros::init(argc, argv, "dynamixel_controller");
   Dynamixel_Controller PupBot;
 
   ros::Rate loop_rate(100);
