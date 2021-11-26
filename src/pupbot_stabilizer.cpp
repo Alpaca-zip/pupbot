@@ -94,10 +94,10 @@ void Pupbot_stabilizer::controlLoop(){
     M_rightfront_leg = M1_rightfront_leg + P * (e_rightfront_leg - e1_rightfront_leg) + I * e_rightfront_leg + D * ((e_rightfront_leg - e1_rightfront_leg) - (e1_rightfront_leg - e2_rightfront_leg));
     M_rightback_leg = M1_rightback_leg + P * (e_rightback_leg - e1_rightback_leg) + I * e_rightback_leg + D * ((e_rightback_leg - e1_rightback_leg) - (e1_rightback_leg - e2_rightback_leg));
   }else{
-    M_leftfront_leg = 0;
-    M_leftback_leg = 0;
-    M_rightfront_leg = 0;
-    M_rightback_leg = 0;
+    M_leftfront_leg = M1_leftfront_leg + 0 * (e_leftfront_leg - e1_leftfront_leg) + 0 * e_leftfront_leg + 0 * ((e_leftback_leg - e1_leftback_leg) - (e1_leftback_leg - e2_leftback_leg));
+    M_leftback_leg = M1_leftback_leg + 0 * (e_leftback_leg - e1_leftback_leg) + 0 * e_leftback_leg + 0 * ((e_leftback_leg - e1_leftback_leg) - (e1_leftback_leg - e2_leftback_leg));
+    M_rightfront_leg = M1_rightfront_leg + 0 * (e_rightfront_leg - e1_rightfront_leg) + 0 * e_rightfront_leg + 0 * ((e_rightfront_leg - e1_rightfront_leg) - (e1_rightfront_leg - e2_rightfront_leg));
+    M_rightback_leg = M1_rightback_leg + 0 * (e_rightback_leg - e1_rightback_leg) + 0 * e_rightback_leg + 0 * ((e_rightback_leg - e1_rightback_leg) - (e1_rightback_leg - e2_rightback_leg));
   }
 
   if(leftfront_leg_z_offset.data > 160.0) leftfront_leg_z_offset.data  = 160.0;
