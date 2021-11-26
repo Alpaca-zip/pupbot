@@ -100,6 +100,11 @@ void Pupbot_stabilizer::controlLoop(){
     M_rightback_leg = M1_rightback_leg + 0 * (e_rightback_leg - e1_rightback_leg) + 0 * e_rightback_leg + 0 * ((e_rightback_leg - e1_rightback_leg) - (e1_rightback_leg - e2_rightback_leg));
   }
 
+  leftfront_leg_z_offset.data = LEFTFRONTLEG_Z_OFFSET + M_leftfront_leg;
+  leftback_leg_z_offset.data = LEFTBACKLEG_Z_OFFSET + M_leftback_leg;
+  rightfront_leg_z_offset.data = RIGHTFRONTLEG_Z_OFFSET + M_rightfront_leg;
+  rightback_leg_z_offset.data = RIGHTBACKLEG_Z_OFFSET + M_rightback_leg;
+
   if(leftfront_leg_z_offset.data > 160.0) leftfront_leg_z_offset.data  = 160.0;
   if(leftback_leg_z_offset.data > 160.0) leftback_leg_z_offset.data  = 160.0;
   if(rightfront_leg_z_offset.data > 160.0) rightfront_leg_z_offset.data  = 160.0;
