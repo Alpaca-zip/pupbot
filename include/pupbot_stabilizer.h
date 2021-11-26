@@ -1,5 +1,6 @@
 #include "ros/ros.h"
 #include "std_msgs/Float64.h"
+#include "std_msgs/Bool.h"
 
 #define X_OFFSET 61
 #define Y_OFFSET 94
@@ -38,9 +39,12 @@ class Pupbot_stabilizer{
   ros::Subscriber key_control_sub_Kp;
   ros::Subscriber key_control_sub_Ki;
   ros::Subscriber key_control_sub_Kd;
+  ros::Subscriber key_control_sub_PID;
   void Kp_callback(const std_msgs::Float64& Kp);
   void Ki_callback(const std_msgs::Float64& Ki);
   void Kd_callback(const std_msgs::Float64& Kd);
+  void PID_callback(const std_msgs::Bool& PID);
+  bool PID_on;
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   std_msgs::Float64 leftfront_leg_z_offset, leftback_leg_z_offset, rightfront_leg_z_offset, rightback_leg_z_offset;
 

@@ -20,6 +20,7 @@ Pupbot_Controller::Pupbot_Controller(){
   std::cout << "J : Decreases the value of I" << std::endl;
   std::cout << "K : Increases the value of D" << std::endl;
   std::cout << "L : Decreases the value of D" << std::endl;
+  std::cout << "X : PID control on/off" << std::endl;
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 }
 
@@ -34,7 +35,9 @@ void Pupbot_Controller::init(){
   key_control_pub_Kp = nh.advertise<std_msgs::Float64>("key_control_Kp", 10);
   key_control_pub_Ki = nh.advertise<std_msgs::Float64>("key_control_Ki", 10);
   key_control_pub_Kd = nh.advertise<std_msgs::Float64>("key_control_Kd", 10);
+  key_control_PID = nh.advertise<std_msgs::Bool>("PID_on_off", 10);
   Kp.data = Ki.data = Kd.data = 0.0;
+  PID.data = false;
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   direction_x.data = 0.0;
   turn.data = 0.0;
@@ -129,6 +132,11 @@ void Pupbot_Controller::controlLoop(){
     Kd.data -= 0.05;
     std::cout << " ==> D:" << Kd.data << std::endl;
     key_control_pub_Ki.publish(Kd);
+  }else if(c == 'x'){
+    PID.data = true;
+    std::cout << " ==> PID" << std::endl;
+    key_control_PID.publish(PID);
+    PID.data = false;
   }
   //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 }

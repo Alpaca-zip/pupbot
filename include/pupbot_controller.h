@@ -20,9 +20,11 @@ class Pupbot_Controller{
   ros::Publisher key_control_pub_Kp;
   ros::Publisher key_control_pub_Ki;
   ros::Publisher key_control_pub_Kd;
+  ros::Publisher key_control_PID;
   std_msgs::Float64 Kp;
   std_msgs::Float64 Ki;
   std_msgs::Float64 Kd;
+  std_msgs::Bool PID;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   std_msgs::Float64 direction_x;
   std_msgs::Float64 turn;
