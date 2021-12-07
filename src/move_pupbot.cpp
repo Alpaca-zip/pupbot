@@ -321,32 +321,32 @@ void Move_Pupbot::controlLoop_trot(){
       leftfront_leg.points[0].positions[1] = target_left_leg_upper_joint;
       leftfront_leg.points[0].positions[2] = target_left_leg_lower_joint;
       leftfront_leg.header.stamp = ros::Time::now();
-      leftfront_leg.points[0].time_from_start = ros::Duration(0.02);
+      leftfront_leg.points[0].time_from_start = ros::Duration(0.008);
       pub_leftfront_leg.publish(leftfront_leg);
     }else if(l == 1){
       leftback_leg.points[0].positions[0] = target_leg_shoulder_joint;
       leftback_leg.points[0].positions[1] = target_left_leg_upper_joint;
       leftback_leg.points[0].positions[2] = target_left_leg_lower_joint;
       leftback_leg.header.stamp = ros::Time::now();
-      leftback_leg.points[0].time_from_start = ros::Duration(0.02);
+      leftback_leg.points[0].time_from_start = ros::Duration(0.008);
       pub_leftback_leg.publish(leftback_leg);
     }else if(l == 2){
       rightback_leg.points[0].positions[0] = target_leg_shoulder_joint;
       rightback_leg.points[0].positions[1] = target_right_leg_upper_joint;
       rightback_leg.points[0].positions[2] = target_right_leg_lower_joint;
       rightback_leg.header.stamp = ros::Time::now();
-      rightback_leg.points[0].time_from_start = ros::Duration(0.02);
+      rightback_leg.points[0].time_from_start = ros::Duration(0.008);
       pub_rightback_leg.publish(rightback_leg);
     }else if(l == 3){
       rightfront_leg.points[0].positions[0] = target_leg_shoulder_joint;
       rightfront_leg.points[0].positions[1] = target_right_leg_upper_joint;
       rightfront_leg.points[0].positions[2] = target_right_leg_lower_joint;
       rightfront_leg.header.stamp = ros::Time::now();
-      rightfront_leg.points[0].time_from_start = ros::Duration(0.02);
+      rightfront_leg.points[0].time_from_start = ros::Duration(0.008);
       pub_rightfront_leg.publish(rightfront_leg);
     }
   }
-  ros::Duration(0.02).sleep();
+  ros::Duration(0.012).sleep();
 }
 
 void Move_Pupbot::controlLoop_crawl(){
@@ -409,7 +409,7 @@ void Move_Pupbot::controlLoop_crawl(){
       pub_rightfront_leg.publish(rightfront_leg);
     }
   }
-  ros::Duration(0.01).sleep();
+  ros::Duration(0.02).sleep();
 }
 
 double Move_Pupbot::rDir_x(){
