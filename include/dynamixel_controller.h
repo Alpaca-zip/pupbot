@@ -7,7 +7,7 @@
 #include "trajectory_msgs/JointTrajectory.h"
 #include "dynamixel_workbench_toolbox/dynamixel_workbench.h"
 
-#define PORT_NAME "/dev/ttyACM1"
+#define PORT_NAME "/dev/ttyACM0"
 #define MODEL_NUMBER 12
 #define BAUD_RATE 1000000
 
