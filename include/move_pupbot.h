@@ -1,11 +1,10 @@
 #include "ros/ros.h"
+#include "ros/time.h"
 #include "std_msgs/Float64.h"
 #include "std_msgs/Bool.h"
-#include "ros/time.h"
 #include "trajectory_msgs/JointTrajectory.h"
 
 #define X_OFFSET 0.0
-//#define Z_OFFSET 120
 #define BONE_LENGTH 83.0
 #define TROT_STEP_EXTENT_X 30.0
 #define TROT_STEP_EXTENT_Y 30.0
@@ -13,10 +12,10 @@
 #define CRAWL_STEP_EXTENT_X 40.0
 #define CRAWL_STEP_EXTENT_Y 40.0
 #define CRAWL_STEP_EXTENT_Z  7.0
-#define LEFTFRONTLEG_Z_OFFSET 113
+#define LEFTFRONTLEG_Z_OFFSET 120
 #define LEFTBACKLEG_Z_OFFSET 120
-#define RIGHTFRONTLEG_Z_OFFSET 115
-#define RIGHTBACKLEG_Z_OFFSET 118
+#define RIGHTFRONTLEG_Z_OFFSET 120
+#define RIGHTBACKLEG_Z_OFFSET 120
 
 class Move_Pupbot{
   public:
