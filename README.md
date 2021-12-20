@@ -29,7 +29,6 @@ Open source ROS package for quadruped robot PupBot.
 roslaunch pupbot move_pupbot_ds4.launch
 ```
 ○ : Startup/Shutdown  
-△ : Crawl gait/Trot gait  
 Left stick : Move forward/backward  
 Right stick : Turn left/right  
 
@@ -40,7 +39,6 @@ roslaunch pupbot move_pupbot.launch
 ```
 
 Q : Startup/Shutdown  
-E : Crawl gait/Trot gait  
 W : Increases the value of direction in the x axis (+0.25)  
 A : Increases the value of turn (+0.25)  
 S : Decreases the value of direction in the x axis (-0.25)  
