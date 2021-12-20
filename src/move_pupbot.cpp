@@ -9,7 +9,6 @@ Move_Pupbot::Move_Pupbot(){
 
 void Move_Pupbot::init(){
   number = 22;
-  gait_state_num = 0;
   x_offset = X_OFFSET;
   z_offset_leftfront_leg = LEFTFRONTLEG_Z_OFFSET;
   z_offset_leftback_leg = LEFTBACKLEG_Z_OFFSET;
@@ -21,9 +20,18 @@ void Move_Pupbot::init(){
   trot_step_extent_x = TROT_STEP_EXTENT_X;
   trot_step_extent_y = TROT_STEP_EXTENT_Y;
   trot_step_extent_z = TROT_STEP_EXTENT_Z;
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//crawl gait section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//These options will be extended in a future release.
+/*
+  gait_state_num = 0;
   crawl_step_extent_x = CRAWL_STEP_EXTENT_X;
   crawl_step_extent_y = CRAWL_STEP_EXTENT_Y;
   crawl_step_extent_z = CRAWL_STEP_EXTENT_Z;
+  key_control_sub4 = nh.subscribe("key_control4", 10, &Move_Pupbot::gait_state_Callback, this);
+*/
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   startup_shutdown_bool = false;
   pub_leftfront_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftfront_leg_controller/command", 10);
   pub_leftback_leg = nh.advertise<trajectory_msgs::JointTrajectory>("/leftback_leg_controller/command", 10);
@@ -32,7 +40,6 @@ void Move_Pupbot::init(){
   key_control_sub1 = nh.subscribe("key_control1", 10, &Move_Pupbot::key_controlCallback1, this);
   key_control_sub2 = nh.subscribe("key_control2", 10, &Move_Pupbot::startup_shutdown_Callback, this);
   key_control_sub3 = nh.subscribe("key_control3", 10, &Move_Pupbot::key_controlCallback2, this);
-  key_control_sub4 = nh.subscribe("key_control4", 10, &Move_Pupbot::gait_state_Callback, this);
   sub_leftfront_leg_z_offset = nh.subscribe("/leftfront_leg_z_offset", 10, &Move_Pupbot::leftfront_leg_z_offset_Callback, this);
   sub_leftback_leg_z_offset = nh.subscribe("/leftback_leg_z_offset", 10, &Move_Pupbot::leftback_leg_z_offset_Callback, this);
   sub_rightfront_leg_z_offset = nh.subscribe("/rightfront_leg_z_offset", 10, &Move_Pupbot::rightfront_leg_z_offset_Callback, this);
@@ -62,9 +69,9 @@ void Move_Pupbot::init(){
   rightfront_leg.joint_names[1] = "rightfront_leg_upper_joint";
   rightfront_leg.joint_names[2] = "rightfront_leg_lower_joint";
 
-  /* ++++++++++++++++++++++++++++++++++
-         Pose initialization
-  ++++++++++++++++++++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++
+       Pose initialization
+++++++++++++++++++++++++++++++++++ */
   ros::Duration(2.0).sleep();
   leftfront_leg.points[0].positions[0] = 0.0;
   leftfront_leg.points[0].positions[1] = 1.5;
@@ -101,42 +108,6 @@ void Move_Pupbot::trot(double c0_x, double c0_y, bool inv){
     c0_x = -c0_x;
     c0_y = -c0_y;
   }
-  if(w0 == 0.0 && l0 == 0.0){
-    vector_x = 0.0;
-    vector_y = 0.0;
-    vector_z = 0.0;
-  }else if(w0 == 0.0){
-    double h1 = sqrt(abs((1.0-(c0_y/l0)*(c0_y/l0))*h0*h0));
-    vector_x = c0_x/0.1;
-    vector_y = c0_y/0.1;
-    vector_z = h1/0.1*int(inv);
-  }else if(l0 == 0.0){
-    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0))*h0*h0));
-    vector_x = c0_x/0.1;
-    vector_y = c0_y/0.1;
-    vector_z = h1/0.1*int(inv);
-  }else{
-    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0)-(c0_y/l0)*(c0_y/l0))*h0*h0));
-    vector_x = c0_x/0.1;
-    vector_y = c0_y/0.1;
-    vector_z = h1/0.1*int(inv);
-  }
-  //if(l==0)printf("0z=%lf ",  vector_z*0.1);
-  //if(l==1)printf("1z=%lf ",  vector_z*0.1);
-  //if(l==2)printf("2z=%lf ",  vector_z*0.1);
-  //if(l==3)printf("3z=%lf\n",  vector_z*0.1);
-}
-
-void Move_Pupbot::crawl(double c0_x, double c0_y, bool inv, int i0){
-  w0 = crawl_step_extent_x*0.1/2.0*dir_x;
-  l0 = crawl_step_extent_y*0.1*4.0*dir_y*l_inv[l][1];
-  h0 = crawl_step_extent_z*0.1;
-
-  if(inv == false){
-    c0_x = -(c0_x+(2*i0-2)*w0)/3;
-    c0_y = -(c0_y+(2*i0-2)*(l0/8))/3;
-  }
-
   if(w0 == 0.0 && l0 == 0.0){
     vector_x = 0.0;
     vector_y = 0.0;
@@ -262,14 +233,6 @@ void Move_Pupbot::startup_shutdown_Callback(const std_msgs::Bool& startup_shutdo
   }
 }
 
-void Move_Pupbot::gait_state_Callback(const std_msgs::Bool& gait_state){
-  if(gait_state.data == true){
-    gait_state_num = 1;
-  }else{
-    gait_state_num = 0;
-  }
-}
-
 void Move_Pupbot::leftfront_leg_z_offset_Callback(const std_msgs::Float64& leftfront_leg_z_offset){
   z_offset_leftfront_leg = leftfront_leg_z_offset.data;
 }
@@ -349,6 +312,47 @@ void Move_Pupbot::controlLoop_trot(){
   ros::Duration(0.012).sleep();
 }
 
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//crawl gait section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//These options will be extended in a future release.
+/*
+void Move_Pupbot::crawl(double c0_x, double c0_y, bool inv, int i0){
+  w0 = crawl_step_extent_x*0.1/2.0*dir_x;
+  l0 = crawl_step_extent_y*0.1*4.0*dir_y*l_inv[l][1];
+  h0 = crawl_step_extent_z*0.1;
+
+  if(inv == false){
+    c0_x = -(c0_x+(2*i0-2)*w0)/3;
+    c0_y = -(c0_y+(2*i0-2)*(l0/8))/3;
+  }
+
+  if(w0 == 0.0 && l0 == 0.0){
+    vector_x = 0.0;
+    vector_y = 0.0;
+    vector_z = 0.0;
+  }else if(w0 == 0.0){
+    double h1 = sqrt(abs((1.0-(c0_y/l0)*(c0_y/l0))*h0*h0));
+    vector_x = c0_x/0.1;
+    vector_y = c0_y/0.1;
+    vector_z = h1/0.1*int(inv);
+  }else if(l0 == 0.0){
+    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0))*h0*h0));
+    vector_x = c0_x/0.1;
+    vector_y = c0_y/0.1;
+    vector_z = h1/0.1*int(inv);
+  }else{
+    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0)-(c0_y/l0)*(c0_y/l0))*h0*h0));
+    vector_x = c0_x/0.1;
+    vector_y = c0_y/0.1;
+    vector_z = h1/0.1*int(inv);
+  }
+if(l==0)printf("0z=%lf ",  vector_z*0.1);
+if(l==1)printf("1z=%lf ",  vector_z*0.1);
+if(l==2)printf("2z=%lf ",  vector_z*0.1);
+if(l==3)printf("3z=%lf\n",  vector_z*0.1);
+}
+
 void Move_Pupbot::controlLoop_crawl(){
   for(l=0;l<4;l++){
     if(startup_shutdown_bool == false)continue;
@@ -412,6 +416,16 @@ void Move_Pupbot::controlLoop_crawl(){
   ros::Duration(0.02).sleep();
 }
 
+void Move_Pupbot::gait_state_Callback(const std_msgs::Bool& gait_state){
+  if(gait_state.data == true){
+    gait_state_num = 1;
+  }else{
+    gait_state_num = 0;
+  }
+}
+*/
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 double Move_Pupbot::rDir_x(){
   if(dir_x != 0.0 || dir_y != 0.0){
     return dir_x/std::max(abs(dir_x), abs(dir_y));
@@ -437,11 +451,19 @@ int main(int argc, char** argv){
   ros::Rate loop_rate(100);
 
   while(ros::ok()){
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//crawl gait section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//These options will be extended in a future release.
+/*
     if(PupBot.gait_state_num == 1){
       PupBot.controlLoop_trot();
     }else{
       PupBot.controlLoop_crawl();
     }
+*/
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    PupBot.controlLoop_trot();
     ros::spinOnce();
     loop_rate.sleep();
   }

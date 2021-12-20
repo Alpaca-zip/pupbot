@@ -13,9 +13,9 @@ class Pupbot_Controller{
   ros::Publisher key_control_pub1;
   ros::Publisher key_control_pub2;
   ros::Publisher key_control_pub3;
-  ros::Publisher key_control_pub4;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //PID control section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //This has been deprecated, and could be removed in a future release.
   ros::Publisher key_control_pub_Kp;
   ros::Publisher key_control_pub_Ki;
@@ -29,7 +29,6 @@ class Pupbot_Controller{
   std_msgs::Float64 direction_x;
   std_msgs::Float64 turn;
   std_msgs::Bool startup_shutdown;
-  std_msgs::Bool gait_state;
 
   void init();
   int getch();

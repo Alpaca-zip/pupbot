@@ -4,10 +4,10 @@
 
 #define X_OFFSET 61
 #define Y_OFFSET 94
-#define LEFTFRONTLEG_Z_OFFSET 120
-#define LEFTBACKLEG_Z_OFFSET 120
-#define RIGHTFRONTLEG_Z_OFFSET 120
-#define RIGHTBACKLEG_Z_OFFSET 120
+#define LEFTFRONTLEG_Z_OFFSET 117
+#define LEFTBACKLEG_Z_OFFSET 118
+#define RIGHTFRONTLEG_Z_OFFSET 119
+#define RIGHTBACKLEG_Z_OFFSET 119
 
 class Pupbot_stabilizer{
   public:
@@ -33,9 +33,10 @@ class Pupbot_stabilizer{
   ros::Publisher pub_rightback_leg_z_offset;
   ros::Subscriber roll_sub;
   ros::Subscriber pitch_sub;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //PID control section
-  //This has been deprecated, and could be removed in a future release.
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//PID control section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//This has been deprecated, and could be removed in a future release.
   ros::Subscriber key_control_sub_Kp;
   ros::Subscriber key_control_sub_Ki;
   ros::Subscriber key_control_sub_Kd;
@@ -45,7 +46,7 @@ class Pupbot_stabilizer{
   void Kd_callback(const std_msgs::Float64& Kd);
   void PID_callback(const std_msgs::Bool& PID);
   bool PID_on;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   std_msgs::Float64 leftfront_leg_z_offset, leftback_leg_z_offset, rightfront_leg_z_offset, rightback_leg_z_offset;
 
   void init();

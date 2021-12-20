@@ -6,14 +6,14 @@
 Pupbot_Controller::Pupbot_Controller(){
   init();
   std::cout << "Q : Startup/Shutdown" << std::endl;
-  std::cout << "E : Crawl gait/Trot gait" << std::endl;
   std::cout << "W : Increases the value of direction in the x axis (+0.25)" << std::endl;
   std::cout << "A : Increases the value of turn (+0.25)" << std::endl;
   std::cout << "S : Decreases the value of direction in the x axis (-0.25)" << std::endl;
   std::cout << "D : Decreases the value of turn (-0.25)" << std::endl;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //PID control section
-  //This has been deprecated, and could be removed in a future release.
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//PID control section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//This has been deprecated, and could be removed in a future release.
   std::cout << "F : Increases the value of P" << std::endl;
   std::cout << "G : Decreases the value of P" << std::endl;
   std::cout << "H : Increases the value of I" << std::endl;
@@ -21,32 +21,31 @@ Pupbot_Controller::Pupbot_Controller(){
   std::cout << "K : Increases the value of D" << std::endl;
   std::cout << "L : Decreases the value of D" << std::endl;
   std::cout << "X : PID control on/off" << std::endl;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 }
 
 void Pupbot_Controller::init(){
   key_control_pub1 = nh.advertise<std_msgs::Float64>("key_control1", 10);
   key_control_pub2 = nh.advertise<std_msgs::Bool>("key_control2", 10);
   key_control_pub3 = nh.advertise<std_msgs::Float64>("key_control3", 10);
-  key_control_pub4 = nh.advertise<std_msgs::Bool>("key_control4", 10);
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //PID control section
-  //This has been deprecated, and could be removed in a future release.
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//PID control section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//This has been deprecated, and could be removed in a future release.
   key_control_pub_Kp = nh.advertise<std_msgs::Float64>("key_control_Kp", 10);
   key_control_pub_Ki = nh.advertise<std_msgs::Float64>("key_control_Ki", 10);
   key_control_pub_Kd = nh.advertise<std_msgs::Float64>("key_control_Kd", 10);
   key_control_PID = nh.advertise<std_msgs::Bool>("PID_on_off", 10);
   Kp.data = Ki.data = Kd.data = 0.0;
   PID.data = false;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   direction_x.data = 0.0;
   turn.data = 0.0;
   startup_shutdown.data = false;
-  gait_state.data = false;
 
-  /* ++++++++++++++++++++++++++++++++++
-         Pose initialization
-  ++++++++++++++++++++++++++++++++++ */
+/* ++++++++++++++++++++++++++++++++++
+       Pose initialization
+++++++++++++++++++++++++++++++++++ */
   std::cout << "+++++++++++++++" << std::endl;
   std::cout << "Initializing..." << std::endl;
   std::cout << "+++++++++++++++" << std::endl;
@@ -95,19 +94,10 @@ void Pupbot_Controller::controlLoop(){
     std::cout << " ==> Power" << std::endl;
     key_control_pub2.publish(startup_shutdown);
     startup_shutdown.data = false;
-  }else if(c == 'e'){
-    if(gait_state.data == false){
-      gait_state.data = true;
-      std::cout << " ==> Trot gait" << std::endl;
-      key_control_pub4.publish(gait_state);
-    }else{
-      gait_state.data = false;
-      std::cout << " ==> Crawl gait" << std::endl;
-      key_control_pub4.publish(gait_state);
-    }
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //PID control section
-  //This has been deprecated, and could be removed in a future release.  
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//PID control section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//This has been deprecated, and could be removed in a future release.  
   }else if(c == 'f'){
     Kp.data += 0.05;
     std::cout << " ==> P:" << Kp.data << std::endl;
@@ -138,7 +128,7 @@ void Pupbot_Controller::controlLoop(){
     key_control_PID.publish(PID);
     PID.data = false;
   }
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 }
 
 /* ++++++++++++++++++++++++++++++++++

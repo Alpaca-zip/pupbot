@@ -18,15 +18,16 @@ void Pupbot_stabilizer::init(){
   pub_rightback_leg_z_offset = nh.advertise<std_msgs::Float64>("/rightback_leg_z_offset", 10);
   roll_sub = nh.subscribe("/roll", 10, &Pupbot_stabilizer::roll_callback, this);
   pitch_sub = nh.subscribe("/pitch", 10, &Pupbot_stabilizer::pitch_callback, this);
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //PID control section
-  //This has been deprecated, and could be removed in a future release.
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//PID control section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//This has been deprecated, and could be removed in a future release.
   key_control_sub_Kp = nh.subscribe("/key_control_Kp", 10, &Pupbot_stabilizer::Kp_callback, this);
   key_control_sub_Ki = nh.subscribe("/key_control_Ki", 10, &Pupbot_stabilizer::Ki_callback, this);
   key_control_sub_Kd = nh.subscribe("/key_control_Kd", 10, &Pupbot_stabilizer::Kd_callback, this);
   key_control_sub_PID = nh.subscribe("/PID_on_off", 10, &Pupbot_stabilizer::PID_callback, this);
   PID_on = false;
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   M_leftfront_leg = M_leftback_leg = M_rightfront_leg = M_rightback_leg = 0.0;
   M1_leftfront_leg = M1_leftback_leg = M1_rightfront_leg = M1_rightback_leg = 0.0;
   e_leftfront_leg = e_leftback_leg = e_rightfront_leg = e_rightback_leg = 0.0;
@@ -47,6 +48,7 @@ void Pupbot_stabilizer::pitch_callback(const std_msgs::Float64& pitch){
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //PID control section
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //This has been deprecated, and could be removed in a future release.
 void Pupbot_stabilizer::Kp_callback(const std_msgs::Float64& Kp){
   P = Kp.data;
