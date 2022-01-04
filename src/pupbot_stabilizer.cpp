@@ -12,10 +12,14 @@ void Pupbot_stabilizer::init(){
   leftback_leg_z_offset.data = LEFTBACKLEG_Z_OFFSET;
   rightfront_leg_z_offset.data = RIGHTFRONTLEG_Z_OFFSET;
   rightback_leg_z_offset.data = RIGHTBACKLEG_Z_OFFSET;
+  roll_LPF.data = 0.0;
+  pitch_LPF.data = 0.0;
   pub_leftfront_leg_z_offset = nh.advertise<std_msgs::Float64>("/leftfront_leg_z_offset", 10);
   pub_leftback_leg_z_offset = nh.advertise<std_msgs::Float64>("/leftback_leg_z_offset", 10);
   pub_rightfront_leg_z_offset = nh.advertise<std_msgs::Float64>("/rightfront_leg_z_offset", 10);
   pub_rightback_leg_z_offset = nh.advertise<std_msgs::Float64>("/rightback_leg_z_offset", 10);
+  pub_roll_LPF = nh.advertise<std_msgs::Float64>("/roll_LPF", 10);
+  pub_pitch_LPF = nh.advertise<std_msgs::Float64>("/pitch_LPF", 10);
   roll_sub = nh.subscribe("/roll", 10, &Pupbot_stabilizer::roll_callback, this);
   pitch_sub = nh.subscribe("/pitch", 10, &Pupbot_stabilizer::pitch_callback, this);
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -36,14 +40,32 @@ void Pupbot_stabilizer::init(){
   P = 0.0;
   I = 0.0;
   D = 0.0;
+  roll_sum = 0.0;
+  pitch_sum = 0.0;
+  roll_cnt = 0;
+  pitch_cnt = 0;
 }
 
 void Pupbot_stabilizer::roll_callback(const std_msgs::Float64& roll){
   roll_data = roll.data;
+  if (roll_cnt == WIDTH) roll_cnt = 0;
+  roll_sum -= buff_roll[roll_cnt];
+  buff_roll[roll_cnt] = roll_data;
+  roll_sum += buff_roll[roll_cnt];
+  roll_cnt++;
+  roll_LPF.data = roll_sum / WIDTH;
+  pub_roll_LPF.publish(roll_LPF);
 }
 
 void Pupbot_stabilizer::pitch_callback(const std_msgs::Float64& pitch){
   pitch_data = pitch.data;
+  if (pitch_cnt == WIDTH) pitch_cnt = 0;
+  pitch_sum -= buff_pitch[pitch_cnt];
+  buff_pitch[pitch_cnt] = pitch_data;
+  pitch_sum += buff_pitch[pitch_cnt];
+  pitch_cnt++;
+  pitch_LPF.data = pitch_sum / WIDTH;
+  pub_pitch_LPF.publish(pitch_LPF);
 }
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

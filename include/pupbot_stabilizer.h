@@ -8,6 +8,7 @@
 #define LEFTBACKLEG_Z_OFFSET 118
 #define RIGHTFRONTLEG_Z_OFFSET 119
 #define RIGHTBACKLEG_Z_OFFSET 119
+#define WIDTH 10
 
 class Pupbot_stabilizer{
   public:
@@ -25,12 +26,17 @@ class Pupbot_stabilizer{
   double P;
   double I;
   double D;
+  double buff_roll[WIDTH], buff_pitch[WIDTH];
+  double roll_sum, pitch_sum;
+  int roll_cnt, pitch_cnt;
 
   ros::NodeHandle nh;
   ros::Publisher pub_leftfront_leg_z_offset;
   ros::Publisher pub_leftback_leg_z_offset;
   ros::Publisher pub_rightfront_leg_z_offset;
   ros::Publisher pub_rightback_leg_z_offset;
+  ros::Publisher pub_roll_LPF;
+  ros::Publisher pub_pitch_LPF;
   ros::Subscriber roll_sub;
   ros::Subscriber pitch_sub;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -48,6 +54,7 @@ class Pupbot_stabilizer{
   bool PID_on;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   std_msgs::Float64 leftfront_leg_z_offset, leftback_leg_z_offset, rightfront_leg_z_offset, rightback_leg_z_offset;
+  std_msgs::Float64 roll_LPF, pitch_LPF;
 
   void init();
   void roll_callback(const std_msgs::Float64& roll);
