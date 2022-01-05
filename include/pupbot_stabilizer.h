@@ -8,7 +8,7 @@
 #define LEFTBACKLEG_Z_OFFSET 118
 #define RIGHTFRONTLEG_Z_OFFSET 119
 #define RIGHTBACKLEG_Z_OFFSET 119
-#define WIDTH 10
+#define WIDTH 27
 
 class Pupbot_stabilizer{
   public:

@@ -107,10 +107,10 @@ void Pupbot_stabilizer::controlLoop(){
   e1_rightfront_leg = e_rightfront_leg;
   e1_rightback_leg = e_rightback_leg;
 
-  e_leftfront_leg = - Y_OFFSET * sin(roll_data / 180.0 * M_PI) + X_OFFSET * sin(pitch_data / 180.0 * M_PI);
-  e_leftback_leg = - Y_OFFSET * sin(roll_data / 180.0 * M_PI) - X_OFFSET * sin(pitch_data / 180.0 * M_PI);
-  e_rightfront_leg = Y_OFFSET * sin(roll_data / 180.0 * M_PI) + X_OFFSET * sin(pitch_data / 180.0 * M_PI);
-  e_rightback_leg = Y_OFFSET * sin(roll_data / 180.0 * M_PI) - X_OFFSET * sin(pitch_data / 180.0 * M_PI);
+  e_leftfront_leg = - Y_OFFSET * sin(roll_LPF.data / 180.0 * M_PI) + X_OFFSET * sin(pitch_LPF.data / 180.0 * M_PI);
+  e_leftback_leg = - Y_OFFSET * sin(roll_LPF.data / 180.0 * M_PI) - X_OFFSET * sin(pitch_LPF.data / 180.0 * M_PI);
+  e_rightfront_leg = Y_OFFSET * sin(roll_LPF.data / 180.0 * M_PI) + X_OFFSET * sin(pitch_LPF.data / 180.0 * M_PI);
+  e_rightback_leg = Y_OFFSET * sin(roll_LPF.data / 180.0 * M_PI) - X_OFFSET * sin(pitch_LPF.data / 180.0 * M_PI);
 
   if(PID_on){
     M_leftfront_leg = M1_leftfront_leg + P * (e_leftfront_leg - e1_leftfront_leg) + I * e_leftfront_leg + D * ((e_leftback_leg - e1_leftback_leg) - (e1_leftback_leg - e2_leftback_leg));
