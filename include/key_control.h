@@ -1,18 +1,27 @@
+//     _     _                                         _
+//    / \   | | _ __    __ _   ___   __ _         ____(_) _ __
+//   / _ \  | || '_ \  / _` | / __| / _` | _____ |_  /| || '_ \
+//  / ___ \ | || |_) || (_| || (__ | (_| ||_____| / / | || |_) |
+// /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
+//             |_|                                       |_|
+//
+// Last updated: Thursday, March 3, 2022
+
 #include "ros/ros.h"
 #include "std_msgs/Float64.h"
 #include "std_msgs/Bool.h"
 #include "termios.h"
 
-class Pupbot_Controller{
+class Key_Control{
   public:
-  Pupbot_Controller();
+  Key_Control();
   void controlLoop();
 
   private:
   ros::NodeHandle nh;
-  ros::Publisher key_control_pub1;
-  ros::Publisher key_control_pub2;
-  ros::Publisher key_control_pub3;
+  ros::Publisher trot_foward_motion_pub;
+  ros::Publisher trot_turn_motion_pub;
+  ros::Publisher standing_motion_pub;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //PID control section
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -28,7 +37,7 @@ class Pupbot_Controller{
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   std_msgs::Float64 direction_x;
   std_msgs::Float64 turn;
-  std_msgs::Bool startup_shutdown;
+  std_msgs::Bool stand;
 
   void init();
   int getch();

@@ -1,11 +1,20 @@
-#include "pupbot_controller.h"
+//     _     _                                         _
+//    / \   | | _ __    __ _   ___   __ _         ____(_) _ __
+//   / _ \  | || '_ \  / _` | / __| / _` | _____ |_  /| || '_ \
+//  / ___ \ | || |_) || (_| || (__ | (_| ||_____| / / | || |_) |
+// /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
+//             |_|                                       |_|
+//
+// Last updated: Thursday, March 3, 2022
+
+#include "key_control.h"
 
 /* ++++++++++++++++++++++++++++++++++
       Pupbot_Controller class
 ++++++++++++++++++++++++++++++++++ */
-Pupbot_Controller::Pupbot_Controller(){
+Key_Control::Key_Control(){
   init();
-  std::cout << "Q : Startup/Shutdown" << std::endl;
+  std::cout << "Q : Stand up/lie down" << std::endl;
   std::cout << "W : Increases the value of direction in the x axis (+0.25)" << std::endl;
   std::cout << "A : Increases the value of turn (+0.25)" << std::endl;
   std::cout << "S : Decreases the value of direction in the x axis (-0.25)" << std::endl;
@@ -24,10 +33,10 @@ Pupbot_Controller::Pupbot_Controller(){
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 }
 
-void Pupbot_Controller::init(){
-  key_control_pub1 = nh.advertise<std_msgs::Float64>("key_control1", 10);
-  key_control_pub2 = nh.advertise<std_msgs::Bool>("key_control2", 10);
-  key_control_pub3 = nh.advertise<std_msgs::Float64>("key_control3", 10);
+void Key_Control::init(){
+  trot_foward_motion_pub = nh.advertise<std_msgs::Float64>("/trot_foward_motion", 10);
+  trot_turn_motion_pub = nh.advertise<std_msgs::Float64>("/trot_turn_motion", 10);
+  standing_motion_pub = nh.advertise<std_msgs::Bool>("/standing_motion", 10);
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //PID control section
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,7 +50,7 @@ void Pupbot_Controller::init(){
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   direction_x.data = 0.0;
   turn.data = 0.0;
-  startup_shutdown.data = false;
+  stand.data = false;
 
 /* ++++++++++++++++++++++++++++++++++
        Pose initialization
@@ -52,7 +61,7 @@ void Pupbot_Controller::init(){
   ros::Duration(2.0).sleep();
 }
 
-int Pupbot_Controller::getch(){
+int Key_Control::getch(){
   static struct termios oldt, newt;
   tcgetattr(STDIN_FILENO, &oldt); 
   newt = oldt;
@@ -63,37 +72,41 @@ int Pupbot_Controller::getch(){
   return c;
 }
 
-void Pupbot_Controller::controlLoop(){
+void Key_Control::controlLoop(){
   int c = getch();
   if(c == 'w'){
     if(direction_x.data < 1.25){
       direction_x.data += 0.25;
     }
     std::cout << " ==> x:" << direction_x.data << std::endl;
-    key_control_pub1.publish(direction_x);
+    trot_foward_motion_pub.publish(direction_x);
   }else if(c == 'a'){
     if(turn.data < 1.0){
       turn.data += 0.25;
     }
     std::cout << " ==> turn:" << turn.data << std::endl;
-    key_control_pub3.publish(turn);
+    trot_turn_motion_pub.publish(turn);
   }else if(c == 's'){
     if(direction_x.data > -1.25){
       direction_x.data -= 0.25;
     }
     std::cout << " ==> x:" << direction_x.data << std::endl;
-    key_control_pub1.publish(direction_x);
+    trot_foward_motion_pub.publish(direction_x);
   }else if(c == 'd'){
     if(turn.data > -1.0){
       turn.data -= 0.25;
     }
     std::cout << " ==> turn:" << turn.data << std::endl;
-    key_control_pub3.publish(turn);
+    trot_turn_motion_pub.publish(turn);
   }else if(c == 'q'){
-    startup_shutdown.data=true;
-    std::cout << " ==> Power" << std::endl;
-    key_control_pub2.publish(startup_shutdown);
-    startup_shutdown.data = false;
+    if(stand.data){
+      stand.data = false;
+      std::cout << " ==> lie down" << std::endl;
+    }else{
+      stand.data = true;
+      std::cout << " ==> Stand up" << std::endl;
+    }
+    standing_motion_pub.publish(stand);
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //PID control section
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -135,13 +148,13 @@ void Pupbot_Controller::controlLoop(){
                main
 ++++++++++++++++++++++++++++++++++ */
 int main(int argc, char** argv){
-  ros::init(argc, argv, "pupbot_controller");
-  Pupbot_Controller PupBot;
+  ros::init(argc, argv, "key_control");
+  Key_Control key_control;
 
   ros::Rate loop_rate(10);
 
   while (ros::ok()){
-    PupBot.controlLoop();
+    key_control.controlLoop();
     ros::spinOnce();
     loop_rate.sleep();
   }

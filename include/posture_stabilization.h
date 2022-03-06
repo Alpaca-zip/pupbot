@@ -1,28 +1,38 @@
+//     _     _                                         _
+//    / \   | | _ __    __ _   ___   __ _         ____(_) _ __
+//   / _ \  | || '_ \  / _` | / __| / _` | _____ |_  /| || '_ \
+//  / ___ \ | || |_) || (_| || (__ | (_| ||_____| / / | || |_) |
+// /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
+//             |_|                                       |_|
+//
+// Last updated: Saturday, March 5, 2022
+
 #include "ros/ros.h"
 #include "std_msgs/Float64.h"
 #include "std_msgs/Bool.h"
+#include "std_msgs/Float64MultiArray.h"
 
 #define X_OFFSET 61
 #define Y_OFFSET 94
-#define LEFTFRONTLEG_Z_OFFSET 117
-#define LEFTBACKLEG_Z_OFFSET 118
-#define RIGHTFRONTLEG_Z_OFFSET 119
-#define RIGHTBACKLEG_Z_OFFSET 119
+#define LF_LEG_Z_OFFSET 120
+#define LR_LEG_Z_OFFSET 120
+#define RR_LEG_Z_OFFSET 120
+#define RF_LEG_Z_OFFSET 120
 #define WIDTH 27
 
-class Pupbot_stabilizer{
+class Posture_Stabilization{
   public:
-  Pupbot_stabilizer();
+  Posture_Stabilization();
   void controlLoop();
 
   private:
   double roll_data;
   double pitch_data;
-  double M_leftfront_leg, M_leftback_leg, M_rightfront_leg, M_rightback_leg;
-  double M1_leftfront_leg, M1_leftback_leg, M1_rightfront_leg, M1_rightback_leg;
-  double e_leftfront_leg, e_leftback_leg, e_rightfront_leg, e_rightback_leg;
-  double e1_leftfront_leg, e1_leftback_leg, e1_rightfront_leg, e1_rightback_leg;
-  double e2_leftfront_leg, e2_leftback_leg, e2_rightfront_leg, e2_rightback_leg;
+  double M_LF_leg, M_LR_leg, M_RR_leg, M_RF_leg;
+  double M1_LF_leg, M1_LR_leg, M1_RR_leg, M1_RF_leg;
+  double e_LF_leg, e_LR_leg, e_RR_leg, e_RF_leg;
+  double e1_LF_leg, e1_LR_leg, e1_RR_leg, e1_RF_leg;
+  double e2_LF_leg, e2_LR_leg, e2_RR_leg, e2_RF_leg;
   double P;
   double I;
   double D;
@@ -31,10 +41,7 @@ class Pupbot_stabilizer{
   int roll_cnt, pitch_cnt;
 
   ros::NodeHandle nh;
-  ros::Publisher pub_leftfront_leg_z_offset;
-  ros::Publisher pub_leftback_leg_z_offset;
-  ros::Publisher pub_rightfront_leg_z_offset;
-  ros::Publisher pub_rightback_leg_z_offset;
+  ros::Publisher pub_stabilization_variable;
   ros::Publisher pub_roll_LPF;
   ros::Publisher pub_pitch_LPF;
   ros::Subscriber roll_sub;
@@ -53,8 +60,8 @@ class Pupbot_stabilizer{
   void PID_callback(const std_msgs::Bool& PID);
   bool PID_on;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  std_msgs::Float64 leftfront_leg_z_offset, leftback_leg_z_offset, rightfront_leg_z_offset, rightback_leg_z_offset;
   std_msgs::Float64 roll_LPF, pitch_LPF;
+  std_msgs::Float64MultiArray MV;
 
   void init();
   void roll_callback(const std_msgs::Float64& roll);

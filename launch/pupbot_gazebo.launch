@@ -16,6 +16,8 @@
   <rosparam file="$(find pupbot)/controllers.yaml" command="load"/>
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" 
   args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
-  <node name="move_pupbot" pkg="pupbot" type="move_pupbot"/>
-  <node name="pupbot_controller" pkg="pupbot" type="pupbot_controller" output="screen"/>
+  <node name="trot_gait" pkg="pupbot" type="trot_gait"/>
+  <node name="standing_motion" pkg="pupbot" type="standing_motion"/>
+  <node name="inverse_kinematics" pkg="pupbot" type="inverse_kinematics" output="screen"/>
+  <node name="key_control" pkg="pupbot" type="key_control" output="screen"/>
 </launch>
