@@ -18,6 +18,6 @@
   args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
   <node name="trot_gait" pkg="pupbot" type="trot_gait"/>
   <node name="standing_motion" pkg="pupbot" type="standing_motion"/>
-  <node name="inverse_kinematics" pkg="pupbot" type="inverse_kinematics" output="screen"/>
+  <node name="inverse_kinematics" pkg="pupbot" type="inverse_kinematics"/>
   <node name="key_control" pkg="pupbot" type="key_control" output="screen"/>
 </launch>

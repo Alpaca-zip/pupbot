@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Saturday, March 5, 2022
+// Last updated: Sunday, March 20, 2022
 
 #include "inverse_kinematics.h"
 
@@ -56,26 +56,6 @@ void Inverse_Kinematics::inverse_kinematics_callback(const std_msgs::Float64Mult
     y = leg_position.data[3*l+1];
     z = leg_position.data[3*l+2];
 
-    /*
-    a0 = (atan(x/z));
-    a1 = (atan(y/z));
-    b0 = sqrt(x*x+z*z);
-
-    angle1 = a1;
-    angle3 = asin((b0/2.0)/bone_length)*2.0;
-    angle2 = angle3/2.0+a0;
-
-    target_leg_shoulder_joint = angle1;
-    target_L_leg_upper_joint = M_PI/2-angle2;
-    target_L_leg_lower_joint = M_PI-angle3;
-    target_R_leg_upper_joint = -(M_PI/2-angle2);
-    target_R_leg_lower_joint = -(M_PI-angle3);
-    */
-    //y=>z
-    //x=>y
-    //z=>x
-
-    
     a0 = (y*y+z*z-LENGTH*LENGTH+x*x-2*bone_length*bone_length)/(2*bone_length*bone_length);
 
     angle1 = -atan2(-z, y)-atan2(sqrt(y*y+z*z-LENGTH*LENGTH), -LENGTH);
@@ -84,24 +64,9 @@ void Inverse_Kinematics::inverse_kinematics_callback(const std_msgs::Float64Mult
     target_leg_shoulder_joint = angle1;
     target_L_leg_upper_joint = -angle2;
     target_L_leg_lower_joint = angle3;
-    target_R_leg_upper_joint = -(-angle2);
-    target_R_leg_lower_joint = -(angle3);
-
+    target_R_leg_upper_joint = angle2;
+    target_R_leg_lower_joint = -angle3;
     
-    if(l == 1){
-    printf("angle1=%lf ",  angle1*180.0/M_PI);
-    printf("angle2=%lf ",  angle2*180.0/M_PI);
-    printf("angle3=%lf \n",  angle3*180.0/M_PI);
-    }
-    
-
-    if(l == 0){
-    printf("a0=%lf \n",  a0);
-    }
-    if(l == 1){
-    printf("a0=%lf \n",  a0);
-    }
-
     if(l == 0){
       LF_leg.points[0].positions[0] = target_leg_shoulder_joint;
       LF_leg.points[0].positions[1] = target_L_leg_upper_joint;

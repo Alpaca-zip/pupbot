@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Saturday, March 5, 2022
+// Last updated: Sunday, March 20, 2022
 
 #include "posture_stabilization.h"
 
@@ -115,10 +115,10 @@ void Posture_Stabilization::controlLoop(){
   e1_RR_leg = e_RR_leg;
   e1_RF_leg = e_RF_leg;
 
-  e_LF_leg = -Y_OFFSET*sin(roll_LPF.data/180.0*M_PI)+X_OFFSET*sin(pitch_LPF.data/180.0*M_PI);
-  e_LR_leg = -Y_OFFSET*sin(roll_LPF.data/180.0*M_PI)-X_OFFSET*sin(pitch_LPF.data/180.0*M_PI);
-  e_RR_leg = Y_OFFSET*sin(roll_LPF.data/180.0*M_PI)-X_OFFSET*sin(pitch_LPF.data/180.0*M_PI);
-  e_RF_leg = Y_OFFSET*sin(roll_LPF.data/180.0*M_PI)+X_OFFSET*sin(pitch_LPF.data/180.0*M_PI);
+  e_LF_leg = -Y_OFFSET*tan(roll_LPF.data/180.0*M_PI)+X_OFFSET*tan(pitch_LPF.data/180.0*M_PI);
+  e_LR_leg = -Y_OFFSET*tan(roll_LPF.data/180.0*M_PI)-X_OFFSET*tan(pitch_LPF.data/180.0*M_PI);
+  e_RR_leg = Y_OFFSET*tan(roll_LPF.data/180.0*M_PI)-X_OFFSET*tan(pitch_LPF.data/180.0*M_PI);
+  e_RF_leg = Y_OFFSET*tan(roll_LPF.data/180.0*M_PI)+X_OFFSET*tan(pitch_LPF.data/180.0*M_PI);
 
   if(PID_on){
     M_LF_leg = M1_LF_leg+P*(e_LF_leg-e1_LF_leg)+I*e_LF_leg+D*((e_LF_leg-e1_LF_leg)-(e1_LF_leg-e2_LF_leg));
