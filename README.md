@@ -3,7 +3,6 @@
 <img src="https://github.com/Alpaca-zip/pupbot_ver1/blob/main/pupbot_ver1.png">
 
 [![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg)](https://github.com/Alpaca-zip/pupbot_ver1)
-
 [![](https://img.shields.io/badge/ROS-Noetic-brightgreen.svg)](https://github.com/Alpaca-zip/pupbot_ver1)
 
 Open source ROS package for quadruped robot PupBot Ver1.
