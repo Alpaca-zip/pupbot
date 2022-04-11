@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="model" default="$(find pupbot)/urdf/pupbot.xacro"/>
+  <arg name="model" default="$(find pupbot_ver1)/urdf/pupbot.xacro"/>
   <arg name="gui" default="false"/>
   <arg name="headless" default="false"/>
   <arg name="output" default="log"/>
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.5"/>
-  <arg name="rvizconfig" default="$(find pupbot)/rviz/pupbot.rviz" />
+  <arg name="rvizconfig" default="$(find pupbot_ver1)/rviz/pupbot.rviz" />
   <param name="robot_description" command="$(find xacro)/xacro $(arg model) --inorder"/>
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="gui" value="$(arg gui)"/>
@@ -18,14 +18,14 @@
   -J leftfront_leg_shoulder_joint -0.5 -J leftback_leg_shoulder_joint -0.5 -J leftfront_leg_upper_joint 1.5 -J leftback_leg_upper_joint 1.5
   -J leftfront_leg_lower_joint 2.5 -J leftback_leg_lower_joint 2.5 -J rightfront_leg_shoulder_joint 0.5 -J rightback_leg_shoulder_joint 0.5
   -J rightfront_leg_upper_joint -1.5 -J rightback_leg_upper_joint -1.5 -J rightfront_leg_lower_joint -2.5 -J rightback_leg_lower_joint -2.5" />
-  <rosparam file="$(find pupbot)/controllers.yaml" command="load"/>
+  <rosparam file="$(find pupbot_ver1)/controllers.yaml" command="load"/>
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" 
   args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-  <node name="trot_gait" pkg="pupbot" type="trot_gait"/>
-  <node name="standing_motion" pkg="pupbot" type="standing_motion"/>
-  <node name="inverse_kinematics" pkg="pupbot" type="inverse_kinematics"/>
-  <node name="posture_stabilization" pkg="pupbot" type="posture_stabilization"/>
-  <node name="key_control" pkg="pupbot" type="key_control" output="screen"/>
+  <node name="trot_gait" pkg="pupbot_ver1" type="trot_gait"/>
+  <node name="standing_motion" pkg="pupbot_ver1" type="standing_motion"/>
+  <node name="inverse_kinematics" pkg="pupbot_ver1" type="inverse_kinematics"/>
+  <node name="posture_stabilization" pkg="pupbot_ver1" type="posture_stabilization"/>
+  <node name="key_control" pkg="pupbot_ver1" type="key_control" output="screen"/>
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
 </launch>

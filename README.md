@@ -1,12 +1,12 @@
-# PupBot
+# pupbot_ver1
 
-<img src="https://github.com/Alpaca-zip/PupBot/blob/main/PupBot.png">
+<img src="https://github.com/Alpaca-zip/pupbot_ver1/blob/main/pupbot_ver1.png">
 
-[![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg)](https://github.com/Alpaca-zip/PupBot)
+[![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg)](https://github.com/Alpaca-zip/pupbot_ver1)
 
-[![](https://img.shields.io/badge/ROS-Noetic-brightgreen.svg)](https://github.com/Alpaca-zip/PupBot)
+[![](https://img.shields.io/badge/ROS-Noetic-brightgreen.svg)](https://github.com/Alpaca-zip/pupbot_ver1)
 
-Open source ROS package for quadruped robot PupBot.
+Open source ROS package for quadruped robot PupBot Ver1.
 
 ## Components
 - Dynamixel AX-12A (×12)
@@ -26,7 +26,7 @@ Open source ROS package for quadruped robot PupBot.
 ## Control the PupBot with laptop
 
 ```
-roslaunch pupbot move_pupbot.launch
+roslaunch pupbot_ver1 move_pupbot.launch
 ```
 
 Q : Startup/Shutdown  
@@ -38,11 +38,11 @@ D : Decreases the value of turn (-0.25)
 ## Launch Gazebo
 
 ```
-roslaunch pupbot pupbot_gazebo.launch
+roslaunch pupbot_ver1 pupbot_gazebo.launch
 ```
 
 ## Launch Rviz
 
 ```
-roslaunch pupbot pupbot_rviz.launch
+roslaunch pupbot_ver1 pupbot_rviz.launch
 ```

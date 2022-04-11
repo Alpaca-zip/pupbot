@@ -5,12 +5,12 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Saturday, March 5, 2022
+// Last updated: Tuesday, April 12, 2022
 
 #include "dynamixel_control.h"
 
 /* ++++++++++++++++++++++++++++++++++
-       Dynamixel_Controller class
+       Dynamixel_Control class
 ++++++++++++++++++++++++++++++++++ */
 Dynamixel_Control::Dynamixel_Control(){
   init();

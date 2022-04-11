@@ -5,12 +5,12 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Thursday, March 3, 2022
+// Last updated: Tuesday, April 12, 2022
 
 #include "key_control.h"
 
 /* ++++++++++++++++++++++++++++++++++
-      Pupbot_Controller class
+         Key_Control class
 ++++++++++++++++++++++++++++++++++ */
 Key_Control::Key_Control(){
   init();

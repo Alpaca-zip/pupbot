@@ -5,12 +5,12 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Sunday, March 20, 2022
+// Last updated: Tuesday, April 12, 2022
 
 #include "posture_stabilization.h"
 
 /* ++++++++++++++++++++++++++++++++++
-     posture_stabilization class
+     Posture_Stabilization class
 ++++++++++++++++++++++++++++++++++ */
 Posture_Stabilization::Posture_Stabilization(){
   init();

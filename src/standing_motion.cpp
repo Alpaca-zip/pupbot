@@ -5,12 +5,12 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Saturday, March 5, 2022
+// Last updated: Tuesday, April 12, 2022
 
 #include "standing_motion.h"
 
 /* ++++++++++++++++++++++++++++++++++
-       standing_motion class
+       Standing_Motion class
 ++++++++++++++++++++++++++++++++++ */
 Standing_Motion::Standing_Motion(){
   init();

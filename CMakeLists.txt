@@ -2,7 +2,7 @@
 # Set minimum required version of cmake, project name and compile options
 ################################################################################
 cmake_minimum_required(VERSION 3.0.2)
-project(pupbot)
+project(pupbot_ver1)
 
 ################################################################################
 # Find catkin packages and libraries for catkin and system dependencies

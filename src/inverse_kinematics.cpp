@@ -5,12 +5,12 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Sunday, March 20, 2022
+// Last updated: Tuesday, April 12, 2022
 
 #include "inverse_kinematics.h"
 
 /* ++++++++++++++++++++++++++++++++++
-      inverse_kinematics class
+      Inverse_Kinematics class
 ++++++++++++++++++++++++++++++++++ */
 Inverse_Kinematics::Inverse_Kinematics(){
   init();
