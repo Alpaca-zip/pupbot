@@ -23,7 +23,7 @@
     <visual>
       <origin xyz="0 0 0.13" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://pupbot/stl/body.stl" />
+        <mesh filename="package://pupbot_ver1/stl/body.stl" />
       </geometry>
       <material name="grey" />
     </visual>
@@ -72,7 +72,7 @@
     <visual>
       <origin xyz="${xyz2}" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://pupbot/stl/leg_shoulder.stl" />
+        <mesh filename="package://pupbot_ver1/stl/leg_shoulder.stl" />
       </geometry>
       <material name="grey"/>
     </visual>
@@ -122,7 +122,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 ${radians(180)}" />
       <geometry>
-        <mesh filename="package://pupbot/stl/leg_upper.stl" />
+        <mesh filename="package://pupbot_ver1/stl/leg_upper.stl" />
       </geometry>
       <material name="grey"/>
     </visual>
@@ -172,7 +172,7 @@
     <visual>
       <origin xyz="0 0 -0.042" rpy="0 ${radians(-90)} 0" />
       <geometry>
-        <mesh filename="package://pupbot/stl/leg_lower.stl" />
+        <mesh filename="package://pupbot_ver1/stl/leg_lower.stl" />
       </geometry>
       <material name="grey"/>
     </visual>
@@ -255,7 +255,7 @@
     <visual>
       <origin xyz="${xyz2}" rpy="0 0 ${radians(180)}" />
       <geometry>
-        <mesh filename="package://pupbot/stl/leg_shoulder.stl" />
+        <mesh filename="package://pupbot_ver1/stl/leg_shoulder.stl" />
       </geometry>
       <material name="grey"/>
     </visual>
@@ -305,7 +305,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 ${radians(0)} ${radians(180)}" />
       <geometry>
-        <mesh filename="package://pupbot/stl/leg_upper.stl" />
+        <mesh filename="package://pupbot_ver1/stl/leg_upper.stl" />
       </geometry>
       <material name="grey"/>
     </visual>
@@ -355,7 +355,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
       <geometry>
-        <mesh filename="package://pupbot/stl/leg_lower.stl" />
+        <mesh filename="package://pupbot_ver1/stl/leg_lower.stl" />
       </geometry>
       <material name="grey"/>
     </visual>
