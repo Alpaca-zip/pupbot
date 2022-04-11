@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Saturday, March 5, 2022
+// Last updated: Tuesday, April 12, 2022
 
 #include "trot_gait.h"
 
@@ -147,7 +147,7 @@ void Trot_Gait::controlLoop(){
 int main(int argc, char** argv){
   ros::init(argc,argv, "trot_gait");
   Trot_Gait trot_gait;
-  ros::Rate loop_rate(10);
+  ros::Rate loop_rate(100);
   while(ros::ok()){
     trot_gait.controlLoop();
     ros::spinOnce();
