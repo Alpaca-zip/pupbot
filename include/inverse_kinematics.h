@@ -13,7 +13,7 @@
 #include "trajectory_msgs/JointTrajectory.h"
 
 #define BONE_LENGTH 83.0
-#define LENGTH 0.0
+#define LENGTH 21.0
 
 class Inverse_Kinematics{
   public:
