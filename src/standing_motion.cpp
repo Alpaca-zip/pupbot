@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Tuesday, April 12, 2022
+// Last updated: Sunday, April 17, 2022
 
 #include "standing_motion.h"
 
@@ -34,15 +34,15 @@ void Standing_Motion::init(){
 
 void Standing_Motion::standing_motion_callback(const std_msgs::Bool& stand){
 if(stand.data){
-  leg_position.data[2] = 30;
-  leg_position.data[5] = 30;
-  leg_position.data[8] = 30;
-  leg_position.data[11] = 30;
+  leg_position.data[2] = 40;
+  leg_position.data[5] = 40;
+  leg_position.data[8] = 40;
+  leg_position.data[11] = 40;
   for(int i=0;i<50;i++){
-    leg_position.data[2] += (z_offset_LF_leg-30)/50;
-    leg_position.data[5] += (z_offset_LR_leg-30)/50;
-    leg_position.data[8] += (z_offset_RR_leg-30)/50;
-    leg_position.data[11] += (z_offset_RF_leg-30)/50;
+    leg_position.data[2] += (z_offset_LF_leg-40)/50;
+    leg_position.data[5] += (z_offset_LR_leg-40)/50;
+    leg_position.data[8] += (z_offset_RR_leg-40)/50;
+    leg_position.data[11] += (z_offset_RF_leg-40)/50;
     pub_leg_position.publish(leg_position);
     ros::Duration(0.05).sleep();
     }
@@ -56,10 +56,10 @@ if(stand.data){
     leg_position.data[8] = z_offset_RR_leg;
     leg_position.data[11] = z_offset_RF_leg;
     for(int i=0;i<50;i++){
-      leg_position.data[2] -= (z_offset_LF_leg-30)/50;
-      leg_position.data[5] -= (z_offset_LR_leg-30)/50;
-      leg_position.data[8] -= (z_offset_RR_leg-30)/50;
-      leg_position.data[11] -= (z_offset_RF_leg-30)/50;
+      leg_position.data[2] -= (z_offset_LF_leg-40)/50;
+      leg_position.data[5] -= (z_offset_LR_leg-40)/50;
+      leg_position.data[8] -= (z_offset_RR_leg-40)/50;
+      leg_position.data[11] -= (z_offset_RF_leg-40)/50;
       pub_leg_position.publish(leg_position);
       ros::Duration(0.05).sleep();
     }

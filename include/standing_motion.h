@@ -12,7 +12,7 @@
 #include "std_msgs/Bool.h"
 #include "std_msgs/Float64MultiArray.h"
 
-#define X_OFFSET 0.0
+#define X_OFFSET -10.0
 #define LF_LEG_Z_OFFSET 120
 #define LR_LEG_Z_OFFSET 120
 #define RR_LEG_Z_OFFSET 120

@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Tuesday, April 12, 2022
+// Last updated: Sunday, April 17, 2022
 
 #include "dynamixel_control.h"
 
@@ -20,10 +20,10 @@ void Dynamixel_Control::init(){
   baud_rate = BAUD_RATE;
   model_number = MODEL_NUMBER;
   result = false;
-  sub_LF_leg = nh.subscribe("/LF_leg_controller/command", 10, &Dynamixel_Control::monitor_LF_leg_callback, this);
-  sub_LR_leg = nh.subscribe("/LR_leg_controller/command", 10, &Dynamixel_Control::monitor_LR_leg_callback, this);
-  sub_RR_leg = nh.subscribe("/RR_leg_controller/command", 10, &Dynamixel_Control::monitor_RR_leg_callback, this);
-  sub_RF_leg = nh.subscribe("/RF_leg_controller/command", 10, &Dynamixel_Control::monitor_RF_leg_callback, this);
+  sub_LF_leg = nh.subscribe("/leftfront_leg_controller/command", 10, &Dynamixel_Control::monitor_LF_leg_callback, this);
+  sub_LR_leg = nh.subscribe("/leftback_leg_controller/command", 10, &Dynamixel_Control::monitor_LR_leg_callback, this);
+  sub_RR_leg = nh.subscribe("/rightback_leg_controller/command", 10, &Dynamixel_Control::monitor_RR_leg_callback, this);
+  sub_RF_leg = nh.subscribe("/rightfront_leg_controller/command", 10, &Dynamixel_Control::monitor_RF_leg_callback, this);
   joint_name[0].data = "LF_leg_shoulder_joint";
   joint_name[1].data = "LF_leg_upper_joint";
   joint_name[2].data = "LF_leg_lower_joint";
