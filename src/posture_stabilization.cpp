@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Tuesday, April 12, 2022
+// Last updated: Sunday, April 17, 2022
 
 #include "posture_stabilization.h"
 
@@ -124,7 +124,7 @@ void Posture_Stabilization::controlLoop(){
     M_LF_leg = M1_LF_leg+P*(e_LF_leg-e1_LF_leg)+I*e_LF_leg+D*((e_LF_leg-e1_LF_leg)-(e1_LF_leg-e2_LF_leg));
     M_LR_leg = M1_LR_leg+P*(e_LR_leg-e1_LR_leg)+I*e_LR_leg+D*((e_LR_leg-e1_LR_leg)-(e1_LR_leg-e2_LR_leg));
     M_RR_leg = M1_RR_leg+P*(e_RR_leg-e1_RR_leg)+I*e_RR_leg+D*((e_RR_leg-e1_RR_leg)-(e1_RR_leg-e2_RR_leg));
-    M_RF_leg = M1_RF_leg+P*(e_RF_leg-e1_RR_leg)+I*e_RF_leg+D*((e_RF_leg-e1_RF_leg)-(e1_RF_leg-e2_RF_leg));
+    M_RF_leg = M1_RF_leg+P*(e_RF_leg-e1_RF_leg)+I*e_RF_leg+D*((e_RF_leg-e1_RF_leg)-(e1_RF_leg-e2_RF_leg));
   }else{
     M_LF_leg = M1_LF_leg+0*(e_LF_leg-e1_LF_leg)+0*e_LF_leg+0*((e_LF_leg-e1_LF_leg)-(e1_LF_leg-e2_LF_leg));
     M_LR_leg = M1_LR_leg+0*(e_LR_leg-e1_LR_leg)+0*e_LR_leg+0*((e_LR_leg-e1_LR_leg)-(e1_LR_leg-e2_LR_leg));

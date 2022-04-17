@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Saturday, April 16, 2022
+// Last updated: Sunday, April 17, 2022
 
 #include "inverse_kinematics.h"
 
@@ -59,7 +59,7 @@ void Inverse_Kinematics::inverse_kinematics_callback(const std_msgs::Float64Mult
     a0 = (y*y+z*z-LENGTH*LENGTH+x*x-2*bone_length*bone_length)/(2*bone_length*bone_length);
 
     if(l == 0){
-	  angle1 = -atan2(-z, y)-atan2(sqrt(y*y+z*z-LENGTH*LENGTH), LENGTH);
+	  angle1 = -atan2(-z, -y)-atan2(sqrt(y*y+z*z-LENGTH*LENGTH), LENGTH);
       angle3 = atan2(sqrt(1-a0*a0), a0);
       angle2 = atan2(x, sqrt(y*y+z*z-LENGTH*LENGTH))-atan2(bone_length*sin(angle3), bone_length*(1+cos(angle3)));
       target_leg_shoulder_joint = angle1;
@@ -74,7 +74,7 @@ void Inverse_Kinematics::inverse_kinematics_callback(const std_msgs::Float64Mult
       LF_leg.points[0].time_from_start = ros::Duration(0.008);
       pub_LF_leg.publish(LF_leg);
     }else if(l == 1){
-	  angle1 = -atan2(-z, y)-atan2(sqrt(y*y+z*z-LENGTH*LENGTH), LENGTH);
+	  angle1 = -atan2(-z, -y)-atan2(sqrt(y*y+z*z-LENGTH*LENGTH), LENGTH);
       angle3 = atan2(sqrt(1-a0*a0), a0);
       angle2 = atan2(x, sqrt(y*y+z*z-LENGTH*LENGTH))-atan2(bone_length*sin(angle3), bone_length*(1+cos(angle3)));
       target_leg_shoulder_joint = angle1;
@@ -89,7 +89,7 @@ void Inverse_Kinematics::inverse_kinematics_callback(const std_msgs::Float64Mult
       LR_leg.points[0].time_from_start = ros::Duration(0.008);
       pub_LR_leg.publish(LR_leg);
     }else if(l == 2){
-	  angle1 = -atan2(-z, y)-atan2(sqrt(y*y+z*z-LENGTH*LENGTH), -LENGTH);
+	  angle1 = -atan2(-z, -y)-atan2(sqrt(y*y+z*z-LENGTH*LENGTH), -LENGTH);
       angle3 = atan2(sqrt(1-a0*a0), a0);
       angle2 = atan2(x, sqrt(y*y+z*z-LENGTH*LENGTH))-atan2(bone_length*sin(angle3), bone_length*(1+cos(angle3)));
       target_leg_shoulder_joint = angle1;
@@ -104,7 +104,7 @@ void Inverse_Kinematics::inverse_kinematics_callback(const std_msgs::Float64Mult
       RR_leg.points[0].time_from_start = ros::Duration(0.008);
       pub_RR_leg.publish(RR_leg);
     }else if(l == 3){
-	  angle1 = -atan2(-z, y)-atan2(sqrt(y*y+z*z-LENGTH*LENGTH), -LENGTH);
+	  angle1 = -atan2(-z, -y)-atan2(sqrt(y*y+z*z-LENGTH*LENGTH), -LENGTH);
       angle3 = atan2(sqrt(1-a0*a0), a0);
       angle2 = atan2(x, sqrt(y*y+z*z-LENGTH*LENGTH))-atan2(bone_length*sin(angle3), bone_length*(1+cos(angle3)));
       target_leg_shoulder_joint = angle1;
