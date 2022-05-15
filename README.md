@@ -34,14 +34,14 @@ Q : Startup/Shutdown
 W : Increases the value of direction in the x axis (+0.25)  
 A : Increases the value of turn (+0.25)  
 S : Decreases the value of direction in the x axis (-0.25)  
-D : Decreases the value of turn (-0.25)
-X : PID control on/off
-F : Increases the value of P
-G : Decreases the value of P
-H : Increases the value of I
-J : Decreases the value of I
-K : Increases the value of D
-L : Decreases the value of D
+D : Decreases the value of turn (-0.25)  
+X : PID control on/off  
+F : Increases the value of P  
+G : Decreases the value of P  
+H : Increases the value of I  
+J : Decreases the value of I  
+K : Increases the value of D  
+L : Decreases the value of D  
 
 ## Launch Gazebo
 
