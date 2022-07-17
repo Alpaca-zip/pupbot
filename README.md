@@ -32,9 +32,9 @@ roslaunch pupbot_ver1 move_pupbot.launch
 
 Q : Startup/Shutdown  
 W : Increases the value of direction in the x axis (+0.25)  
-A : Increases the value of turn (+0.25)  
+A : Increases the value of turn (-0.25)  
 S : Decreases the value of direction in the x axis (-0.25)  
-D : Decreases the value of turn (-0.25)  
+D : Decreases the value of turn (+0.25)  
 X : PID control on/off  
 F : Increases the value of P  
 G : Decreases the value of P  
