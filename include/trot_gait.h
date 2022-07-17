@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Saturday, March 5, 2022
+// Last updated: Sunday, July 17, 2022
 
 #include "ros/ros.h"
 #include "ros/time.h"
@@ -39,7 +39,7 @@ class Trot_Gait{
   double dir_x, dir_y;
   double w0, l0, h0;
   double w0_count_c, a0_count_c;
-  double l_inv[4][2] = {{1.0, -1.0}, {-1.0, -1.0}, {1.0, 1.0}, {-1.0, 1.0}};
+  double l_inv[4][2] = {{1.0, 1.0}, {-1.0, 1.0}, {1.0, -1.0}, {-1.0, -1.0}};
   double c_iter[4] = {0.0, 0.0, 0.0, 0.0};
   double c[4] = {0.0, 0.0, 0.0, 0.0};
   double c_inv[4] = {0.0, 0.0, 0.0, 0.0};

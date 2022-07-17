@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Tuesday, April 12, 2022
+// Last updated: Sunday, July 17, 2022
 
 #include "key_control.h"
 
@@ -16,9 +16,9 @@ Key_Control::Key_Control(){
   init();
   std::cout << "Q : Stand up/lie down" << std::endl;
   std::cout << "W : Increases the value of direction in the x axis (+0.25)" << std::endl;
-  std::cout << "A : Increases the value of turn (+0.25)" << std::endl;
+  std::cout << "A : Increases the value of turn (-0.25)" << std::endl;
   std::cout << "S : Decreases the value of direction in the x axis (-0.25)" << std::endl;
-  std::cout << "D : Decreases the value of turn (-0.25)" << std::endl;
+  std::cout << "D : Decreases the value of turn (+0.25)" << std::endl;
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //PID control section
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,8 +81,8 @@ void Key_Control::controlLoop(){
     std::cout << " ==> x:" << direction_x.data << std::endl;
     trot_foward_motion_pub.publish(direction_x);
   }else if(c == 'a'){
-    if(turn.data < 1.0){
-      turn.data += 0.25;
+    if(turn.data > -1.0){
+      turn.data -= 0.25;
     }
     std::cout << " ==> turn:" << turn.data << std::endl;
     trot_turn_motion_pub.publish(turn);
@@ -93,8 +93,8 @@ void Key_Control::controlLoop(){
     std::cout << " ==> x:" << direction_x.data << std::endl;
     trot_foward_motion_pub.publish(direction_x);
   }else if(c == 'd'){
-    if(turn.data > -1.0){
-      turn.data -= 0.25;
+    if(turn.data < 1.0){
+      turn.data += 0.25;
     }
     std::cout << " ==> turn:" << turn.data << std::endl;
     trot_turn_motion_pub.publish(turn);

@@ -5,7 +5,7 @@
 // /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
 //             |_|                                       |_|
 //
-// Last updated: Sunday, April 17, 2022
+// Last updated: Sunday, July 17, 2022
 
 #include "trot_gait.h"
 
@@ -57,9 +57,9 @@ void Trot_Gait::stabilization_variable_callback(const std_msgs::Float64MultiArra
 }
 
 void Trot_Gait::trot(double c0_x, double c0_y, bool inv){
-  w0 = trot_step_extent_x*0.1/2.0*dir_x;
-  l0 = trot_step_extent_y*0.1*4.0*dir_y;
-  h0 = trot_step_extent_z*0.1;
+  w0 = trot_step_extent_x/2.0*dir_x;
+  l0 = trot_step_extent_y/2.0*dir_y;
+  h0 = trot_step_extent_z;
   if(inv == false){
     c0_x = -c0_x;
     c0_y = -c0_y;
@@ -70,24 +70,24 @@ void Trot_Gait::trot(double c0_x, double c0_y, bool inv){
     vector_z = 0.0;
   }else if(w0 == 0.0){
     double h1 = sqrt(abs((1.0-(c0_y/l0)*(c0_y/l0))*h0*h0));
-    vector_x = c0_x/0.1;
-    vector_y = c0_y/0.1;
-    vector_z = h1/0.1*int(inv);
+    vector_x = c0_x;
+    vector_y = c0_y;
+    vector_z = h1*int(inv);
   }else if(l0 == 0.0){
     double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0))*h0*h0));
-    vector_x = c0_x/0.1;
-    vector_y = c0_y/0.1;
-    vector_z = h1/0.1*int(inv);
+    vector_x = c0_x;
+    vector_y = c0_y;
+    vector_z = h1*int(inv);
   }else{
-    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0)-(c0_y/l0)*(c0_y/l0))*h0*h0));
-    vector_x = c0_x/0.1;
-    vector_y = c0_y/0.1;
-    vector_z = h1/0.1*int(inv);
+    double h1 = sqrt(abs((1.0-(c0_x/w0)*(c0_x/w0))*h0*h0));
+    vector_x = c0_x;
+    vector_y = c0_y;
+    vector_z = h1*int(inv);
   }
 }
 
 void Trot_Gait::count_c(double step_extent_x){
-  w0_count_c = step_extent_x*0.1*std::max(abs(dir_x),abs(dir_y))/2.0;
+  w0_count_c = step_extent_x*std::max(abs(dir_x),abs(dir_y))/2.0;
   a0_count_c = (2.0*w0_count_c)*(c_iter[l]/number)-w0_count_c;
   c[l] = a0_count_c;
   c_iter[l] += 1.0;
