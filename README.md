@@ -20,6 +20,7 @@ Dockerfiles:https://github.com/Alpaca-zip/docker-pupbot
 The posture control feature provides a stable gait on sloping terrain. This algorithm plays an important role in stabilizing the robot body during gait by dynamically controlling the toe position based on the filtered roll and pitch angles. 
 
 ![posture_control](https://user-images.githubusercontent.com/84959376/191177606-0fdff183-3349-40da-a78a-2da9e3d32d73.gif)
+![FSx-DpyVIAAEWa5](https://user-images.githubusercontent.com/84959376/191180942-1104cf41-3f2a-4d45-b8f5-ec9582013b9b.jpg)
 
 ## Control the PupBot with laptop(without gazebo)
 ### 1 From your laptop PC, open the terminal and connect to the Raspberry Pi with its IP address.
