@@ -28,7 +28,7 @@ Before starting, please install ROS on your Raspberry Pi.
 ```
 $ ssh pi@{IP_ADDRESS_OF_RASPBERRY_PI}
 ```
-### 2 start PupBot applications.
+### 2 Start PupBot applications.
 ```
 $ roslaunch pupbot move_pupbot.launch
 ```

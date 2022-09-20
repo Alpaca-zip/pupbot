@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>pupbot</name>
-  <version>0.0.0</version>
+  <version>1.0.1</version>
   <description>ROS package for quadruped robot PupBot</description>
   <maintainer email="Alpaca-zip@todo.todo">Alpaca-zip</maintainer>
   <license>Apache 2.0</license>

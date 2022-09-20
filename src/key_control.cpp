@@ -1,11 +1,18 @@
-//     _     _                                         _
-//    / \   | | _ __    __ _   ___   __ _         ____(_) _ __
-//   / _ \  | || '_ \  / _` | / __| / _` | _____ |_  /| || '_ \
-//  / ___ \ | || |_) || (_| || (__ | (_| ||_____| / / | || |_) |
-// /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
-//             |_|                                       |_|
-//
-// Last updated: Sunday, July 17, 2022
+/**
+ * Copyright (C) 2022  Alpaca-zip
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include "key_control.h"
 
@@ -19,35 +26,15 @@ Key_Control::Key_Control(){
   std::cout << "A : Increases the value of turn (-0.25)" << std::endl;
   std::cout << "S : Decreases the value of direction in the x axis (-0.25)" << std::endl;
   std::cout << "D : Decreases the value of turn (+0.25)" << std::endl;
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//PID control section
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//This has been deprecated, and could be removed in a future release.
-  std::cout << "F : Increases the value of P" << std::endl;
-  std::cout << "G : Decreases the value of P" << std::endl;
-  std::cout << "H : Increases the value of I" << std::endl;
-  std::cout << "J : Decreases the value of I" << std::endl;
-  std::cout << "K : Increases the value of D" << std::endl;
-  std::cout << "L : Decreases the value of D" << std::endl;
-  std::cout << "X : PID control on/off" << std::endl;
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  std::cout << "X : Posture control on/off" << std::endl;
 }
 
 void Key_Control::init(){
   trot_foward_motion_pub = nh.advertise<std_msgs::Float64>("/trot_foward_motion", 10);
   trot_turn_motion_pub = nh.advertise<std_msgs::Float64>("/trot_turn_motion", 10);
   standing_motion_pub = nh.advertise<std_msgs::Bool>("/standing_motion", 10);
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//PID control section
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//This has been deprecated, and could be removed in a future release.
-  key_control_pub_Kp = nh.advertise<std_msgs::Float64>("key_control_Kp", 10);
-  key_control_pub_Ki = nh.advertise<std_msgs::Float64>("key_control_Ki", 10);
-  key_control_pub_Kd = nh.advertise<std_msgs::Float64>("key_control_Kd", 10);
-  key_control_PID = nh.advertise<std_msgs::Bool>("PID_on_off", 10);
-  Kp.data = Ki.data = Kd.data = 0.0;
-  PID.data = false;
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  posture_control_pub = nh.advertise<std_msgs::Bool>("/posture_control", 10);
+  posture_control.data = false;
   direction_x.data = 0.0;
   turn.data = 0.0;
   stand.data = false;
@@ -107,41 +94,16 @@ void Key_Control::controlLoop(){
       std::cout << " ==> Stand up" << std::endl;
     }
     standing_motion_pub.publish(stand);
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//PID control section
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//This has been deprecated, and could be removed in a future release.  
-  }else if(c == 'f'){
-    Kp.data += 0.05;
-    std::cout << " ==> P:" << Kp.data << std::endl;
-    key_control_pub_Kp.publish(Kp);
-  }else if(c == 'g'){
-    Kp.data -= 0.05;
-    std::cout << " ==> P:" << Kp.data << std::endl;
-    key_control_pub_Kp.publish(Kp);
-  }else if(c == 'h'){
-    Ki.data += 0.05;
-    std::cout << " ==> I:" << Ki.data << std::endl;
-    key_control_pub_Ki.publish(Ki);
-  }else if(c == 'j'){
-    Ki.data -= 0.05;
-    std::cout << " ==> I:" << Ki.data << std::endl;
-    key_control_pub_Ki.publish(Ki);
-  }else if(c == 'k'){
-    Kd.data += 0.05;
-    std::cout << " ==> D:" << Kd.data << std::endl;
-    key_control_pub_Kd.publish(Kd);
-  }else if(c == 'l'){
-    Kd.data -= 0.05;
-    std::cout << " ==> D:" << Kd.data << std::endl;
-    key_control_pub_Ki.publish(Kd);
   }else if(c == 'x'){
-    PID.data = true;
-    std::cout << " ==> PID" << std::endl;
-    key_control_PID.publish(PID);
-    PID.data = false;
+    if(posture_control.data){
+      posture_control.data = false;
+      std::cout << " ==> Posture control disable" << std::endl;
+    }else{
+      posture_control.data = true;
+      std::cout << " ==> Posture control enable" << std::endl;
+    }
+    posture_control_pub.publish(posture_control);
   }
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 }
 
 /* ++++++++++++++++++++++++++++++++++

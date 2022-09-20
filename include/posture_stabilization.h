@@ -1,11 +1,18 @@
-//     _     _                                         _
-//    / \   | | _ __    __ _   ___   __ _         ____(_) _ __
-//   / _ \  | || '_ \  / _` | / __| / _` | _____ |_  /| || '_ \
-//  / ___ \ | || |_) || (_| || (__ | (_| ||_____| / / | || |_) |
-// /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
-//             |_|                                       |_|
-//
-// Last updated: Saturday, March 5, 2022
+/**
+ * Copyright (C) 2022  Alpaca-zip
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include "ros/ros.h"
 #include "std_msgs/Float64.h"
@@ -46,24 +53,14 @@ class Posture_Stabilization{
   ros::Publisher pub_pitch_LPF;
   ros::Subscriber roll_sub;
   ros::Subscriber pitch_sub;
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//PID control section
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//This has been deprecated, and could be removed in a future release.
-  ros::Subscriber key_control_sub_Kp;
-  ros::Subscriber key_control_sub_Ki;
-  ros::Subscriber key_control_sub_Kd;
-  ros::Subscriber key_control_sub_PID;
-  void Kp_callback(const std_msgs::Float64& Kp);
-  void Ki_callback(const std_msgs::Float64& Ki);
-  void Kd_callback(const std_msgs::Float64& Kd);
-  void PID_callback(const std_msgs::Bool& PID);
-  bool PID_on;
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  ros::Subscriber key_control_sub_posture_control;
+
   std_msgs::Float64 roll_LPF, pitch_LPF;
   std_msgs::Float64MultiArray MV;
+  bool posture_control_on;
 
   void init();
   void roll_callback(const std_msgs::Float64& roll);
   void pitch_callback(const std_msgs::Float64& pitch);
+  void posture_control_callback(const std_msgs::Bool& posture_control);
 };

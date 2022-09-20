@@ -1,11 +1,18 @@
-//     _     _                                         _
-//    / \   | | _ __    __ _   ___   __ _         ____(_) _ __
-//   / _ \  | || '_ \  / _` | / __| / _` | _____ |_  /| || '_ \
-//  / ___ \ | || |_) || (_| || (__ | (_| ||_____| / / | || |_) |
-// /_/   \_\|_|| .__/  \__,_| \___| \__,_|       /___||_|| .__/
-//             |_|                                       |_|
-//
-// Last updated: Sunday, April 17, 2022
+/**
+ * Copyright (C) 2022  Alpaca-zip
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include "posture_stabilization.h"
 
@@ -29,29 +36,22 @@ void Posture_Stabilization::init(){
   pub_pitch_LPF = nh.advertise<std_msgs::Float64>("/pitch_LPF", 10);
   roll_sub = nh.subscribe("/roll", 10, &Posture_Stabilization::roll_callback, this);
   pitch_sub = nh.subscribe("/pitch", 10, &Posture_Stabilization::pitch_callback, this);
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//PID control section
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//This has been deprecated, and could be removed in a future release.
-  key_control_sub_Kp = nh.subscribe("/key_control_Kp", 10, &Posture_Stabilization::Kp_callback, this);
-  key_control_sub_Ki = nh.subscribe("/key_control_Ki", 10, &Posture_Stabilization::Ki_callback, this);
-  key_control_sub_Kd = nh.subscribe("/key_control_Kd", 10, &Posture_Stabilization::Kd_callback, this);
-  key_control_sub_PID = nh.subscribe("/PID_on_off", 10, &Posture_Stabilization::PID_callback, this);
-  PID_on = false;
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  key_control_sub_posture_control = nh.subscribe("/posture_control", 10, &Posture_Stabilization::posture_control_callback, this);
+
   M_LF_leg = M_LR_leg = M_RR_leg = M_RF_leg = 0.0;
   M1_LF_leg = M1_LR_leg = M1_RR_leg = M1_RF_leg = 0.0;
   e_LF_leg = e_LR_leg = e_RR_leg = e_RF_leg = 0.0;
   e1_LF_leg = e1_LR_leg = e1_RR_leg = e1_RF_leg = 0.0;
   e2_LF_leg = e2_LR_leg = e2_RR_leg = e2_RF_leg = 0.0;
 
-  P = 0.0;
-  I = 0.0;
-  D = 0.0;
+  P = 0.5;
+  I = 0.1;
+  D = 0.15;
   roll_sum = 0.0;
   pitch_sum = 0.0;
   roll_cnt = 0;
   pitch_cnt = 0;
+  posture_control_on = false;
 }
 
 void Posture_Stabilization::roll_callback(const std_msgs::Float64& roll){
@@ -76,30 +76,13 @@ void Posture_Stabilization::pitch_callback(const std_msgs::Float64& pitch){
   pub_pitch_LPF.publish(pitch_LPF);
 }
 
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//PID control section
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//This has been deprecated, and could be removed in a future release.
-void Posture_Stabilization::Kp_callback(const std_msgs::Float64& Kp){
-  P = Kp.data;
-}
-
-void Posture_Stabilization::Ki_callback(const std_msgs::Float64& Ki){
-  I = Ki.data;
-}
-
-void Posture_Stabilization::Kd_callback(const std_msgs::Float64& Kd){
-  D = Kd.data;
-}
-
-void Posture_Stabilization::PID_callback(const std_msgs::Bool& PID){
-  if(PID_on){
-    PID_on = false;
+void Posture_Stabilization::posture_control_callback(const std_msgs::Bool& posture_control){
+  if(posture_control_on){
+    posture_control_on = false;
   }else{
-    PID_on = true;
+    posture_control_on = true;
   }
 }
-//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 void Posture_Stabilization::controlLoop(){
   M1_LF_leg = M_LF_leg;
@@ -120,7 +103,7 @@ void Posture_Stabilization::controlLoop(){
   e_RR_leg = Y_OFFSET*tan(roll_LPF.data/180.0*M_PI)-X_OFFSET*tan(pitch_LPF.data/180.0*M_PI);
   e_RF_leg = Y_OFFSET*tan(roll_LPF.data/180.0*M_PI)+X_OFFSET*tan(pitch_LPF.data/180.0*M_PI);
 
-  if(PID_on){
+  if(posture_control_on){
     M_LF_leg = M1_LF_leg+P*(e_LF_leg-e1_LF_leg)+I*e_LF_leg+D*((e_LF_leg-e1_LF_leg)-(e1_LF_leg-e2_LF_leg));
     M_LR_leg = M1_LR_leg+P*(e_LR_leg-e1_LR_leg)+I*e_LR_leg+D*((e_LR_leg-e1_LR_leg)-(e1_LR_leg-e2_LR_leg));
     M_RR_leg = M1_RR_leg+P*(e_RR_leg-e1_RR_leg)+I*e_RR_leg+D*((e_RR_leg-e1_RR_leg)-(e1_RR_leg-e2_RR_leg));
