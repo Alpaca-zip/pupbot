@@ -1,6 +1,6 @@
 # PupBot
 
-<img src="https://github.com/Alpaca-zip/pupbot/blob/main/pupbot_ver1.png">
+![pupbot](https://user-images.githubusercontent.com/84959376/191180426-5900f05b-1c27-4ff8-8bd7-21559404e883.png)
 
 [![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg)](https://github.com/Alpaca-zip/pupbot)
 [![](https://img.shields.io/badge/ROS-Noetic-brightgreen.svg)](https://github.com/Alpaca-zip/pupbot)
