@@ -1,0 +1,23 @@
+name: Formatter
+
+on:
+  pull_request:
+
+jobs:
+  formatter:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+    - name: install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-format
+    - name: clang-format
+      run: find . -type f \( -name "*.cpp" -or -name "*.hpp" -or -name "*.h" \) -exec clang-format -i -style=file {} \;
+    - name: auto commit
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: apply format
