@@ -1,0 +1,4 @@
+- git:
+    local-name: icm_20948
+    uri: https://github.com/Alpaca-zip/icm_20948.git
+    version: noetic-devel
