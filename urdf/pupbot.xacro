@@ -39,7 +39,39 @@
     <material>Gazebo/DarkGrey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
-  
+
+  <!-- IMU -->
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="imu_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="imu_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.15815"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <gazebo reference="imu_link">
+    <sensor type="imu" name="imu">
+      <always_on>true</always_on>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+    </sensor>
+  </gazebo>
+
   <!-- left_legs macro -->
   <xacro:macro name="left_legs_macro" params="prefix xyz1 xyz2 xyz3 xyz4 effort velocity">
 
@@ -414,9 +446,10 @@
       <legacyModeNS>true</legacyModeNS>
     </plugin>
     <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
-            <robotNamespace>/</robotNamespace>
-            <jointName>leftfront_leg_shoulder_joint, leftback_leg_shoulder_joint, rightfront_leg_shoulder_joint, rightback_leg_shoulder_joint, leftfront_leg_upper_joint, leftback_leg_upper_joint, rightfront_leg_upper_joint, rightback_leg_upper_joint, leftfront_leg_lower_joint, leftback_leg_lower_joint, rightfront_leg_lower_joint, rightback_leg_lower_joint</jointName>
-        </plugin>
+      <robotNamespace>/</robotNamespace>
+      <jointName>leftfront_leg_shoulder_joint, leftback_leg_shoulder_joint, rightfront_leg_shoulder_joint, rightback_leg_shoulder_joint, leftfront_leg_upper_joint, leftback_leg_upper_joint, rightfront_leg_upper_joint, rightback_leg_upper_joint, leftfront_leg_lower_joint, leftback_leg_lower_joint, rightfront_leg_lower_joint, rightback_leg_lower_joint</jointName>
+      <updateRate>10.0</updateRate>
+    </plugin>
   </gazebo>
   
 </robot>

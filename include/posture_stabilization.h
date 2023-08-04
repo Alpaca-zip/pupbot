@@ -14,53 +14,48 @@
  * limitations under the License.
  */
 
-#include "ros/ros.h"
-#include "std_msgs/Float64.h"
-#include "std_msgs/Bool.h"
-#include "std_msgs/Float64MultiArray.h"
+#pragma once
 
-#define X_OFFSET 61
-#define Y_OFFSET 94
-#define LF_LEG_Z_OFFSET 120
-#define LR_LEG_Z_OFFSET 120
-#define RR_LEG_Z_OFFSET 120
-#define RF_LEG_Z_OFFSET 120
-#define WIDTH 27
+#include <vector>
+#include <ros/ros.h>
+#include <sensor_msgs/Imu.h>
+#include <geometry_msgs/Quaternion.h>
+#include <std_msgs/Bool.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <std_msgs/Float64.h>
 
-class Posture_Stabilization{
-  public:
-  Posture_Stabilization();
-  void controlLoop();
-
+class postureStabilization{
   private:
-  double roll_data;
-  double pitch_data;
-  double M_LF_leg, M_LR_leg, M_RR_leg, M_RF_leg;
-  double M1_LF_leg, M1_LR_leg, M1_RR_leg, M1_RF_leg;
-  double e_LF_leg, e_LR_leg, e_RR_leg, e_RF_leg;
-  double e1_LF_leg, e1_LR_leg, e1_RR_leg, e1_RF_leg;
-  double e2_LF_leg, e2_LR_leg, e2_RR_leg, e2_RF_leg;
-  double P;
-  double I;
-  double D;
-  double buff_roll[WIDTH], buff_pitch[WIDTH];
-  double roll_sum, pitch_sum;
-  int roll_cnt, pitch_cnt;
+    ros::NodeHandle _nh;
+    ros::NodeHandle _pnh;
+    ros::Publisher _pub_stabilization_variable;
+    ros::Publisher _pub_roll_LPF;
+    ros::Publisher _pub_pitch_LPF;
+    ros::Subscriber _imu_sub;
+    ros::Subscriber _key_control_sub_posture_control;
+    std_msgs::Float64 _roll_LPF, _pitch_LPF;
+    std_msgs::Float64MultiArray _MV;
+    std::vector<double> _buff_roll, _buff_pitch;
+    std::string _imu_topic;
+    bool _posture_control_on;
+    int _imu_cnt;
+    int _x_offset, _y_offset;
+    int _lf_leg_z_offset, _lr_leg_z_offset, _rr_leg_z_offset, _rf_leg_z_offset;
+    int _width;
+    double _M_LF_leg, _M_LR_leg, _M_RR_leg, _M_RF_leg;
+    double _M1_LF_leg, _M1_LR_leg, _M1_RR_leg, _M1_RF_leg;
+    double _e_LF_leg, _e_LR_leg, _e_RR_leg, _e_RF_leg;
+    double _e1_LF_leg, _e1_LR_leg, _e1_RR_leg, _e1_RF_leg;
+    double _e2_LF_leg, _e2_LR_leg, _e2_RR_leg, _e2_RF_leg;
+    double _P;
+    double _I;
+    double _D;
+    double _roll_sum, _pitch_sum;
 
-  ros::NodeHandle nh;
-  ros::Publisher pub_stabilization_variable;
-  ros::Publisher pub_roll_LPF;
-  ros::Publisher pub_pitch_LPF;
-  ros::Subscriber roll_sub;
-  ros::Subscriber pitch_sub;
-  ros::Subscriber key_control_sub_posture_control;
-
-  std_msgs::Float64 roll_LPF, pitch_LPF;
-  std_msgs::Float64MultiArray MV;
-  bool posture_control_on;
-
-  void init();
-  void roll_callback(const std_msgs::Float64& roll);
-  void pitch_callback(const std_msgs::Float64& pitch);
-  void posture_control_callback(const std_msgs::Bool& posture_control);
+  public:
+    postureStabilization();
+    void controlLoop();
+    void imuCallback(const sensor_msgs::Imu& msg);
+    void quatToRPY(const geometry_msgs::Quaternion quat, double& roll, double& pitch, double& yaw);
+    void postureControlCallback(const std_msgs::Bool& posture_control);
 };

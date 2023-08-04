@@ -1,13 +1,32 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <launch>
   <arg name="port" default="/dev/ttyACM0"/>
+  <arg name="imu_topic" default="imu"/>
   <include file="$(find icm_20948)/launch/run.launch">
-    <param name="port" value="$(arg port)"/>
+    <arg name="port" value="$(arg port)"/>
   </include>
+  <!-- dynamixel_control node -->
   <node name="dynamixel_control" pkg="pupbot" type="dynamixel_control"/>
+  <!-- trot_gait node -->
   <node name="trot_gait" pkg="pupbot" type="trot_gait"/>
+  <!-- standing_motion node -->
   <node name="standing_motion" pkg="pupbot" type="standing_motion"/>
+  <!-- inverse_kinematics node -->
   <node name="inverse_kinematics" pkg="pupbot" type="inverse_kinematics"/>
-  <node name="posture_stabilization" pkg="pupbot" type="posture_stabilization"/>
+  <!-- posture_stabilization node -->
+  <node name="posture_stabilization" pkg="pupbot" type="posture_stabilization">
+    <param name="imu_topic" value="$(arg imu_topic)"/>
+    <param name="x_offset" value="61"/>
+    <param name="y_offset" value="94"/>
+    <param name="lf_leg_z_offset" value="120"/>
+    <param name="lr_leg_z_offset" value="120"/>
+    <param name="rr_leg_z_offset" value="120"/>
+    <param name="rf_leg_z_offset" value="120"/>
+    <param name="width" value="120"/>
+    <param name="p_gain" value="120"/>
+    <param name="i_gain" value="120"/>
+    <param name="D_gain" value="120"/>
+  </node>
+  <!-- key_control node -->
   <node name="key_control" pkg="pupbot" type="key_control" output="screen"/>
 </launch>
