@@ -14,9 +14,11 @@ jobs:
     - name: install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y clang-format
+        sudo apt-get install -y clang-format libxml2-utils
     - name: clang-format
       run: find . -type f \( -name "*.cpp" -or -name "*.hpp" -or -name "*.h" \) -exec clang-format -i -style=file {} \;
+    - name: xmllint
+      run: find . -type f \( -name "*.xml" -or -name "*.launch" -or -name "*.xacro" \) -exec xmllint --format -o {} {} \;
     - name: auto commit
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
