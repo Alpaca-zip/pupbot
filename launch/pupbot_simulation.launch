@@ -17,10 +17,20 @@
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" 
   args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
   <!-- trot_gait node -->
-  <node name="trot_gait" pkg="pupbot" type="trot_gait"/>
+  <node name="trot_gait" pkg="pupbot" type="trot_gait" output="log">
+    <param name="x_offset" value="0.0"/>
+    <param name="z_offset_LF_leg" value="120.0"/>
+    <param name="z_offset_LR_leg" value="120.0"/>
+    <param name="z_offset_RR_leg" value="120.0"/>
+    <param name="z_offset_RF_leg" value="120.0"/>
+    <param name="iter_number" value="20"/>
+    <param name="trot_step_extent_x" value="30.0"/>
+    <param name="trot_step_extent_y" value="30.0"/>
+    <param name="trot_step_extent_z" value="8.0"/>
+  </node>
   <!-- standing_motion node -->
   <node name="standing_motion" pkg="pupbot" type="standing_motion" output="log">
-    <param name="x_offset" value="-10.0"/>
+    <param name="x_offset" value="0.0"/>
     <param name="z_offset_LF_leg" value="120.0"/>
     <param name="z_offset_LR_leg" value="120.0"/>
     <param name="z_offset_RR_leg" value="120.0"/>
@@ -28,7 +38,7 @@
   </node>
   <!-- inverse_kinematics node -->
   <node name="inverse_kinematics" pkg="pupbot" type="inverse_kinematics" output="log">
-    <param name="duration" value="0.008"/>
+    <param name="duration" value="0.01"/>
   </node>
   <!-- posture_stabilization node -->
   <node name="posture_stabilization" pkg="pupbot" type="posture_stabilization" output="log">
@@ -39,10 +49,10 @@
     <param name="lr_leg_z_offset" value="120"/>
     <param name="rr_leg_z_offset" value="120"/>
     <param name="rf_leg_z_offset" value="120"/>
-    <param name="width" value="120"/>
-    <param name="p_gain" value="120"/>
-    <param name="i_gain" value="120"/>
-    <param name="D_gain" value="120"/>
+    <param name="width" value="27"/>
+    <param name="p_gain" value="0.5"/>
+    <param name="i_gain" value="0.1"/>
+    <param name="D_gain" value="0.15"/>
   </node>
   <!-- key_control node -->
   <node name="key_control" pkg="pupbot" type="key_control" output="screen"/>
