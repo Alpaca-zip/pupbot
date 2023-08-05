@@ -42,8 +42,8 @@ class postureStabilization{
     std::string _imu_topic;
     bool _posture_control_on;
     int _imu_cnt;
-    int _z_offset_LF_leg, _z_offset_LR_leg, _z_offset_RR_leg, _z_offset_RF_leg;
     int _width;
+    double _z_offset_LF_leg, _z_offset_LR_leg, _z_offset_RR_leg, _z_offset_RF_leg;
     double _M_LF_leg, _M_LR_leg, _M_RR_leg, _M_RF_leg;
     double _M1_LF_leg, _M1_LR_leg, _M1_RR_leg, _M1_RF_leg;
     double _e_LF_leg, _e_LR_leg, _e_RR_leg, _e_RF_leg;
