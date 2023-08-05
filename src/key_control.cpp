@@ -28,13 +28,14 @@ keyControl::keyControl(){
   std::cout << "+++++++++++++++" << std::endl;
   std::cout << "Initializing..." << std::endl;
   std::cout << "+++++++++++++++" << std::endl;
-  std::cout << "Q : Stand up/lie down" << std::endl;
-  std::cout << "W : Increases the value of direction in the x axis (+0.25)" << std::endl;
-  std::cout << "A : Increases the value of turn (-0.25)" << std::endl;
-  std::cout << "S : Decreases the value of direction in the x axis (-0.25)" << std::endl;
-  std::cout << "D : Decreases the value of turn (+0.25)" << std::endl;
-  std::cout << "X : Posture control on/off" << std::endl;
   ros::Duration(2.0).sleep();
+
+  std::cout << "\033[32mQ : Stand up/lie down\033[0m" << std::endl;
+  std::cout << "\033[32mW : Increases the value of direction in the x axis (+0.25)\033[0m" << std::endl;
+  std::cout << "\033[32mA : Increases the value of turn (-0.25)\033[0m" << std::endl;
+  std::cout << "\033[32mS : Decreases the value of direction in the x axis (-0.25)\033[0m" << std::endl;
+  std::cout << "\033[32mD : Decreases the value of turn (+0.25)\033[0m" << std::endl;
+  std::cout << "\033[32mX : Posture control on/off\033[0m" << std::endl;
 }
 
 int keyControl::getch(){
@@ -54,42 +55,46 @@ void keyControl::controlLoop(){
     if(_direction_x.data < 1.25){
       _direction_x.data += 0.25;
     }
-    std::cout << " ==> x:" << _direction_x.data << std::endl;
+    std::cout << "\033[32m ==> x:\033[0m" << _direction_x.data << std::endl;
     _trot_foward_motion_pub.publish(_direction_x);
   }else if(c == 'a'){
     if(_turn.data > -1.0){
       _turn.data -= 0.25;
     }
-    std::cout << " ==> turn:" << _turn.data << std::endl;
+    std::cout << "\033[32m ==> turn:\033[0m" << _turn.data << std::endl;
     _trot_turn_motion_pub.publish(_turn);
   }else if(c == 's'){
     if(_direction_x.data > -1.25){
       _direction_x.data -= 0.25;
     }
-    std::cout << " ==> x:" << _direction_x.data << std::endl;
+    std::cout << "\033[32m ==> x:\033[0m" << _direction_x.data << std::endl;
     _trot_foward_motion_pub.publish(_direction_x);
   }else if(c == 'd'){
     if(_turn.data < 1.0){
       _turn.data += 0.25;
     }
-    std::cout << " ==> turn:" << _turn.data << std::endl;
+    std::cout << "\033[32m ==> turn:\033[0m" << _turn.data << std::endl;
     _trot_turn_motion_pub.publish(_turn);
   }else if(c == 'q'){
     if(_stand.data){
       _stand.data = false;
-      std::cout << " ==> lie down" << std::endl;
+      std::cout << "\033[32m ==> lie down\033[0m" << std::endl;
     }else{
       _stand.data = true;
-      std::cout << " ==> Stand up" << std::endl;
+      std::cout << "\033[32m ==> Stand up\033[0m" << std::endl;
     }
+    _direction_x.data = 0.0;
+    _turn.data = 0.0;
+    _trot_foward_motion_pub.publish(_direction_x);
+    _trot_turn_motion_pub.publish(_turn);
     _standing_motion_pub.publish(_stand);
   }else if(c == 'x'){
     if(_posture_control.data){
       _posture_control.data = false;
-      std::cout << " ==> Posture control disable" << std::endl;
+      std::cout << "\033[32m ==> Posture control disable\033[0m" << std::endl;
     }else{
       _posture_control.data = true;
-      std::cout << " ==> Posture control enable" << std::endl;
+      std::cout << "\033[32m ==> Posture control enable\033[0m" << std::endl;
     }
     _posture_control_pub.publish(_posture_control);
   }
