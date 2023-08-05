@@ -151,7 +151,7 @@ void trotGait::controlLoop(){
 int main(int argc, char** argv){
   ros::init(argc, argv, "trot_gait");
   trotGait TG;
-  ros::Rate loop_rate(80);
+  ros::Rate loop_rate(50);
   while(ros::ok()){
     TG.controlLoop();
     ros::spinOnce();

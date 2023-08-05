@@ -17,7 +17,7 @@
 #include "inverse_kinematics.h"
 
 inverseKinematics::inverseKinematics() : _pnh("~"){
-  _pnh.param<double>("duration", _duration, 0.008);
+  _pnh.param<double>("duration", _duration, 0.01);
 
   _pub_LF_leg = _nh.advertise<trajectory_msgs::JointTrajectory>("leftfront_leg_controller/command", 10);
   _pub_LR_leg = _nh.advertise<trajectory_msgs::JointTrajectory>("leftback_leg_controller/command", 10);
