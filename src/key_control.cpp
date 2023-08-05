@@ -21,10 +21,12 @@ keyControl::keyControl(){
   _trot_turn_motion_pub = _nh.advertise<std_msgs::Float64>("trot_turn_motion", 10);
   _standing_motion_pub = _nh.advertise<std_msgs::Bool>("standing_motion", 10);
   _posture_control_pub = _nh.advertise<std_msgs::Bool>("posture_control", 10);
+
   _posture_control.data = false;
   _direction_x.data = 0.0;
   _turn.data = 0.0;
   _stand.data = false;
+
   std::cout << "+++++++++++++++" << std::endl;
   std::cout << "Initializing..." << std::endl;
   std::cout << "+++++++++++++++" << std::endl;
