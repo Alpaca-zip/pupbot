@@ -16,69 +16,62 @@
 
 #include "standing_motion.h"
 
-/* ++++++++++++++++++++++++++++++++++
-       Standing_Motion class
-++++++++++++++++++++++++++++++++++ */
-Standing_Motion::Standing_Motion(){
-  init();
+standingMotion::standingMotion() : _pnh("~"){
+  _pnh.param<double>("x_offset", _x_offset, -10.0);
+  _pnh.param<double>("z_offset_LF_leg", _z_offset_LF_leg, 120.0);
+  _pnh.param<double>("z_offset_LR_leg", _z_offset_LR_leg, 120.0);
+  _pnh.param<double>("z_offset_RR_leg", _z_offset_RR_leg, 120.0);
+  _pnh.param<double>("z_offset_RF_leg", _z_offset_RF_leg, 120.0);
+
+  _pub_leg_position = _nh.advertise<std_msgs::Float64MultiArray>("leg_position", 10);
+  _pub_stop_signal = _nh.advertise<std_msgs::Bool>("stop_signal", 10);
+  _sub_standing_motion = _nh.subscribe("standing_motion", 10, &standingMotion::standingMotionCallback, this);
+
+  _stop.data = true;
+  _leg_position.data.resize(12);
+  _leg_position.data[0] = _x_offset;
+  _leg_position.data[3] = _x_offset;
+  _leg_position.data[6] = _x_offset;
+  _leg_position.data[9] = _x_offset;
 }
 
-void Standing_Motion::init(){
-  pub_leg_position = nh.advertise<std_msgs::Float64MultiArray>("/leg_position", 10);
-  pub_stop_signal = nh.advertise<std_msgs::Bool>("/stop_signal", 10);
-  sub_standing_motion = nh.subscribe("/standing_motion", 10, &Standing_Motion::standing_motion_callback, this);
-  stop.data = true;
-  leg_position.data.resize(12);
-  leg_position.data[0] = X_OFFSET;
-  leg_position.data[3] = X_OFFSET;
-  leg_position.data[6] = X_OFFSET;
-  leg_position.data[9] = X_OFFSET;
-  z_offset_LF_leg = LF_LEG_Z_OFFSET;
-  z_offset_LR_leg = LR_LEG_Z_OFFSET;
-  z_offset_RR_leg = RR_LEG_Z_OFFSET;
-  z_offset_RF_leg = RF_LEG_Z_OFFSET;
-}
-
-void Standing_Motion::standing_motion_callback(const std_msgs::Bool& stand){
+void standingMotion::standingMotionCallback(const std_msgs::Bool& stand){
 if(stand.data){
-  leg_position.data[2] = 40;
-  leg_position.data[5] = 40;
-  leg_position.data[8] = 40;
-  leg_position.data[11] = 40;
+  _leg_position.data[2] = 40.0;
+  _leg_position.data[5] = 40.0;
+  _leg_position.data[8] = 40.0;
+  _leg_position.data[11] = 40.0;
   for(int i=0;i<50;i++){
-    leg_position.data[2] += (z_offset_LF_leg-40)/50;
-    leg_position.data[5] += (z_offset_LR_leg-40)/50;
-    leg_position.data[8] += (z_offset_RR_leg-40)/50;
-    leg_position.data[11] += (z_offset_RF_leg-40)/50;
-    pub_leg_position.publish(leg_position);
+    _leg_position.data[2] += (_z_offset_LF_leg-40.0)/50.0;
+    _leg_position.data[5] += (_z_offset_LR_leg-40.0)/50.0;
+    _leg_position.data[8] += (_z_offset_RR_leg-40.0)/50.0;
+    _leg_position.data[11] += (_z_offset_RF_leg-40.0)/50.0;
+    _pub_leg_position.publish(_leg_position);
     ros::Duration(0.05).sleep();
     }
-  stop.data = false;
-  pub_stop_signal.publish(stop);
+  _stop.data = false;
+  _pub_stop_signal.publish(_stop);
   }else{
-    stop.data = true;
-    pub_stop_signal.publish(stop);
-    leg_position.data[2] = z_offset_LF_leg;
-    leg_position.data[5] = z_offset_LR_leg;
-    leg_position.data[8] = z_offset_RR_leg;
-    leg_position.data[11] = z_offset_RF_leg;
+    _stop.data = true;
+    _pub_stop_signal.publish(_stop);
+    _leg_position.data[2] = _z_offset_LF_leg;
+    _leg_position.data[5] = _z_offset_LR_leg;
+    _leg_position.data[8] = _z_offset_RR_leg;
+    _leg_position.data[11] = _z_offset_RF_leg;
     for(int i=0;i<50;i++){
-      leg_position.data[2] -= (z_offset_LF_leg-40)/50;
-      leg_position.data[5] -= (z_offset_LR_leg-40)/50;
-      leg_position.data[8] -= (z_offset_RR_leg-40)/50;
-      leg_position.data[11] -= (z_offset_RF_leg-40)/50;
-      pub_leg_position.publish(leg_position);
+      _leg_position.data[2] -= (_z_offset_LF_leg-40.0)/50.0;
+      _leg_position.data[5] -= (_z_offset_LR_leg-40.0)/50.0;
+      _leg_position.data[8] -= (_z_offset_RR_leg-40.0)/50.0;
+      _leg_position.data[11] -= (_z_offset_RF_leg-40.0)/50.0;
+      _pub_leg_position.publish(_leg_position);
       ros::Duration(0.05).sleep();
     }
   }
 }
 
-/* ++++++++++++++++++++++++++++++++++
-               main
-++++++++++++++++++++++++++++++++++ */
 int main(int argc, char** argv){
   ros::init(argc,argv, "standing_motion");
-  Standing_Motion standing_motion;
+  standingMotion SM;
   ros::spin();
   return 0;
 }

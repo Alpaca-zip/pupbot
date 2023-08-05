@@ -19,11 +19,17 @@
   <!-- trot_gait node -->
   <node name="trot_gait" pkg="pupbot" type="trot_gait"/>
   <!-- standing_motion node -->
-  <node name="standing_motion" pkg="pupbot" type="standing_motion"/>
+  <node name="standing_motion" pkg="pupbot" type="standing_motion" output="log">
+    <param name="x_offset" value="-10.0"/>
+    <param name="z_offset_LF_leg" value="120.0"/>
+    <param name="z_offset_LR_leg" value="120.0"/>
+    <param name="z_offset_RR_leg" value="120.0"/>
+    <param name="z_offset_RF_leg" value="120.0"/>
+  </node>
   <!-- inverse_kinematics node -->
   <node name="inverse_kinematics" pkg="pupbot" type="inverse_kinematics"/>
   <!-- posture_stabilization node -->
-  <node name="posture_stabilization" pkg="pupbot" type="posture_stabilization">
+  <node name="posture_stabilization" pkg="pupbot" type="posture_stabilization" output="log">
     <param name="imu_topic" value="$(arg imu_topic)"/>
     <param name="x_offset" value="61"/>
     <param name="y_offset" value="94"/>
