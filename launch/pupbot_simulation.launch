@@ -4,8 +4,8 @@
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
-  <arg name="imu_topic" default="imu"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model) --inorder"/>
+  <!-- empty_world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
   <!-- spawn_urdf node -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model pupbot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos)
@@ -18,12 +18,12 @@
   args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
   <!-- trot_gait node -->
   <node name="trot_gait" pkg="pupbot" type="trot_gait" output="log">
+    <param name="iter_number" value="20"/>
     <param name="x_offset" value="0.0"/>
     <param name="z_offset_LF_leg" value="120.0"/>
     <param name="z_offset_LR_leg" value="120.0"/>
     <param name="z_offset_RR_leg" value="120.0"/>
     <param name="z_offset_RF_leg" value="120.0"/>
-    <param name="iter_number" value="20"/>
     <param name="trot_step_extent_x" value="30.0"/>
     <param name="trot_step_extent_y" value="30.0"/>
     <param name="trot_step_extent_z" value="8.0"/>
@@ -42,14 +42,12 @@
   </node>
   <!-- posture_stabilization node -->
   <node name="posture_stabilization" pkg="pupbot" type="posture_stabilization" output="log">
-    <param name="imu_topic" value="$(arg imu_topic)"/>
-    <param name="x_offset" value="61"/>
-    <param name="y_offset" value="94"/>
-    <param name="lf_leg_z_offset" value="120"/>
-    <param name="lr_leg_z_offset" value="120"/>
-    <param name="rr_leg_z_offset" value="120"/>
-    <param name="rf_leg_z_offset" value="120"/>
+    <param name="imu_topic" value="imu"/>
     <param name="width" value="27"/>
+    <param name="z_offset_LF_leg" value="120.0"/>
+    <param name="z_offset_LR_leg" value="120.0"/>
+    <param name="z_offset_RR_leg" value="120.0"/>
+    <param name="z_offset_RF_leg" value="120.0"/>
     <param name="p_gain" value="0.5"/>
     <param name="i_gain" value="0.1"/>
     <param name="D_gain" value="0.15"/>

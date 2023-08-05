@@ -24,6 +24,9 @@
 #include <std_msgs/Float64MultiArray.h>
 #include <std_msgs/Float64.h>
 
+#define X_OFFSET 61
+#define Y_OFFSET 94
+
 class postureStabilization{
   private:
     ros::NodeHandle _nh;
@@ -39,8 +42,7 @@ class postureStabilization{
     std::string _imu_topic;
     bool _posture_control_on;
     int _imu_cnt;
-    int _x_offset, _y_offset;
-    int _LF_leg_z_offset, _LR_leg_z_offset, _RR_leg_z_offset, _RF_leg_z_offset;
+    int _z_offset_LF_leg, _z_offset_LR_leg, _z_offset_RR_leg, _z_offset_RF_leg;
     int _width;
     double _M_LF_leg, _M_LR_leg, _M_RR_leg, _M_RF_leg;
     double _M1_LF_leg, _M1_LR_leg, _M1_RR_leg, _M1_RF_leg;

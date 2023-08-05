@@ -18,13 +18,11 @@
 
 postureStabilization::postureStabilization() : _pnh("~"){
   _pnh.param<std::string>("imu_topic", _imu_topic, "imu");
-  _pnh.param<int>("x_offset", _x_offset, 61);
-  _pnh.param<int>("y_offset", _y_offset, 94);
-  _pnh.param<int>("lf_leg_z_offset", _LF_leg_z_offset, 120);
-  _pnh.param<int>("lr_leg_z_offset", _LR_leg_z_offset, 120);
-  _pnh.param<int>("rr_leg_z_offset", _RR_leg_z_offset, 120);
-  _pnh.param<int>("rf_leg_z_offset", _RF_leg_z_offset, 120);
   _pnh.param<int>("width", _width, 27);
+  _pnh.param<double>("z_offset_LF_leg", _z_offset_LF_leg, 120);
+  _pnh.param<double>("z_offset_LR_leg", _z_offset_LR_leg, 120);
+  _pnh.param<double>("z_offset_RR_leg", _z_offset_RR_leg, 120);
+  _pnh.param<double>("z_offset_RF_leg", _z_offset_RF_leg, 120);
   _pnh.param<double>("p_gain", _P, 0.5);
   _pnh.param<double>("i_gain", _I, 0.1);
   _pnh.param<double>("D_gain", _D, 0.15);
@@ -38,10 +36,10 @@ postureStabilization::postureStabilization() : _pnh("~"){
   _buff_roll.resize(_width, 0.0);
   _buff_pitch.resize(_width, 0.0);
   _MV.data.resize(4);
-  _MV.data[0] = _LF_leg_z_offset;
-  _MV.data[1] = _LR_leg_z_offset;
-  _MV.data[2] = _RR_leg_z_offset;
-  _MV.data[3] = _RF_leg_z_offset;
+  _MV.data[0] = _z_offset_LF_leg;
+  _MV.data[1] = _z_offset_LR_leg;
+  _MV.data[2] = _z_offset_RR_leg;
+  _MV.data[3] = _z_offset_RF_leg;
   _roll_LPF.data = 0.0;
   _pitch_LPF.data = 0.0;
   _M_LF_leg = _M_LR_leg = _M_RR_leg = _M_RF_leg = 0.0;
@@ -116,10 +114,10 @@ void postureStabilization::controlLoop(){
   _e1_RR_leg = _e_RR_leg;
   _e1_RF_leg = _e_RF_leg;
 
-  _e_LF_leg = -_y_offset * tan(_roll_LPF.data / 180.0 * M_PI) + _x_offset * tan(_pitch_LPF.data / 180.0 * M_PI);
-  _e_LR_leg = -_y_offset * tan(_roll_LPF.data / 180.0 * M_PI) - _x_offset * tan(_pitch_LPF.data / 180.0 * M_PI);
-  _e_RR_leg = _y_offset * tan(_roll_LPF.data / 180.0 * M_PI) - _x_offset * tan(_pitch_LPF.data / 180.0 * M_PI);
-  _e_RF_leg = _y_offset * tan(_roll_LPF.data / 180.0 * M_PI) + _x_offset * tan(_pitch_LPF.data / 180.0 * M_PI);
+  _e_LF_leg = -Y_OFFSET * tan(_roll_LPF.data / 180.0 * M_PI) + X_OFFSET * tan(_pitch_LPF.data / 180.0 * M_PI);
+  _e_LR_leg = -Y_OFFSET * tan(_roll_LPF.data / 180.0 * M_PI) - X_OFFSET * tan(_pitch_LPF.data / 180.0 * M_PI);
+  _e_RR_leg = Y_OFFSET * tan(_roll_LPF.data / 180.0 * M_PI) - X_OFFSET * tan(_pitch_LPF.data / 180.0 * M_PI);
+  _e_RF_leg = Y_OFFSET * tan(_roll_LPF.data / 180.0 * M_PI) + X_OFFSET * tan(_pitch_LPF.data / 180.0 * M_PI);
 
   if(_posture_control_on){
     _M_LF_leg = _M1_LF_leg + _P * (_e_LF_leg - _e1_LF_leg) + _I * _e_LF_leg + _D * ((_e_LF_leg - _e1_LF_leg) - (_e1_LF_leg - _e2_LF_leg));
@@ -133,10 +131,10 @@ void postureStabilization::controlLoop(){
     _M_RF_leg = _M1_RF_leg + 0 * (_e_RF_leg - _e1_RF_leg) + 0 * _e_RF_leg + 0 * ((_e_RF_leg - _e1_RF_leg) - (_e1_RF_leg - _e2_RF_leg));
   }
 
-  _MV.data[0] = _LF_leg_z_offset + _M_LF_leg;
-  _MV.data[1] = _LR_leg_z_offset + _M_LR_leg;
-  _MV.data[2] = _RR_leg_z_offset + _M_RR_leg;
-  _MV.data[3] = _RF_leg_z_offset + _M_RF_leg;
+  _MV.data[0] = _z_offset_LF_leg + _M_LF_leg;
+  _MV.data[1] = _z_offset_LR_leg + _M_LR_leg;
+  _MV.data[2] = _z_offset_RR_leg + _M_RR_leg;
+  _MV.data[3] = _z_offset_RF_leg + _M_RF_leg;
 
   for(int i=0; i<4; i++){
     if(_MV.data[i] > 160.0){
