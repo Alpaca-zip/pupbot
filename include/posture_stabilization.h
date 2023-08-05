@@ -40,7 +40,7 @@ class postureStabilization{
     bool _posture_control_on;
     int _imu_cnt;
     int _x_offset, _y_offset;
-    int _lf_leg_z_offset, _lr_leg_z_offset, _rr_leg_z_offset, _rf_leg_z_offset;
+    int _LF_leg_z_offset, _LR_leg_z_offset, _RR_leg_z_offset, _RF_leg_z_offset;
     int _width;
     double _M_LF_leg, _M_LR_leg, _M_RR_leg, _M_RF_leg;
     double _M1_LF_leg, _M1_LR_leg, _M1_RR_leg, _M1_RF_leg;
