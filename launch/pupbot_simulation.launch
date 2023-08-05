@@ -27,7 +27,9 @@
     <param name="z_offset_RF_leg" value="120.0"/>
   </node>
   <!-- inverse_kinematics node -->
-  <node name="inverse_kinematics" pkg="pupbot" type="inverse_kinematics"/>
+  <node name="inverse_kinematics" pkg="pupbot" type="inverse_kinematics" output="log">
+    <param name="duration" value="0.008"/>
+  </node>
   <!-- posture_stabilization node -->
   <node name="posture_stabilization" pkg="pupbot" type="posture_stabilization" output="log">
     <param name="imu_topic" value="$(arg imu_topic)"/>

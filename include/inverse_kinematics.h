@@ -14,33 +14,29 @@
  * limitations under the License.
  */
 
-#include "ros/ros.h"
-#include "ros/time.h"
-#include "std_msgs/Float64MultiArray.h"
-#include "trajectory_msgs/JointTrajectory.h"
+#pragma once
+
+#include <ros/ros.h>
+#include <ros/time.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <trajectory_msgs/JointTrajectory.h>
 
 #define BONE_LENGTH 83.0
 #define LENGTH 21.0
 
-class Inverse_Kinematics{
-  public:
-  Inverse_Kinematics();
-  
+class inverseKinematics{
   private:
-  int l;
-  double x, y, z, a0, a1, b0;
-  double angle1, angle2, angle3;
-  double bone_length;
-  double target_leg_shoulder_joint, target_L_leg_upper_joint, target_L_leg_lower_joint, target_R_leg_upper_joint, target_R_leg_lower_joint;
-  
-  ros::NodeHandle nh;
-  ros::Publisher pub_LF_leg;
-  ros::Publisher pub_LR_leg;
-  ros::Publisher pub_RF_leg;
-  ros::Publisher pub_RR_leg;
-  ros::Subscriber sub_leg_position;
-  trajectory_msgs::JointTrajectory LF_leg, LR_leg, RF_leg, RR_leg;
+    ros::NodeHandle _nh;
+    ros::NodeHandle _pnh;
+    ros::Publisher _pub_LF_leg;
+    ros::Publisher _pub_LR_leg;
+    ros::Publisher _pub_RF_leg;
+    ros::Publisher _pub_RR_leg;
+    ros::Subscriber _sub_leg_position;
+    trajectory_msgs::JointTrajectory _LF_leg, _LR_leg, _RF_leg, _RR_leg;
+    double _duration;
 
-  void init();
-  void inverse_kinematics_callback(const std_msgs::Float64MultiArray& leg_position);
+  public:
+    inverseKinematics();
+    void inverseKinematicsCallback(const std_msgs::Float64MultiArray& leg_position);
 };
