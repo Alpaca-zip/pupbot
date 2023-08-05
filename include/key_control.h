@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-#include "ros/ros.h"
-#include "std_msgs/Float64.h"
-#include "std_msgs/Bool.h"
-#include "termios.h"
+#pragma once
 
-class Key_Control{
-  public:
-  Key_Control();
-  void controlLoop();
+#include <ros/ros.h>
+#include <std_msgs/Float64.h>
+#include <std_msgs/Bool.h>
+#include <termios.h>
 
+class keyControl{
   private:
-  ros::NodeHandle nh;
-  ros::Publisher trot_foward_motion_pub;
-  ros::Publisher trot_turn_motion_pub;
-  ros::Publisher standing_motion_pub;
-  ros::Publisher posture_control_pub;
-  
-  std_msgs::Bool posture_control;
-  std_msgs::Float64 direction_x;
-  std_msgs::Float64 turn;
-  std_msgs::Bool stand;
+    ros::NodeHandle _nh;
+    ros::Publisher _trot_foward_motion_pub;
+    ros::Publisher _trot_turn_motion_pub;
+    ros::Publisher _standing_motion_pub;
+    ros::Publisher _posture_control_pub;
+    std_msgs::Bool _posture_control;
+    std_msgs::Float64 _direction_x;
+    std_msgs::Float64 _turn;
+    std_msgs::Bool _stand;
 
-  void init();
-  int getch();
+  public:
+    keyControl();
+    void controlLoop();
+    int getch();
 };
