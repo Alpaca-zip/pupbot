@@ -51,7 +51,7 @@ class dynamixelControl{
     bool _result;
     int _baudrate;
     int _model_number_int;
-    uint8_t _dxl_id[12] = {LF_LEG_SHOULDER_ID, LF_LEG_UPPER_ID, LF_LEG_LOWER_ID, LR_LEG_SHOULDER_ID, LR_LEG_UPPER_ID, LR_LEG_LOWER_ID, RR_LEG_SHOULDER_ID, RR_LEG_UPPER_ID, RR_LEG_LOWER_ID, RF_LEG_SHOULDER_ID, RF_LEG_UPPER_ID, RF_LEG_LOWER_ID};
+    uint8_t _dxl_id[12];
     uint16_t _model_number;
     const char *_log;
     const char* _port_name;

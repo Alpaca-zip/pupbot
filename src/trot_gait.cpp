@@ -39,6 +39,15 @@ trotGait::trotGait() : _pnh("~"){
   _turn0 = 0.0;
   _vector_x = _vector_y = _vector_z = 0.0;
   _dir_x = _dir_y = 0.0;
+  for(int i = 0; i < 4; i++) {
+    _c[i] = 0.0;
+    _c_inv[i] = 0.0;
+    _c_iter[i] = 0.0;
+  }
+  _l_inv[0][0] = 1.0; _l_inv[0][1] = 1.0;
+  _l_inv[1][0] = -1.0; _l_inv[1][1] = 1.0;
+  _l_inv[2][0] = 1.0; _l_inv[2][1] = -1.0;
+  _l_inv[3][0] = -1.0; _l_inv[3][1] = -1.0;
 }
 
 void trotGait::trotFowardMotionCallback(const std_msgs::Float64& direction_x){

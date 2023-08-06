@@ -40,10 +40,7 @@ class trotGait{
     double _vector_x, _vector_y, _vector_z;
     double _trot_step_extent_x, _trot_step_extent_y, _trot_step_extent_z;
     double _dir_x, _dir_y;
-    double _c[4] = {0.0, 0.0, 0.0, 0.0};
-    double _c_inv[4] = {0.0, 0.0, 0.0, 0.0};
-    double _l_inv[4][2] = {{1.0, 1.0}, {-1.0, 1.0}, {1.0, -1.0}, {-1.0, -1.0}};
-    double _c_iter[4] = {0.0, 0.0, 0.0, 0.0};
+    double _c[4], _c_inv[4], _c_iter[4], _l_inv[4][2];
 
   public:
     trotGait();
