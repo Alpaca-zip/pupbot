@@ -1,13 +1,9 @@
-# PupBot
+# PupBot [![ROS-noetic Build Check](https://github.com/Alpaca-zip/pupbot/actions/workflows/ros1-build-check-bot.yml/badge.svg?event=pull_request)](https://github.com/Alpaca-zip/pupbot/actions/workflows/ros1-build-check-bot.yml)
 
-![pupbot](https://user-images.githubusercontent.com/84959376/191180426-5900f05b-1c27-4ff8-8bd7-21559404e883.png)
+Open source ROS package for quadruped robot PupBot.  
+Dockerfiles: https://github.com/Alpaca-zip/docker-pupbot
 
-[![](https://img.shields.io/badge/ROS-Melodic-brightgreen.svg)](https://github.com/Alpaca-zip/pupbot)
-[![](https://img.shields.io/badge/ROS-Noetic-brightgreen.svg)](https://github.com/Alpaca-zip/pupbot)
-
-Open source ROS package for quadruped robot PupBot. 
-
-Dockerfiles:https://github.com/Alpaca-zip/docker-pupbot
+<img src="https://github.com/Alpaca-zip/pupbot/assets/84959376/aeeeb110-bc89-4cfb-9514-b253e039affc" width="330px"> 　<img src="https://github.com/Alpaca-zip/pupbot/assets/84959376/9bd9c814-8c15-4010-a0dd-d9faf234b706" width="400px">
 
 ## Basic Components
 - Dynamixel AX-12A (×12)
@@ -20,35 +16,24 @@ Dockerfiles:https://github.com/Alpaca-zip/docker-pupbot
 The posture control feature provides a stable gait on sloping terrain. This algorithm plays an important role in stabilizing the robot body during gait by dynamically controlling the toe position based on the filtered roll and pitch angles. 
 
 ![posture_control](https://user-images.githubusercontent.com/84959376/191177606-0fdff183-3349-40da-a78a-2da9e3d32d73.gif)
-![FSx-DpyVIAAEWa5](https://user-images.githubusercontent.com/84959376/191180942-1104cf41-3f2a-4d45-b8f5-ec9582013b9b.jpg)
+<img src="https://user-images.githubusercontent.com/84959376/191180942-1104cf41-3f2a-4d45-b8f5-ec9582013b9b.jpg" width="800px">
 
-## Control the PupBot with laptop(without gazebo)
-### 1 From your laptop PC, open the terminal and connect to the Raspberry Pi with its IP address.
-Before starting, please install ROS on your Raspberry Pi.
+## Usage
+### 1. Setup ROS package
 ```
-$ ssh pi@{IP_ADDRESS_OF_RASPBERRY_PI}
-```
-### 2 Start PupBot applications.
-```
-$ roslaunch pupbot move_pupbot.launch
-```
-
-Q : Startup/Shutdown  
-W : Increases the value of direction in the x axis (+0.25)  
-A : Increases the value of turn (-0.25)  
-S : Decreases the value of direction in the x axis (-0.25)  
-D : Decreases the value of turn (+0.25)  
-X : Posture control on/off  
-
-### Launch Gazebo(for simulation)
-
-```
-$ roslaunch pupbot pupbot_gazebo.launch
+$ cd ~/catkin_ws/src
+$ git clone -b noetic-devel https://github.com/Alpaca-zip/pupbot.git
+$ wstool merge pupbot/pupbot.rosinstall
+$ wstool update
+$ cd ~/catkin_ws
+$ rosdep install -r -y -i --from-paths .
+$ catkin build
 ```
 
-### Launch Rviz
-
+### 2. Control the PupBot with simulation
 ```
-$ roslaunch pupbot pupbot_rviz.launch
+$ roslaunch pupbot pupbot_simulation.launch debug:=true
 ```
 
+### 3. Extra information
+It is helpful to see `pupbot_bringup.launch` to get an understanding of how the robot works on the actual machine.
