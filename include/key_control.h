@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2022  Alpaca-zip
+ * Copyright (C) 2021-2023  Alpaca-zip
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-#include "ros/ros.h"
-#include "std_msgs/Float64.h"
-#include "std_msgs/Bool.h"
-#include "termios.h"
+#pragma once
 
-class Key_Control{
-  public:
-  Key_Control();
+#include <ros/ros.h>
+#include <std_msgs/Bool.h>
+#include <std_msgs/Float64.h>
+#include <termios.h>
+
+class keyControl
+{
+private:
+  ros::NodeHandle _nh;
+  ros::Publisher _trot_foward_motion_pub;
+  ros::Publisher _trot_turn_motion_pub;
+  ros::Publisher _standing_motion_pub;
+  ros::Publisher _posture_control_pub;
+  std_msgs::Bool _posture_control;
+  std_msgs::Float64 _direction_x;
+  std_msgs::Float64 _turn;
+  std_msgs::Bool _stand;
+
+public:
+  keyControl();
   void controlLoop();
-
-  private:
-  ros::NodeHandle nh;
-  ros::Publisher trot_foward_motion_pub;
-  ros::Publisher trot_turn_motion_pub;
-  ros::Publisher standing_motion_pub;
-  ros::Publisher posture_control_pub;
-  
-  std_msgs::Bool posture_control;
-  std_msgs::Float64 direction_x;
-  std_msgs::Float64 turn;
-  std_msgs::Bool stand;
-
-  void init();
   int getch();
 };

@@ -1,411 +1,406 @@
 <?xml version="1.0"?>
-<robot name="pupbot" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="pupbot">
   <material name="grey">
     <color rgba="0.5 0.5 0.5 1.0"/>
   </material>
-
   <!-- base -->
-  <link name="world"/>    <!-- <link name="base_link"/> -->
-
+  <link name="world"/>
+  <!-- <link name="base_link"/> -->
   <!-- body -->
   <joint name="base_joint" type="fixed">
-    <parent link="world"/>    <!-- <parent link="base_link"/> -->
-    <child  link="base_link"/>    <!-- <child link="body_link"/> -->
+    <parent link="world"/>
+    <!-- <parent link="base_link"/> -->
+    <child link="base_link"/>
+    <!-- <child link="body_link"/> -->
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
-
-  <link name="base_link">    <!-- <link name="body_link"> -->
+  <link name="base_link">
+    <!-- <link name="body_link"> -->
     <inertial>
       <origin xyz="0 0 0.13" rpy="0 0 0"/>
       <mass value="0.796"/>
       <inertia ixx="0.0011654561" ixy="0.0" ixz="0.0" iyy="0.00488505272" iyz="0.0" izz="0.00562999661"/>
     </inertial>
     <visual>
-      <origin xyz="0 0 0.13" rpy="0 0 0" />
+      <origin xyz="0 0 0.13" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://pupbot/stl/body.stl" />
+        <mesh filename="package://pupbot/stl/body.stl"/>
       </geometry>
-      <material name="grey" />
+      <material name="grey"/>
     </visual>
     <collision>
-      <origin xyz="0 0 0.13" rpy="0 0 0" />
+      <origin xyz="0 0 0.13" rpy="0 0 0"/>
       <geometry>
-        <box size="0.26547 0.12 0.0563" />
+        <box size="0.26547 0.12 0.0563"/>
       </geometry>
     </collision>
   </link>
-
-  <gazebo reference="base_link">    <!-- <gazebo reference="body_link"> -->
+  <gazebo reference="base_link">
+    <!-- <gazebo reference="body_link"> -->
     <material>Gazebo/DarkGrey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
-  
+  <!-- IMU -->
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="imu_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.15815"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </visual>
+  </link>
+  <gazebo reference="imu_link">
+    <sensor type="imu" name="imu">
+      <always_on>true</always_on>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+    </sensor>
+  </gazebo>
   <!-- left_legs macro -->
   <xacro:macro name="left_legs_macro" params="prefix xyz1 xyz2 xyz3 xyz4 effort velocity">
-
-  <!-- left leg shoulder -->
-  <joint name="${prefix}_shoulder_joint" type="revolute">
-    <origin xyz="${xyz1}" rpy="0 ${radians(-90)} 0"/>
-    <parent link="base_link"/>    <!-- <parent link="body_link"/> -->
-    <child  link="${prefix}_shoulder_link"/>
-    <axis xyz="0 0 1"/>
-    <limit lower="-1" upper="1.5" effort="${effort}" velocity="${velocity}"/>
-  </joint>
-
-  <transmission name="${prefix}_shoulder_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="${prefix}_shoulder_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <!-- left leg shoulder -->
+    <joint name="${prefix}_shoulder_joint" type="revolute">
+      <origin xyz="${xyz1}" rpy="0 ${radians(-90)} 0"/>
+      <parent link="base_link"/>
+      <!-- <parent link="body_link"/> -->
+      <child link="${prefix}_shoulder_link"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-1" upper="1.5" effort="${effort}" velocity="${velocity}"/>
     </joint>
-    <actuator name="${prefix}_shoulder_motor">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanismReduction>1</mechanismReduction>
-    </actuator>
-  </transmission>
-
-  <link name="${prefix}_shoulder_link">
-    <inertial>
-      <origin xyz="0 0.015 ${xyz4}" rpy="0 0 0" />
-      <mass value="0.0090718"/>
-      <inertia ixx="0.00000219235" ixy="0.0" ixz="0.0" iyy="0.00000219235" iyz="0.0" izz="0.000000604786667"/>
-    </inertial>
-    <visual>
-      <origin xyz="${xyz2}" rpy="0 0 0" />
-      <geometry>
-        <mesh filename="package://pupbot/stl/leg_shoulder.stl" />
-      </geometry>
-      <material name="grey"/>
-    </visual>
-    <collision>
-      <origin xyz="0 0.015 ${xyz4}" rpy="0 0 0" />
-      <geometry>
-        <box size="0.02 0.02 0.05" />
-      </geometry>
-    </collision>
-  </link>
-
-  <gazebo reference="${prefix}_shoulder_link">
-    <material>Gazebo/Grey</material>
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
-    <maxVel>1.0</maxVel>
-    <minDepth>0.001</minDepth>
-    <selfCollide>true</selfCollide>
-  </gazebo>
-
-  <!-- left leg upper -->
-  <joint name="${prefix}_upper_joint" type="revolute">
-    <origin xyz="${xyz3}" rpy="${radians(-90)} ${radians(90)} 0"/>
-    <parent link="${prefix}_shoulder_link"/>
-    <child  link="${prefix}_upper_link"/>
-    <axis xyz="0 0 1"/>
-    <limit lower="-1.0" upper="2.0" effort="${effort}" velocity="${velocity}"/>
-  </joint>
-
-  <transmission name="${prefix}_upper_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="${prefix}_upper_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <transmission name="${prefix}_shoulder_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}_shoulder_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}_shoulder_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanismReduction>1</mechanismReduction>
+      </actuator>
+    </transmission>
+    <link name="${prefix}_shoulder_link">
+      <inertial>
+        <origin xyz="0 0.015 ${xyz4}" rpy="0 0 0"/>
+        <mass value="0.0090718"/>
+        <inertia ixx="0.00000219235" ixy="0.0" ixz="0.0" iyy="0.00000219235" iyz="0.0" izz="0.000000604786667"/>
+      </inertial>
+      <visual>
+        <origin xyz="${xyz2}" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://pupbot/stl/leg_shoulder.stl"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0.015 ${xyz4}" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 0.05"/>
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="${prefix}_shoulder_link">
+      <material>Gazebo/Grey</material>
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <maxVel>1.0</maxVel>
+      <minDepth>0.001</minDepth>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <!-- left leg upper -->
+    <joint name="${prefix}_upper_joint" type="revolute">
+      <origin xyz="${xyz3}" rpy="${radians(-90)} ${radians(90)} 0"/>
+      <parent link="${prefix}_shoulder_link"/>
+      <child link="${prefix}_upper_link"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-1.0" upper="2.0" effort="${effort}" velocity="${velocity}"/>
     </joint>
-    <actuator name="${prefix}_upper_motor">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanismReduction>1</mechanismReduction>
-    </actuator>
-  </transmission>
-
-  <link name="${prefix}_upper_link">
-    <inertial>
-      <origin xyz="0 0.04 0.015" rpy="0 0 0" />
-      <mass value="0.1273437"/>
-      <inertia ixx="0.00009550777" ixy="0.0" ixz="0.0" iyy="0.00001379556" iyz="0.0" izz="0.00009020178"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 ${radians(180)}" />
-      <geometry>
-        <mesh filename="package://pupbot/stl/leg_upper.stl" />
-      </geometry>
-      <material name="grey"/>
-    </visual>
-    <collision>
-      <origin xyz="0 0.04 0.015" rpy="0 0 0" />
-      <geometry>
-        <box size="0.02 0.09 0.03" />
-      </geometry>
-    </collision>
-  </link>
-
-  <gazebo reference="${prefix}_upper_link">
-    <material>Gazebo/Grey</material>
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
-    <maxVel>1.0</maxVel>
-    <minDepth>0.001</minDepth>
-    <selfCollide>true</selfCollide>
-  </gazebo>
-
-  <!-- left leg lower -->
-  <joint name="${prefix}_lower_joint" type="revolute">
-    <origin xyz="0 0.083 0" rpy="0 ${radians(180)} 0"/>
-    <parent link="${prefix}_upper_link"/>
-    <child  link="${prefix}_lower_link"/>
-    <axis xyz="0 0 1"/>
-    <limit lower="0.0" upper="3.0" effort="${effort}" velocity="${velocity}"/>
-  </joint>
-
-  <transmission name="${prefix}_lower_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="${prefix}_lower_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <transmission name="${prefix}_upper_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}_upper_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}_upper_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanismReduction>1</mechanismReduction>
+      </actuator>
+    </transmission>
+    <link name="${prefix}_upper_link">
+      <inertial>
+        <origin xyz="0 0.04 0.015" rpy="0 0 0"/>
+        <mass value="0.1273437"/>
+        <inertia ixx="0.00009550777" ixy="0.0" ixz="0.0" iyy="0.00001379556" iyz="0.0" izz="0.00009020178"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${radians(180)}"/>
+        <geometry>
+          <mesh filename="package://pupbot/stl/leg_upper.stl"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0.04 0.015" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.09 0.03"/>
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="${prefix}_upper_link">
+      <material>Gazebo/Grey</material>
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <maxVel>1.0</maxVel>
+      <minDepth>0.001</minDepth>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <!-- left leg lower -->
+    <joint name="${prefix}_lower_joint" type="revolute">
+      <origin xyz="0 0.083 0" rpy="0 ${radians(180)} 0"/>
+      <parent link="${prefix}_upper_link"/>
+      <child link="${prefix}_lower_link"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="0.0" upper="3.0" effort="${effort}" velocity="${velocity}"/>
     </joint>
-    <actuator name="${prefix}_lower_motor">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanismReduction>1</mechanismReduction>
-    </actuator>
-  </transmission>
-
-  <link name="${prefix}_lower_link">
-    <inertial>
-      <origin xyz="0 0.0365 -0.021" rpy="0 ${radians(-180)} 0" />
-      <mass value="0.0181437"/>
-      <inertia ixx="0.00000820851" ixy="0.0" ixz="0.0" iyy="0.000000302395" iyz="0.0" izz="0.00000820851"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 -0.042" rpy="0 ${radians(-90)} 0" />
-      <geometry>
-        <mesh filename="package://pupbot/stl/leg_lower.stl" />
-      </geometry>
-      <material name="grey"/>
-    </visual>
-    <collision>
-      <origin xyz="0 0.0365 -0.021" rpy="0 0 0" />
-      <geometry>
-        <box size="0.01 0.073 0.01" />
-      </geometry>
-    </collision>
-  </link>
-
-  <gazebo reference="${prefix}_lower_link">
-    <material>Gazebo/Grey</material>
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
-    <maxVel>1.0</maxVel>
-    <minDepth>0.001</minDepth>
-    <selfCollide>true</selfCollide>
-  </gazebo>
-
-  <joint name="${prefix}_lower_ball_joint" type="fixed">
-    <origin xyz="0 0.073 0" rpy="0 0 0"/>
-    <parent link="${prefix}_lower_link"/>
-    <child  link="${prefix}_lower_ball"/>
-  </joint>
-
-  <link name="${prefix}_lower_ball">
-    <collision>
-      <origin xyz="0 0.005 -0.021" rpy="0 0 0" />
-      <geometry>
-        <sphere radius="0.005"/>
-      </geometry>
-    </collision>
-  </link>
-
-  <gazebo reference="${prefix}_lower_ball">
-    <material>Gazebo/Grey</material>
-    <mu1>0.5</mu1>
-    <mu2>0.5</mu2>
-    <maxVel>1.0</maxVel>
-    <minDepth>0.001</minDepth>
-    <selfCollide>true</selfCollide>
-  </gazebo>
-  
+    <transmission name="${prefix}_lower_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}_lower_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}_lower_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanismReduction>1</mechanismReduction>
+      </actuator>
+    </transmission>
+    <link name="${prefix}_lower_link">
+      <inertial>
+        <origin xyz="0 0.0365 -0.021" rpy="0 ${radians(-180)} 0"/>
+        <mass value="0.0181437"/>
+        <inertia ixx="0.00000820851" ixy="0.0" ixz="0.0" iyy="0.000000302395" iyz="0.0" izz="0.00000820851"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 -0.042" rpy="0 ${radians(-90)} 0"/>
+        <geometry>
+          <mesh filename="package://pupbot/stl/leg_lower.stl"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0.0365 -0.021" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.01 0.073 0.01"/>
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="${prefix}_lower_link">
+      <material>Gazebo/Grey</material>
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <maxVel>1.0</maxVel>
+      <minDepth>0.001</minDepth>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <joint name="${prefix}_lower_ball_joint" type="fixed">
+      <origin xyz="0 0.073 0" rpy="0 0 0"/>
+      <parent link="${prefix}_lower_link"/>
+      <child link="${prefix}_lower_ball"/>
+    </joint>
+    <link name="${prefix}_lower_ball">
+      <collision>
+        <origin xyz="0 0.005 -0.021" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="0.005"/>
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="${prefix}_lower_ball">
+      <material>Gazebo/Grey</material>
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
+      <maxVel>1.0</maxVel>
+      <minDepth>0.001</minDepth>
+      <selfCollide>true</selfCollide>
+    </gazebo>
   </xacro:macro>
-
   <!-- left legs -->
   <xacro:left_legs_macro prefix="leftfront_leg" xyz1="0.0834 0.068518 0.13" xyz2="0.0 0.0 0.0" xyz3="0 0.026 0.025" xyz4="0.02" effort="1.5" velocity="6.17"/>
   <xacro:left_legs_macro prefix="leftback_leg" xyz1="-0.0834 0.068518 0.13" xyz2="0.0 0.0 -0.042" xyz3="0 0.026 -0.025" xyz4="-0.02" effort="1.5" velocity="6.17"/>
-
   <!-- right_legs macro -->
   <xacro:macro name="right_legs_macro" params="prefix xyz1 xyz2 xyz3 xyz4 effort velocity">
-
-  <!-- right leg shoulder -->
-  <joint name="${prefix}_shoulder_joint" type="revolute">
-    <origin xyz="${xyz1}" rpy="0 ${radians(-90)} 0"/>
-    <parent link="base_link"/>    <!-- <parent link="body_link"/> -->
-    <child  link="${prefix}_shoulder_link"/>
-    <axis xyz="0 0 1"/>
-    <limit lower="-1.5" upper="1" effort="${effort}" velocity="${velocity}"/>
-  </joint>
-
-  <transmission name="${prefix}_shoulder_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="${prefix}_shoulder_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <!-- right leg shoulder -->
+    <joint name="${prefix}_shoulder_joint" type="revolute">
+      <origin xyz="${xyz1}" rpy="0 ${radians(-90)} 0"/>
+      <parent link="base_link"/>
+      <!-- <parent link="body_link"/> -->
+      <child link="${prefix}_shoulder_link"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-1.5" upper="1" effort="${effort}" velocity="${velocity}"/>
     </joint>
-    <actuator name="${prefix}_shoulder_motor">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanismReduction>1</mechanismReduction>
-    </actuator>
-  </transmission>
-
-  <link name="${prefix}_shoulder_link">
-    <inertial>
-      <origin xyz="0 -0.015 ${xyz4}" rpy="0 0 0" />
-      <mass value="0.0090718"/>
-      <inertia ixx="0.00000219235" ixy="0.0" ixz="0.0" iyy="0.00000219235" iyz="0.0" izz="0.000000604786667"/>
-    </inertial>
-    <visual>
-      <origin xyz="${xyz2}" rpy="0 0 ${radians(180)}" />
-      <geometry>
-        <mesh filename="package://pupbot/stl/leg_shoulder.stl" />
-      </geometry>
-      <material name="grey"/>
-    </visual>
-    <collision>
-      <origin xyz="0 -0.015 ${xyz4}" rpy="0 0 0" />
-      <geometry>
-        <box size="0.02 0.02 0.05" />
-      </geometry>
-    </collision>
-  </link>
-
-  <gazebo reference="${prefix}_shoulder_link">
-    <material>Gazebo/Grey</material>
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
-    <maxVel>1.0</maxVel>
-    <minDepth>0.001</minDepth>
-    <selfCollide>true</selfCollide>
-  </gazebo>
-
-  <!-- right leg upper -->
-  <joint name="${prefix}_upper_joint" type="revolute">
-    <origin xyz="${xyz3}" rpy="${radians(90)} ${radians(-90)} 0"/>
-    <parent link="${prefix}_shoulder_link"/>
-    <child  link="${prefix}_upper_link"/>
-    <axis xyz="0 0 1"/>
-    <limit lower="-2.0" upper="1.0" effort="${effort}" velocity="${velocity}"/>
-  </joint>
-
-  <transmission name="${prefix}_upper_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="${prefix}_upper_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <transmission name="${prefix}_shoulder_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}_shoulder_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}_shoulder_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanismReduction>1</mechanismReduction>
+      </actuator>
+    </transmission>
+    <link name="${prefix}_shoulder_link">
+      <inertial>
+        <origin xyz="0 -0.015 ${xyz4}" rpy="0 0 0"/>
+        <mass value="0.0090718"/>
+        <inertia ixx="0.00000219235" ixy="0.0" ixz="0.0" iyy="0.00000219235" iyz="0.0" izz="0.000000604786667"/>
+      </inertial>
+      <visual>
+        <origin xyz="${xyz2}" rpy="0 0 ${radians(180)}"/>
+        <geometry>
+          <mesh filename="package://pupbot/stl/leg_shoulder.stl"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 -0.015 ${xyz4}" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.02 0.05"/>
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="${prefix}_shoulder_link">
+      <material>Gazebo/Grey</material>
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <maxVel>1.0</maxVel>
+      <minDepth>0.001</minDepth>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <!-- right leg upper -->
+    <joint name="${prefix}_upper_joint" type="revolute">
+      <origin xyz="${xyz3}" rpy="${radians(90)} ${radians(-90)} 0"/>
+      <parent link="${prefix}_shoulder_link"/>
+      <child link="${prefix}_upper_link"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-2.0" upper="1.0" effort="${effort}" velocity="${velocity}"/>
     </joint>
-    <actuator name="${prefix}_upper_motor">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanismReduction>1</mechanismReduction>
-    </actuator>
-  </transmission>
-
-  <link name="${prefix}_upper_link">
-    <inertial>
-      <origin xyz="0 0.04 0.015" rpy="0 ${radians(180)} 0" />
-      <mass value="0.1273437"/>
-      <inertia ixx="0.00009550777" ixy="0.0" ixz="0.0" iyy="0.00001379556" iyz="0.0" izz="0.00009020178"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 ${radians(0)} ${radians(180)}" />
-      <geometry>
-        <mesh filename="package://pupbot/stl/leg_upper.stl" />
-      </geometry>
-      <material name="grey"/>
-    </visual>
-    <collision>
-      <origin xyz="0 0.04 0.015" rpy="0 0 0" />
-      <geometry>
-        <box size="0.02 0.09 0.03" />
-      </geometry>
-    </collision>
-  </link>
-
-  <gazebo reference="${prefix}_upper_link">
-    <material>Gazebo/Grey</material>
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
-    <maxVel>1.0</maxVel>
-    <minDepth>0.001</minDepth>
-    <selfCollide>true</selfCollide>
-  </gazebo>
-
-  <!-- right leg lower -->
-  <joint name="${prefix}_lower_joint" type="revolute">
-    <origin xyz="0 0.083 0" rpy="0 ${radians(180)} 0"/>
-    <parent link="${prefix}_upper_link"/>
-    <child  link="${prefix}_lower_link"/>
-    <axis xyz="0 0 1"/>
-    <limit lower="-3.0" upper="0.0" effort="${effort}" velocity="${velocity}"/>
-  </joint>
-
-  <transmission name="${prefix}_lower_trans">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="${prefix}_lower_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <transmission name="${prefix}_upper_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}_upper_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}_upper_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanismReduction>1</mechanismReduction>
+      </actuator>
+    </transmission>
+    <link name="${prefix}_upper_link">
+      <inertial>
+        <origin xyz="0 0.04 0.015" rpy="0 ${radians(180)} 0"/>
+        <mass value="0.1273437"/>
+        <inertia ixx="0.00009550777" ixy="0.0" ixz="0.0" iyy="0.00001379556" iyz="0.0" izz="0.00009020178"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 ${radians(0)} ${radians(180)}"/>
+        <geometry>
+          <mesh filename="package://pupbot/stl/leg_upper.stl"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0.04 0.015" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.02 0.09 0.03"/>
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="${prefix}_upper_link">
+      <material>Gazebo/Grey</material>
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <maxVel>1.0</maxVel>
+      <minDepth>0.001</minDepth>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <!-- right leg lower -->
+    <joint name="${prefix}_lower_joint" type="revolute">
+      <origin xyz="0 0.083 0" rpy="0 ${radians(180)} 0"/>
+      <parent link="${prefix}_upper_link"/>
+      <child link="${prefix}_lower_link"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-3.0" upper="0.0" effort="${effort}" velocity="${velocity}"/>
     </joint>
-    <actuator name="${prefix}_lower_motor">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanismReduction>1</mechanismReduction>
-    </actuator>
-  </transmission>
-
-  <link name="${prefix}_lower_link">
-    <inertial>
-      <origin xyz="0 0.0365 -0.021" rpy="0 0 0" />
-      <mass value="0.0181437"/>
-      <inertia ixx="0.00000820851" ixy="0.0" ixz="0.0" iyy="0.000000302395" iyz="0.0" izz="0.00000820851"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 ${radians(90)} 0" />
-      <geometry>
-        <mesh filename="package://pupbot/stl/leg_lower.stl" />
-      </geometry>
-      <material name="grey"/>
-    </visual>
-    <collision>
-      <origin xyz="0 0.0365 -0.021" rpy="0 0 0" />
-      <geometry>
-        <box size="0.01 0.073 0.01" />
-      </geometry>
-    </collision>
-  </link>
-
-  <gazebo reference="${prefix}_lower_link">
-    <material>Gazebo/Grey</material>
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
-    <maxVel>1.0</maxVel>
-    <minDepth>0.001</minDepth>
-    <selfCollide>true</selfCollide>
-  </gazebo>
-
-  <joint name="${prefix}_lower_ball_joint" type="fixed">
-    <origin xyz="0 0.073 0" rpy="0 0 0"/>
-    <parent link="${prefix}_lower_link"/>
-    <child  link="${prefix}_lower_ball"/>
-  </joint>
-
-  <link name="${prefix}_lower_ball">
-    <collision>
-      <origin xyz="0 0.005 -0.021" rpy="0 0 0" />
-      <geometry>
-        <sphere radius="0.005"/>
-      </geometry>
-    </collision>
-  </link>
-
-  <gazebo reference="${prefix}_lower_ball">
-    <material>Gazebo/Grey</material>
-    <mu1>0.5</mu1>
-    <mu2>0.5</mu2>
-    <maxVel>1.0</maxVel>
-    <minDepth>0.001</minDepth>
-    <selfCollide>true</selfCollide>
-  </gazebo>
-  
+    <transmission name="${prefix}_lower_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}_lower_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}_lower_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanismReduction>1</mechanismReduction>
+      </actuator>
+    </transmission>
+    <link name="${prefix}_lower_link">
+      <inertial>
+        <origin xyz="0 0.0365 -0.021" rpy="0 0 0"/>
+        <mass value="0.0181437"/>
+        <inertia ixx="0.00000820851" ixy="0.0" ixz="0.0" iyy="0.000000302395" iyz="0.0" izz="0.00000820851"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
+        <geometry>
+          <mesh filename="package://pupbot/stl/leg_lower.stl"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0.0365 -0.021" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.01 0.073 0.01"/>
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="${prefix}_lower_link">
+      <material>Gazebo/Grey</material>
+      <mu1>1.0</mu1>
+      <mu2>1.0</mu2>
+      <maxVel>1.0</maxVel>
+      <minDepth>0.001</minDepth>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <joint name="${prefix}_lower_ball_joint" type="fixed">
+      <origin xyz="0 0.073 0" rpy="0 0 0"/>
+      <parent link="${prefix}_lower_link"/>
+      <child link="${prefix}_lower_ball"/>
+    </joint>
+    <link name="${prefix}_lower_ball">
+      <collision>
+        <origin xyz="0 0.005 -0.021" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="0.005"/>
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="${prefix}_lower_ball">
+      <material>Gazebo/Grey</material>
+      <mu1>0.5</mu1>
+      <mu2>0.5</mu2>
+      <maxVel>1.0</maxVel>
+      <minDepth>0.001</minDepth>
+      <selfCollide>true</selfCollide>
+    </gazebo>
   </xacro:macro>
-
   <!-- right legs -->
   <xacro:right_legs_macro prefix="rightfront_leg" xyz1="0.0834 -0.068518 0.13" xyz2="0.0 0.0 0.0" xyz3="0 -0.026 0.025" xyz4="0.02" effort="1.5" velocity="6.17"/>
   <xacro:right_legs_macro prefix="rightback_leg" xyz1="-0.0834 -0.068518 0.13" xyz2="0.0 0.0 -0.042" xyz3="0 -0.026 -0.025" xyz4="-0.02" effort="1.5" velocity="6.17"/>
-
   <!-- gazebo plugin -->
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
@@ -414,9 +409,9 @@
       <legacyModeNS>true</legacyModeNS>
     </plugin>
     <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
-            <robotNamespace>/</robotNamespace>
-            <jointName>leftfront_leg_shoulder_joint, leftback_leg_shoulder_joint, rightfront_leg_shoulder_joint, rightback_leg_shoulder_joint, leftfront_leg_upper_joint, leftback_leg_upper_joint, rightfront_leg_upper_joint, rightback_leg_upper_joint, leftfront_leg_lower_joint, leftback_leg_lower_joint, rightfront_leg_lower_joint, rightback_leg_lower_joint</jointName>
-        </plugin>
+      <robotNamespace>/</robotNamespace>
+      <jointName>leftfront_leg_shoulder_joint, leftback_leg_shoulder_joint, rightfront_leg_shoulder_joint, rightback_leg_shoulder_joint, leftfront_leg_upper_joint, leftback_leg_upper_joint, rightfront_leg_upper_joint, rightback_leg_upper_joint, leftfront_leg_lower_joint, leftback_leg_lower_joint, rightfront_leg_lower_joint, rightback_leg_lower_joint</jointName>
+      <updateRate>10.0</updateRate>
+    </plugin>
   </gazebo>
-  
 </robot>

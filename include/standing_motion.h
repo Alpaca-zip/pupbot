@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2022  Alpaca-zip
+ * Copyright (C) 2021-2023  Alpaca-zip
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,32 +14,26 @@
  * limitations under the License.
  */
 
-#include "ros/ros.h"
-#include "ros/time.h"
-#include "std_msgs/Bool.h"
-#include "std_msgs/Float64MultiArray.h"
+#pragma once
 
-#define X_OFFSET -10.0
-#define LF_LEG_Z_OFFSET 120
-#define LR_LEG_Z_OFFSET 120
-#define RR_LEG_Z_OFFSET 120
-#define RF_LEG_Z_OFFSET 120
+#include <ros/ros.h>
+#include <ros/time.h>
+#include <std_msgs/Bool.h>
+#include <std_msgs/Float64MultiArray.h>
 
-class Standing_Motion{
-  public:
-  Standing_Motion();
-  
-  private:
-  double z_offset_LF_leg, z_offset_LR_leg, z_offset_RR_leg, z_offset_RF_leg;
-  bool stop_signal;
-  
-  ros::NodeHandle nh;
-  ros::Publisher pub_leg_position;
-  ros::Publisher pub_stop_signal;
-  ros::Subscriber sub_standing_motion;
-  std_msgs::Float64MultiArray leg_position;
-  std_msgs::Bool stop;
+class standingMotion
+{
+private:
+  ros::NodeHandle _nh;
+  ros::NodeHandle _pnh;
+  ros::Publisher _pub_leg_position;
+  ros::Publisher _pub_stop_signal;
+  ros::Subscriber _sub_standing_motion;
+  std_msgs::Bool _stop;
+  std_msgs::Float64MultiArray _leg_position;
+  double _x_offset, _z_offset_LF_leg, _z_offset_LR_leg, _z_offset_RR_leg, _z_offset_RF_leg;
 
-  void init();
-  void standing_motion_callback(const std_msgs::Bool& stand);
+public:
+  standingMotion();
+  void standingMotionCallback(const std_msgs::Bool & stand);
 };

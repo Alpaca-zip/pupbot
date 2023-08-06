@@ -1,0 +1,32 @@
+name: ROS-noetic Build Check
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+    - name: setup ROS1
+      uses: ros-tooling/setup-ros@v0.6
+      with:
+        required-ros-distributions: noetic
+    - name: build
+      uses: ros-tooling/action-ros-ci@v0.3
+      with:
+        package-name: >
+          pupbot 
+          dynamixel_sdk 
+          dynamixel_workbench_msgs 
+          dynamixel_workbench 
+          dynamixel_workbench_operators 
+          dynamixel_sdk_examples 
+          dynamixel_workbench_toolbox 
+          dynamixel_workbench_controllers
+        target-ros1-distro: noetic
+        vcs-repo-file-url: "${{ github.workspace }}/pupbot.rosinstall"
+        skip-tests: true

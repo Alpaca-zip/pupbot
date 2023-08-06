@@ -1,0 +1,16 @@
+- git:
+    local-name: icm_20948
+    uri: https://github.com/Alpaca-zip/icm_20948.git
+    version: noetic-devel
+- git:
+    local-name: dynamixel_workbench
+    uri: https://github.com/ROBOTIS-GIT/dynamixel-workbench.git
+    version: noetic-devel
+- git:
+    local-name: DynamixelSDK
+    uri: https://github.com/ROBOTIS-GIT/DynamixelSDK.git
+    version: noetic-devel
+- git:
+    local-name: dynamixel_workbench_msgs
+    uri: https://github.com/ROBOTIS-GIT/dynamixel-workbench-msgs.git
+    version: noetic-devel
