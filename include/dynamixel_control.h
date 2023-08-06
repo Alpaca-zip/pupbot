@@ -16,12 +16,13 @@
 
 #pragma once
 
-#include <vector>
+#include <dynamixel_workbench_toolbox/dynamixel_workbench.h>
 #include <ros/ros.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/String.h>
 #include <trajectory_msgs/JointTrajectory.h>
-#include <dynamixel_workbench_toolbox/dynamixel_workbench.h>
+
+#include <vector>
 
 // These are the default values and are overridden by rosparam.
 #define LF_LEG_SHOULDER_ID 3
@@ -37,34 +38,35 @@
 #define RF_LEG_UPPER_ID 1
 #define RF_LEG_LOWER_ID 13
 
-class dynamixelControl{
-  private:
-    ros::NodeHandle _nh;
-    ros::NodeHandle _pnh;
-    ros::Subscriber _sub_LF_leg;
-    ros::Subscriber _sub_LR_leg;
-    ros::Subscriber _sub_RR_leg;
-    ros::Subscriber _sub_RF_leg;
-    std_msgs::Float64 _joint_pos[12];
-    std::string _port_name_str;
-    std::vector<int> _dxl_id_vector;
-    bool _result;
-    int _baudrate;
-    int _model_number_int;
-    uint8_t _dxl_id[12];
-    uint16_t _model_number;
-    const char *_log;
-    const char* _port_name;
-    DynamixelWorkbench _dxl_wb;
+class dynamixelControl
+{
+private:
+  ros::NodeHandle _nh;
+  ros::NodeHandle _pnh;
+  ros::Subscriber _sub_LF_leg;
+  ros::Subscriber _sub_LR_leg;
+  ros::Subscriber _sub_RR_leg;
+  ros::Subscriber _sub_RF_leg;
+  std_msgs::Float64 _joint_pos[12];
+  std::string _port_name_str;
+  std::vector<int> _dxl_id_vector;
+  bool _result;
+  int _baudrate;
+  int _model_number_int;
+  uint8_t _dxl_id[12];
+  uint16_t _model_number;
+  const char * _log;
+  const char * _port_name;
+  DynamixelWorkbench _dxl_wb;
 
-  public:
-    dynamixelControl();
-    void controlLoop();
-    void monitorLFLegCallback(const trajectory_msgs::JointTrajectory& LF_leg);
-    void monitorLRLegCallback(const trajectory_msgs::JointTrajectory& LR_leg);
-    void monitorRRLegCallback(const trajectory_msgs::JointTrajectory& RR_leg);
-    void monitorRFLegCallback(const trajectory_msgs::JointTrajectory& RF_leg);
-    void dxlInit();
-    void dxlTorqueOn();
-    void dxlAddSyncWriteHandler();
+public:
+  dynamixelControl();
+  void controlLoop();
+  void monitorLFLegCallback(const trajectory_msgs::JointTrajectory & LF_leg);
+  void monitorLRLegCallback(const trajectory_msgs::JointTrajectory & LR_leg);
+  void monitorRRLegCallback(const trajectory_msgs::JointTrajectory & RR_leg);
+  void monitorRFLegCallback(const trajectory_msgs::JointTrajectory & RF_leg);
+  void dxlInit();
+  void dxlTorqueOn();
+  void dxlAddSyncWriteHandler();
 };

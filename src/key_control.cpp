@@ -16,7 +16,8 @@
 
 #include "key_control.h"
 
-keyControl::keyControl(){
+keyControl::keyControl()
+{
   _trot_foward_motion_pub = _nh.advertise<std_msgs::Float64>("trot_foward_motion", 10);
   _trot_turn_motion_pub = _nh.advertise<std_msgs::Float64>("trot_turn_motion", 10);
   _standing_motion_pub = _nh.advertise<std_msgs::Bool>("standing_motion", 10);
@@ -33,55 +34,59 @@ keyControl::keyControl(){
   ros::Duration(2.0).sleep();
 
   std::cout << "\033[32mQ : Stand up/lie down\033[0m" << std::endl;
-  std::cout << "\033[32mW : Increases the value of direction in the x axis (+0.25)\033[0m" << std::endl;
+  std::cout << "\033[32mW : Increases the value of direction in the x axis (+0.25)\033[0m"
+            << std::endl;
   std::cout << "\033[32mA : Increases the value of turn (-0.25)\033[0m" << std::endl;
-  std::cout << "\033[32mS : Decreases the value of direction in the x axis (-0.25)\033[0m" << std::endl;
+  std::cout << "\033[32mS : Decreases the value of direction in the x axis (-0.25)\033[0m"
+            << std::endl;
   std::cout << "\033[32mD : Decreases the value of turn (+0.25)\033[0m" << std::endl;
   std::cout << "\033[32mX : Posture control on/off\033[0m" << std::endl;
 }
 
-int keyControl::getch(){
+int keyControl::getch()
+{
   static struct termios oldt, newt;
-  tcgetattr(STDIN_FILENO, &oldt); 
+  tcgetattr(STDIN_FILENO, &oldt);
   newt = oldt;
-  newt.c_lflag &= ~(ICANON);       
+  newt.c_lflag &= ~(ICANON);
   tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-  int c = getchar(); 
+  int c = getchar();
   tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
   return c;
 }
 
-void keyControl::controlLoop(){
+void keyControl::controlLoop()
+{
   int c = getch();
-  if(c == 'w'){
-    if(_direction_x.data < 1.25){
+  if (c == 'w') {
+    if (_direction_x.data < 1.25) {
       _direction_x.data += 0.25;
     }
     std::cout << "\033[32m ==> x:\033[0m" << _direction_x.data << std::endl;
     _trot_foward_motion_pub.publish(_direction_x);
-  }else if(c == 'a'){
-    if(_turn.data > -1.0){
+  } else if (c == 'a') {
+    if (_turn.data > -1.0) {
       _turn.data -= 0.25;
     }
     std::cout << "\033[32m ==> turn:\033[0m" << _turn.data << std::endl;
     _trot_turn_motion_pub.publish(_turn);
-  }else if(c == 's'){
-    if(_direction_x.data > -1.25){
+  } else if (c == 's') {
+    if (_direction_x.data > -1.25) {
       _direction_x.data -= 0.25;
     }
     std::cout << "\033[32m ==> x:\033[0m" << _direction_x.data << std::endl;
     _trot_foward_motion_pub.publish(_direction_x);
-  }else if(c == 'd'){
-    if(_turn.data < 1.0){
+  } else if (c == 'd') {
+    if (_turn.data < 1.0) {
       _turn.data += 0.25;
     }
     std::cout << "\033[32m ==> turn:\033[0m" << _turn.data << std::endl;
     _trot_turn_motion_pub.publish(_turn);
-  }else if(c == 'q'){
-    if(_stand.data){
+  } else if (c == 'q') {
+    if (_stand.data) {
       _stand.data = false;
       std::cout << "\033[32m ==> lie down\033[0m" << std::endl;
-    }else{
+    } else {
       _stand.data = true;
       std::cout << "\033[32m ==> Stand up\033[0m" << std::endl;
     }
@@ -90,11 +95,11 @@ void keyControl::controlLoop(){
     _trot_foward_motion_pub.publish(_direction_x);
     _trot_turn_motion_pub.publish(_turn);
     _standing_motion_pub.publish(_stand);
-  }else if(c == 'x'){
-    if(_posture_control.data){
+  } else if (c == 'x') {
+    if (_posture_control.data) {
       _posture_control.data = false;
       std::cout << "\033[32m ==> Posture control disable\033[0m" << std::endl;
-    }else{
+    } else {
       _posture_control.data = true;
       std::cout << "\033[32m ==> Posture control enable\033[0m" << std::endl;
     }
@@ -102,11 +107,12 @@ void keyControl::controlLoop(){
   }
 }
 
-int main(int argc, char** argv){
+int main(int argc, char ** argv)
+{
   ros::init(argc, argv, "key_control");
   keyControl KC;
   ros::Rate loop_rate(10);
-  while (ros::ok()){
+  while (ros::ok()) {
     KC.controlLoop();
     ros::spinOnce();
     loop_rate.sleep();

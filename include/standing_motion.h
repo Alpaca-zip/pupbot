@@ -21,18 +21,19 @@
 #include <std_msgs/Bool.h>
 #include <std_msgs/Float64MultiArray.h>
 
-class standingMotion{
-  private:
-    ros::NodeHandle _nh;
-    ros::NodeHandle _pnh;
-    ros::Publisher _pub_leg_position;
-    ros::Publisher _pub_stop_signal;
-    ros::Subscriber _sub_standing_motion;
-    std_msgs::Bool _stop;
-    std_msgs::Float64MultiArray _leg_position;
-    double _x_offset, _z_offset_LF_leg, _z_offset_LR_leg, _z_offset_RR_leg, _z_offset_RF_leg;
+class standingMotion
+{
+private:
+  ros::NodeHandle _nh;
+  ros::NodeHandle _pnh;
+  ros::Publisher _pub_leg_position;
+  ros::Publisher _pub_stop_signal;
+  ros::Subscriber _sub_standing_motion;
+  std_msgs::Bool _stop;
+  std_msgs::Float64MultiArray _leg_position;
+  double _x_offset, _z_offset_LF_leg, _z_offset_LR_leg, _z_offset_RR_leg, _z_offset_RF_leg;
 
-  public:
-    standingMotion();
-    void standingMotionCallback(const std_msgs::Bool& stand);
+public:
+  standingMotion();
+  void standingMotionCallback(const std_msgs::Bool & stand);
 };

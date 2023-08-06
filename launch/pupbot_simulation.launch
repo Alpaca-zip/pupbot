@@ -9,14 +9,10 @@
   <!-- empty_world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
   <!-- spawn_urdf node -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model pupbot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos)
-  -J leftfront_leg_shoulder_joint -0.5 -J leftback_leg_shoulder_joint -0.5 -J leftfront_leg_upper_joint 1.5 -J leftback_leg_upper_joint 1.5
-  -J leftfront_leg_lower_joint 2.5 -J leftback_leg_lower_joint 2.5 -J rightfront_leg_shoulder_joint 0.5 -J rightback_leg_shoulder_joint 0.5
-  -J rightfront_leg_upper_joint -1.5 -J rightback_leg_upper_joint -1.5 -J rightfront_leg_lower_joint -2.5 -J rightback_leg_lower_joint -2.5"/>
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model pupbot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos)   -J leftfront_leg_shoulder_joint -0.5 -J leftback_leg_shoulder_joint -0.5 -J leftfront_leg_upper_joint 1.5 -J leftback_leg_upper_joint 1.5   -J leftfront_leg_lower_joint 2.5 -J leftback_leg_lower_joint 2.5 -J rightfront_leg_shoulder_joint 0.5 -J rightback_leg_shoulder_joint 0.5   -J rightfront_leg_upper_joint -1.5 -J rightback_leg_upper_joint -1.5 -J rightfront_leg_lower_joint -2.5 -J rightback_leg_lower_joint -2.5"/>
   <rosparam file="$(find pupbot)/controllers.yaml" command="load"/>
   <!-- controller_spawner node -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" 
-  args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" args="joint_state_controller leftfront_leg_controller leftback_leg_controller rightfront_leg_controller rightback_leg_controller"/>
   <!-- trot_gait node -->
   <node name="trot_gait" pkg="pupbot" type="trot_gait" output="log">
     <param name="iter_number" value="20"/>
