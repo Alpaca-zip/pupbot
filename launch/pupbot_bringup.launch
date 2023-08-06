@@ -5,6 +5,7 @@
   <arg name="imu_baudrate" default="115200"/>
   <arg name="dxl_baudrate" default="1000000"/>
   <arg name="imu_topic" default="imu"/>
+  <arg name="debug" default="false"/>
   <!-- IMU -->
   <include file="$(find icm_20948)/launch/run.launch">
     <arg name="port" value="$(arg imu_port)"/>
@@ -59,4 +60,11 @@
   </node>
   <!-- key_control node -->
   <node name="key_control" pkg="pupbot" type="key_control" output="screen"/>
+  <!-- debug feature -->
+  <group if="$(arg debug)">
+    <!-- rqt_plot -->
+    <node name="leg_position_plot_x" pkg="rqt_plot" type="rqt_plot" args="/leg_position/data[0]:data[3]:data[6]:data[9]"/>
+    <node name="leg_position_plot_y" pkg="rqt_plot" type="rqt_plot" args="/leg_position/data[1]:data[4]:data[7]:data[10]"/>
+    <node name="leg_position_plot_z" pkg="rqt_plot" type="rqt_plot" args="/leg_position/data[2]:data[5]:data[8]:data[11]"/>
+  </group>
 </launch>

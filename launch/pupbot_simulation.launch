@@ -4,6 +4,7 @@
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
+  <arg name="debug" default="false"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model) --inorder"/>
   <!-- empty_world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
@@ -56,6 +57,13 @@
   <node name="key_control" pkg="pupbot" type="key_control" output="screen"/>
   <!-- robot_state_publisher node -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-  <!-- rviz node -->
-  <node name="pupbot_rviz" pkg="rviz" type="rviz" args="-d $(find pupbot)/rviz/pupbot.rviz" required="true"/>
+  <!-- debug feature -->
+  <group if="$(arg debug)">
+    <!-- rviz node -->
+    <node name="pupbot_rviz" pkg="rviz" type="rviz" args="-d $(find pupbot)/rviz/pupbot.rviz" required="true"/>
+    <!-- rqt_plot -->
+    <node name="leg_position_plot_x" pkg="rqt_plot" type="rqt_plot" args="/leg_position/data[0]:data[3]:data[6]:data[9]"/>
+    <node name="leg_position_plot_y" pkg="rqt_plot" type="rqt_plot" args="/leg_position/data[1]:data[4]:data[7]:data[10]"/>
+    <node name="leg_position_plot_z" pkg="rqt_plot" type="rqt_plot" args="/leg_position/data[2]:data[5]:data[8]:data[11]"/>
+  </group>
 </launch>

@@ -13,4 +13,5 @@
   <depend>trajectory_msgs</depend>
   <depend>icm_20948</depend>
   <depend>dynamixel_workbench</depend>
+  <depend>rqt</depend>
 </package>
