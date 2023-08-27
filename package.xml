@@ -14,4 +14,6 @@
   <depend>icm_20948</depend>
   <depend>dynamixel_workbench</depend>
   <depend>rqt</depend>
+  <depend>ros_control</depend>
+  <depend>ros_controllers</depend>
 </package>
