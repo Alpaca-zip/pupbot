@@ -2,8 +2,8 @@
 
 [![dockeri.co](https://dockerico.blankenship.io/image/alpacazip/pupbot)](https://hub.docker.com/r/alpacazip/pupbot)
 
-Open source ROS package for quadruped robot PupBot.  
-Dockerfiles: https://github.com/Alpaca-zip/docker-pupbot
+~~https://github.com/Alpaca-zip/docker-pupbot~~ is no longer supported!  
+Check out DockerHub from the banner above.
 
 <img src="https://github.com/Alpaca-zip/pupbot/assets/84959376/aeeeb110-bc89-4cfb-9514-b253e039affc" width="330px"> 　<img src="https://github.com/Alpaca-zip/pupbot/assets/84959376/9bd9c814-8c15-4010-a0dd-d9faf234b706" width="400px">
 
