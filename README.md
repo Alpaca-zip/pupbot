@@ -1,4 +1,5 @@
 # PupBot [![ROS-noetic Build Check](https://github.com/Alpaca-zip/pupbot/actions/workflows/ros1-build-check-bot.yml/badge.svg?event=pull_request)](https://github.com/Alpaca-zip/pupbot/actions/workflows/ros1-build-check-bot.yml) [![Docker Build Check](https://github.com/Alpaca-zip/pupbot/actions/workflows/docker-build-check-bot.yml/badge.svg?event=pull_request)](https://github.com/Alpaca-zip/pupbot/actions/workflows/docker-build-check-bot.yml)
+ROS package for quadruped robot PupBot.
 
 [![dockeri.co](https://dockerico.blankenship.io/image/alpacazip/pupbot)](https://hub.docker.com/r/alpacazip/pupbot)
 
