@@ -29,7 +29,7 @@ jobs:
         env:
           ROS_DISTRO: noetic
           UPSTREAM_WORKSPACE: pupbot.rosinstall
-          CLANG_TIDY: true
+          CLANG_TIDY: pedantic
 
   black_check:
     runs-on: ubuntu-latest
