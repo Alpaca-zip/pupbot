@@ -28,6 +28,7 @@ jobs:
         uses: 'ros-industrial/industrial_ci@master'
         env:
           ROS_DISTRO: noetic
+          UPSTREAM_WORKSPACE: pupbot.rosinstall
           CLANG_TIDY: true
 
   black_check:
@@ -54,6 +55,7 @@ jobs:
         uses: 'ros-industrial/industrial_ci@master'
         env:
           ROS_DISTRO: noetic
+          UPSTREAM_WORKSPACE: pupbot.rosinstall
           PYLINT_CHECK: true
 
   catkin_lint_check:
@@ -67,6 +69,7 @@ jobs:
         uses: 'ros-industrial/industrial_ci@master'
         env:
           ROS_DISTRO: noetic
+          UPSTREAM_WORKSPACE: pupbot.rosinstall
           CATKIN_LINT: true
 
   build_check:
