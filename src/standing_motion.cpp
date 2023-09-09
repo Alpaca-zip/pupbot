@@ -26,8 +26,7 @@ standingMotion::standingMotion() : _pnh("~")
 
   _pub_leg_position = _nh.advertise<std_msgs::Float64MultiArray>("leg_position", 10);
   _pub_stop_signal = _nh.advertise<std_msgs::Bool>("stop_signal", 10);
-  _sub_standing_motion =
-    _nh.subscribe("standing_motion", 10, &standingMotion::standingMotionCallback, this);
+  _sub_standing_motion = _nh.subscribe("standing_motion", 10, &standingMotion::standingMotionCallback, this);
 
   _stop.data = true;
   _leg_position.data.resize(12);
@@ -37,14 +36,16 @@ standingMotion::standingMotion() : _pnh("~")
   _leg_position.data[9] = _x_offset;
 }
 
-void standingMotion::standingMotionCallback(const std_msgs::Bool & stand)
+void standingMotion::standingMotionCallback(const std_msgs::Bool& stand)
 {
-  if (stand.data) {
+  if (stand.data)
+  {
     _leg_position.data[2] = 40.0;
     _leg_position.data[5] = 40.0;
     _leg_position.data[8] = 40.0;
     _leg_position.data[11] = 40.0;
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 50; i++)
+    {
       _leg_position.data[2] += (_z_offset_LF_leg - 40.0) / 50.0;
       _leg_position.data[5] += (_z_offset_LR_leg - 40.0) / 50.0;
       _leg_position.data[8] += (_z_offset_RR_leg - 40.0) / 50.0;
@@ -54,14 +55,17 @@ void standingMotion::standingMotionCallback(const std_msgs::Bool & stand)
     }
     _stop.data = false;
     _pub_stop_signal.publish(_stop);
-  } else {
+  }
+  else
+  {
     _stop.data = true;
     _pub_stop_signal.publish(_stop);
     _leg_position.data[2] = _z_offset_LF_leg;
     _leg_position.data[5] = _z_offset_LR_leg;
     _leg_position.data[8] = _z_offset_RR_leg;
     _leg_position.data[11] = _z_offset_RF_leg;
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 50; i++)
+    {
       _leg_position.data[2] -= (_z_offset_LF_leg - 40.0) / 50.0;
       _leg_position.data[5] -= (_z_offset_LR_leg - 40.0) / 50.0;
       _leg_position.data[8] -= (_z_offset_RR_leg - 40.0) / 50.0;
@@ -72,7 +76,7 @@ void standingMotion::standingMotionCallback(const std_msgs::Bool & stand)
   }
 }
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
   ros::init(argc, argv, "standing_motion");
   standingMotion SM;

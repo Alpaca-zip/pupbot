@@ -39,5 +39,5 @@ private:
 
 public:
   inverseKinematics();
-  void inverseKinematicsCallback(const std_msgs::Float64MultiArray & leg_position);
+  void inverseKinematicsCallback(const std_msgs::Float64MultiArray& leg_position);
 };

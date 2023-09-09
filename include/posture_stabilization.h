@@ -59,7 +59,7 @@ private:
 public:
   postureStabilization();
   void controlLoop();
-  void imuCallback(const sensor_msgs::Imu & msg);
-  void quatToRPY(const geometry_msgs::Quaternion quat, double & roll, double & pitch, double & yaw);
-  void postureControlCallback(const std_msgs::Bool & posture_control);
+  void imuCallback(const sensor_msgs::Imu& msg);
+  void quatToRPY(const geometry_msgs::Quaternion quat, double& roll, double& pitch, double& yaw);
+  void postureControlCallback(const std_msgs::Bool& posture_control);
 };

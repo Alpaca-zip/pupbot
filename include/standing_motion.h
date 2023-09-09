@@ -35,5 +35,5 @@ private:
 
 public:
   standingMotion();
-  void standingMotionCallback(const std_msgs::Bool & stand);
+  void standingMotionCallback(const std_msgs::Bool& stand);
 };

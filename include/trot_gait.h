@@ -46,10 +46,10 @@ private:
 public:
   trotGait();
   void controlLoop();
-  void trotFowardMotionCallback(const std_msgs::Float64 & direction_x);
-  void trotTurnMotionCallback(const std_msgs::Float64 & turn);
-  void stopSignalCallback(const std_msgs::Bool & stop);
-  void stabilizationVariableCallback(const std_msgs::Float64MultiArray & MV);
+  void trotFowardMotionCallback(const std_msgs::Float64& direction_x);
+  void trotTurnMotionCallback(const std_msgs::Float64& turn);
+  void stopSignalCallback(const std_msgs::Bool& stop);
+  void stabilizationVariableCallback(const std_msgs::Float64MultiArray& MV);
   void trot(double c0_x, double c0_y, bool inv);
   void countC(const double step_extent_x, const int l);
   double rDirX();

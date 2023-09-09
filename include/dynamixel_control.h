@@ -55,17 +55,17 @@ private:
   int _model_number_int;
   uint8_t _dxl_id[12];
   uint16_t _model_number;
-  const char * _log;
-  const char * _port_name;
+  const char* _log;
+  const char* _port_name;
   DynamixelWorkbench _dxl_wb;
 
 public:
   dynamixelControl();
   void controlLoop();
-  void monitorLFLegCallback(const trajectory_msgs::JointTrajectory & LF_leg);
-  void monitorLRLegCallback(const trajectory_msgs::JointTrajectory & LR_leg);
-  void monitorRRLegCallback(const trajectory_msgs::JointTrajectory & RR_leg);
-  void monitorRFLegCallback(const trajectory_msgs::JointTrajectory & RF_leg);
+  void monitorLFLegCallback(const trajectory_msgs::JointTrajectory& LF_leg);
+  void monitorLRLegCallback(const trajectory_msgs::JointTrajectory& LR_leg);
+  void monitorRRLegCallback(const trajectory_msgs::JointTrajectory& RR_leg);
+  void monitorRFLegCallback(const trajectory_msgs::JointTrajectory& RF_leg);
   void dxlInit();
   void dxlTorqueOn();
   void dxlAddSyncWriteHandler();
