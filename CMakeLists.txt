@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.0.2)
 project(pupbot)
 
 find_package(catkin REQUIRED COMPONENTS
-  dynamixel_workbench
   dynamixel_workbench_toolbox
   geometry_msgs
   roscpp
