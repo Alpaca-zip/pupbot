@@ -22,7 +22,7 @@
 #include <std_msgs/Float64.h>
 #include <std_msgs/Float64MultiArray.h>
 
-class trotGait
+class TrotGait
 {
 private:
   ros::NodeHandle _nh;
@@ -44,7 +44,7 @@ private:
   double _c[4], _c_inv[4], _c_iter[4], _l_inv[4][2];
 
 public:
-  trotGait();
+  TrotGait();
   void controlLoop();
   void trotFowardMotionCallback(const std_msgs::Float64& direction_x);
   void trotTurnMotionCallback(const std_msgs::Float64& turn);

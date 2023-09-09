@@ -21,7 +21,7 @@
 #include <std_msgs/Bool.h>
 #include <std_msgs/Float64MultiArray.h>
 
-class standingMotion
+class StandingMotion
 {
 private:
   ros::NodeHandle _nh;
@@ -34,6 +34,6 @@ private:
   double _x_offset, _z_offset_LF_leg, _z_offset_LR_leg, _z_offset_RR_leg, _z_offset_RF_leg;
 
 public:
-  standingMotion();
+  StandingMotion();
   void standingMotionCallback(const std_msgs::Bool& stand);
 };

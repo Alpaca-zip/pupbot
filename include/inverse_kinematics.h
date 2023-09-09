@@ -24,7 +24,7 @@
 #define BONE_LENGTH 83.0
 #define LENGTH 21.0
 
-class inverseKinematics
+class InverseKinematics
 {
 private:
   ros::NodeHandle _nh;
@@ -38,6 +38,6 @@ private:
   double _duration;
 
 public:
-  inverseKinematics();
+  InverseKinematics();
   void inverseKinematicsCallback(const std_msgs::Float64MultiArray& leg_position);
 };

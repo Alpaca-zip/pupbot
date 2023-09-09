@@ -38,7 +38,7 @@
 #define RF_LEG_UPPER_ID 1
 #define RF_LEG_LOWER_ID 13
 
-class dynamixelControl
+class DynamixelControl
 {
 private:
   ros::NodeHandle _nh;
@@ -60,7 +60,7 @@ private:
   DynamixelWorkbench _dxl_wb;
 
 public:
-  dynamixelControl();
+  DynamixelControl();
   void controlLoop();
   void monitorLFLegCallback(const trajectory_msgs::JointTrajectory& LF_leg);
   void monitorLRLegCallback(const trajectory_msgs::JointTrajectory& LR_leg);

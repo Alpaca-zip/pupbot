@@ -16,7 +16,7 @@
 
 #include "standing_motion.h"
 
-standingMotion::standingMotion() : _pnh("~")
+StandingMotion::StandingMotion() : _pnh("~")
 {
   _pnh.param<double>("x_offset", _x_offset, -10.0);
   _pnh.param<double>("z_offset_LF_leg", _z_offset_LF_leg, 120.0);
@@ -26,7 +26,7 @@ standingMotion::standingMotion() : _pnh("~")
 
   _pub_leg_position = _nh.advertise<std_msgs::Float64MultiArray>("leg_position", 10);
   _pub_stop_signal = _nh.advertise<std_msgs::Bool>("stop_signal", 10);
-  _sub_standing_motion = _nh.subscribe("standing_motion", 10, &standingMotion::standingMotionCallback, this);
+  _sub_standing_motion = _nh.subscribe("standing_motion", 10, &StandingMotion::standingMotionCallback, this);
 
   _stop.data = true;
   _leg_position.data.resize(12);
@@ -36,7 +36,7 @@ standingMotion::standingMotion() : _pnh("~")
   _leg_position.data[9] = _x_offset;
 }
 
-void standingMotion::standingMotionCallback(const std_msgs::Bool& stand)
+void StandingMotion::standingMotionCallback(const std_msgs::Bool& stand)
 {
   if (stand.data)
   {
@@ -79,7 +79,7 @@ void standingMotion::standingMotionCallback(const std_msgs::Bool& stand)
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "standing_motion");
-  standingMotion SM;
+  StandingMotion sm;
   ros::spin();
   return 0;
 }

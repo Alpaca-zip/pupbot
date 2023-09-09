@@ -21,7 +21,7 @@
 #include <std_msgs/Float64.h>
 #include <termios.h>
 
-class keyControl
+class KeyControl
 {
 private:
   ros::NodeHandle _nh;
@@ -35,7 +35,7 @@ private:
   std_msgs::Bool _stand;
 
 public:
-  keyControl();
+  KeyControl();
   void controlLoop();
   int getch();
 };

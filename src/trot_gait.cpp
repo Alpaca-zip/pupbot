@@ -16,7 +16,7 @@
 
 #include "trot_gait.h"
 
-trotGait::trotGait() : _pnh("~")
+TrotGait::TrotGait() : _pnh("~")
 {
   _pnh.param<int>("iter_number", _iter_number, 22);
   _pnh.param<double>("trot_step_extent_x", _trot_step_extent_x, 30.0);
@@ -29,11 +29,11 @@ trotGait::trotGait() : _pnh("~")
   _pnh.param<double>("z_offset_RF_leg", _z_offset_RF_leg, 120.0);
 
   _pub_leg_position = _nh.advertise<std_msgs::Float64MultiArray>("leg_position", 10);
-  _sub_trot_foward_motion = _nh.subscribe("trot_foward_motion", 10, &trotGait::trotFowardMotionCallback, this);
-  _sub_trot_turn_motion = _nh.subscribe("trot_turn_motion", 10, &trotGait::trotTurnMotionCallback, this);
-  _sub_stop_signal = _nh.subscribe("stop_signal", 10, &trotGait::stopSignalCallback, this);
+  _sub_trot_foward_motion = _nh.subscribe("trot_foward_motion", 10, &TrotGait::trotFowardMotionCallback, this);
+  _sub_trot_turn_motion = _nh.subscribe("trot_turn_motion", 10, &TrotGait::trotTurnMotionCallback, this);
+  _sub_stop_signal = _nh.subscribe("stop_signal", 10, &TrotGait::stopSignalCallback, this);
   _sub_stabilization_variable =
-      _nh.subscribe("stabilization_variable", 10, &trotGait::stabilizationVariableCallback, this);
+      _nh.subscribe("stabilization_variable", 10, &TrotGait::stabilizationVariableCallback, this);
 
   _leg_position.data.resize(12);
   _stop_signal = true;
@@ -57,22 +57,22 @@ trotGait::trotGait() : _pnh("~")
   _l_inv[3][1] = -1.0;
 }
 
-void trotGait::trotFowardMotionCallback(const std_msgs::Float64& direction_x)
+void TrotGait::trotFowardMotionCallback(const std_msgs::Float64& direction_x)
 {
   _dirupdate_x = direction_x.data;
 }
 
-void trotGait::trotTurnMotionCallback(const std_msgs::Float64& turn)
+void TrotGait::trotTurnMotionCallback(const std_msgs::Float64& turn)
 {
   _turn0 = turn.data;
 }
 
-void trotGait::stopSignalCallback(const std_msgs::Bool& stop)
+void TrotGait::stopSignalCallback(const std_msgs::Bool& stop)
 {
   _stop_signal = stop.data;
 }
 
-void trotGait::stabilizationVariableCallback(const std_msgs::Float64MultiArray& MV)
+void TrotGait::stabilizationVariableCallback(const std_msgs::Float64MultiArray& MV)
 {
   _z_offset_LF_leg = MV.data[0];
   _z_offset_LR_leg = MV.data[1];
@@ -80,13 +80,13 @@ void trotGait::stabilizationVariableCallback(const std_msgs::Float64MultiArray& 
   _z_offset_RF_leg = MV.data[3];
 }
 
-void trotGait::trot(double c0_x, double c0_y, bool inv)
+void TrotGait::trot(double c0_x, double c0_y, bool inv)
 {
   double w0, l0, h0;
   w0 = _trot_step_extent_x / 2.0 * _dir_x;
   l0 = _trot_step_extent_y / 2.0 * _dir_y;
   h0 = _trot_step_extent_z;
-  if (inv == false)
+  if (!inv)
   {
     c0_x = -c0_x;
     c0_y = -c0_y;
@@ -120,7 +120,7 @@ void trotGait::trot(double c0_x, double c0_y, bool inv)
   }
 }
 
-void trotGait::countC(const double step_extent_x, const int l)
+void TrotGait::countC(const double step_extent_x, const int l)
 {
   double w0_count_c, a0_count_c;
   w0_count_c = step_extent_x * std::max(abs(_dir_x), abs(_dir_y)) / 2.0;
@@ -137,7 +137,7 @@ void trotGait::countC(const double step_extent_x, const int l)
   }
 }
 
-double trotGait::rDirX()
+double TrotGait::rDirX()
 {
   if (_dir_x != 0.0 || _dir_y != 0.0)
   {
@@ -149,7 +149,7 @@ double trotGait::rDirX()
   }
 }
 
-double trotGait::rDirY()
+double TrotGait::rDirY()
 {
   if (_dir_x != 0.0 || _dir_y != 0.0)
   {
@@ -161,7 +161,7 @@ double trotGait::rDirY()
   }
 }
 
-void trotGait::controlLoop()
+void TrotGait::controlLoop()
 {
   double x, y, z;
   if (!_stop_signal)
@@ -201,11 +201,11 @@ void trotGait::controlLoop()
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "trot_gait");
-  trotGait TG;
+  TrotGait tg;
   ros::Rate loop_rate(50);
   while (ros::ok())
   {
-    TG.controlLoop();
+    tg.controlLoop();
     ros::spinOnce();
     loop_rate.sleep();
   }

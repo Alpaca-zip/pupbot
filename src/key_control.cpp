@@ -16,7 +16,7 @@
 
 #include "key_control.h"
 
-keyControl::keyControl()
+KeyControl::KeyControl()
 {
   _trot_foward_motion_pub = _nh.advertise<std_msgs::Float64>("trot_foward_motion", 10);
   _trot_turn_motion_pub = _nh.advertise<std_msgs::Float64>("trot_turn_motion", 10);
@@ -41,7 +41,7 @@ keyControl::keyControl()
   std::cout << "\033[32mX : Posture control on/off\033[0m" << std::endl;
 }
 
-int keyControl::getch()
+int KeyControl::getch()
 {
   static struct termios oldt, newt;
   tcgetattr(STDIN_FILENO, &oldt);
@@ -53,7 +53,7 @@ int keyControl::getch()
   return c;
 }
 
-void keyControl::controlLoop()
+void KeyControl::controlLoop()
 {
   int c = getch();
   if (c == 'w')
@@ -129,11 +129,11 @@ void keyControl::controlLoop()
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "key_control");
-  keyControl KC;
+  KeyControl kc;
   ros::Rate loop_rate(10);
   while (ros::ok())
   {
-    KC.controlLoop();
+    kc.controlLoop();
     ros::spinOnce();
     loop_rate.sleep();
   }

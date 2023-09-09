@@ -28,7 +28,7 @@
 #define X_OFFSET 61
 #define Y_OFFSET 94
 
-class postureStabilization
+class PostureStabilization
 {
 private:
   ros::NodeHandle _nh;
@@ -57,7 +57,7 @@ private:
   double _roll_sum, _pitch_sum;
 
 public:
-  postureStabilization();
+  PostureStabilization();
   void controlLoop();
   void imuCallback(const sensor_msgs::Imu& msg);
   void quatToRPY(const geometry_msgs::Quaternion quat, double& roll, double& pitch, double& yaw);

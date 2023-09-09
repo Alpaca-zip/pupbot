@@ -16,7 +16,7 @@
 
 #include "dynamixel_control.h"
 
-dynamixelControl::dynamixelControl() : _pnh("~")
+DynamixelControl::DynamixelControl() : _pnh("~")
 {
   _pnh.param<std::string>("port", _port_name_str, "/dev/ttyACM1");
   _pnh.param<int>("model_number", _model_number_int, 12);
@@ -44,10 +44,10 @@ dynamixelControl::dynamixelControl() : _pnh("~")
     _dxl_id[11] = RF_LEG_LOWER_ID;
   }
 
-  _sub_LF_leg = _nh.subscribe("leftfront_leg_controller/command", 10, &dynamixelControl::monitorLFLegCallback, this);
-  _sub_LR_leg = _nh.subscribe("leftback_leg_controller/command", 10, &dynamixelControl::monitorLRLegCallback, this);
-  _sub_RR_leg = _nh.subscribe("rightback_leg_controller/command", 10, &dynamixelControl::monitorRRLegCallback, this);
-  _sub_RF_leg = _nh.subscribe("rightfront_leg_controller/command", 10, &dynamixelControl::monitorRFLegCallback, this);
+  _sub_LF_leg = _nh.subscribe("leftfront_leg_controller/command", 10, &DynamixelControl::monitorLFLegCallback, this);
+  _sub_LR_leg = _nh.subscribe("leftback_leg_controller/command", 10, &DynamixelControl::monitorLRLegCallback, this);
+  _sub_RR_leg = _nh.subscribe("rightback_leg_controller/command", 10, &DynamixelControl::monitorRRLegCallback, this);
+  _sub_RF_leg = _nh.subscribe("rightfront_leg_controller/command", 10, &DynamixelControl::monitorRFLegCallback, this);
 
   _joint_pos[0].data = 0;      // LF_leg_shoulder_joint
   _joint_pos[1].data = 1.5;    // LF_leg_upper_joint
@@ -70,7 +70,7 @@ dynamixelControl::dynamixelControl() : _pnh("~")
   dxlAddSyncWriteHandler();
 }
 
-void dynamixelControl::monitorLFLegCallback(const trajectory_msgs::JointTrajectory& LF_leg)
+void DynamixelControl::monitorLFLegCallback(const trajectory_msgs::JointTrajectory& LF_leg)
 {
   for (int i = 0; i < 3; i++)
   {
@@ -78,7 +78,7 @@ void dynamixelControl::monitorLFLegCallback(const trajectory_msgs::JointTrajecto
   }
 }
 
-void dynamixelControl::monitorLRLegCallback(const trajectory_msgs::JointTrajectory& LR_leg)
+void DynamixelControl::monitorLRLegCallback(const trajectory_msgs::JointTrajectory& LR_leg)
 {
   for (int i = 3; i < 6; i++)
   {
@@ -86,7 +86,7 @@ void dynamixelControl::monitorLRLegCallback(const trajectory_msgs::JointTrajecto
   }
 }
 
-void dynamixelControl::monitorRRLegCallback(const trajectory_msgs::JointTrajectory& RR_leg)
+void DynamixelControl::monitorRRLegCallback(const trajectory_msgs::JointTrajectory& RR_leg)
 {
   for (int i = 6; i < 9; i++)
   {
@@ -94,7 +94,7 @@ void dynamixelControl::monitorRRLegCallback(const trajectory_msgs::JointTrajecto
   }
 }
 
-void dynamixelControl::monitorRFLegCallback(const trajectory_msgs::JointTrajectory& RF_leg)
+void DynamixelControl::monitorRFLegCallback(const trajectory_msgs::JointTrajectory& RF_leg)
 {
   for (int i = 9; i < 12; i++)
   {
@@ -102,7 +102,7 @@ void dynamixelControl::monitorRFLegCallback(const trajectory_msgs::JointTrajecto
   }
 }
 
-void dynamixelControl::controlLoop()
+void DynamixelControl::controlLoop()
 {
   int32_t goal_position[12];
   const uint8_t handler_index = 0;
@@ -111,17 +111,17 @@ void dynamixelControl::controlLoop()
     goal_position[i] = 512 + 3.41 * 180 * (_joint_pos[i].data / M_PI);
   }
   _result = _dxl_wb.syncWrite(handler_index, &goal_position[0], &_log);
-  if (_result == false)
+  if (!_result)
   {
     ROS_ERROR("%s", _log);
     ROS_ERROR("Failed to sync write position");
   }
 }
 
-void dynamixelControl::dxlInit()
+void DynamixelControl::dxlInit()
 {
   _result = _dxl_wb.init(_port_name, _baudrate, &_log);
-  if (_result == false)
+  if (!_result)
   {
     ROS_ERROR("%s", _log);
     ROS_ERROR("Failed to init");
@@ -130,12 +130,12 @@ void dynamixelControl::dxlInit()
     ROS_WARN("Succeed to init(%d)", _baudrate);
 }
 
-void dynamixelControl::dxlTorqueOn()
+void DynamixelControl::dxlTorqueOn()
 {
-  for (int cnt = 0; cnt < 12; cnt++)
+  for (unsigned char cnt : _dxl_id)
   {
-    _result = _dxl_wb.ping(_dxl_id[cnt], &_model_number, &_log);
-    if (_result == false)
+    _result = _dxl_wb.ping(cnt, &_model_number, &_log);
+    if (!_result)
     {
       ROS_ERROR("%s", _log);
       ROS_ERROR("Failed to ping");
@@ -143,18 +143,18 @@ void dynamixelControl::dxlTorqueOn()
     else
     {
       ROS_WARN("Succeeded to ping");
-      ROS_WARN("id : %d, model_number : %d", _dxl_id[cnt], _model_number);
+      ROS_WARN("id : %d, model_number : %d", cnt, _model_number);
     }
-    _result = _dxl_wb.torqueOn(_dxl_id[cnt]);
-    if (_result == false)
+    _result = _dxl_wb.torqueOn(cnt);
+    if (!_result)
       ROS_ERROR("torqueOn ERROR");
   }
 }
 
-void dynamixelControl::dxlAddSyncWriteHandler()
+void DynamixelControl::dxlAddSyncWriteHandler()
 {
   _result = _dxl_wb.addSyncWriteHandler(_dxl_id[0], "Goal_Position", &_log);
-  if (_result == false)
+  if (!_result)
   {
     ROS_ERROR("%s", _log);
     ROS_ERROR("Failed to add sync write handler");
@@ -164,11 +164,11 @@ void dynamixelControl::dxlAddSyncWriteHandler()
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "dynamixel_control");
-  dynamixelControl DC;
+  DynamixelControl dc;
   ros::Rate loop_rate(100);
   while (ros::ok())
   {
-    DC.controlLoop();
+    dc.controlLoop();
     ros::spinOnce();
     loop_rate.sleep();
   }
